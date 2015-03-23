@@ -1,7 +1,8 @@
 var express = require('express')
-	, app = express()
+		, app = express()
   	, server = require('http').createServer(app)
-  	, io = require('socket.io').listen(server);
+  	, io = require('socket.io').listen(server)
+		, sanitizer = require('sanitizer');
 
 var logger = require('./app/logger');
 
@@ -21,11 +22,13 @@ io.on('connection',function(socket){
 	var username =  'unknown';
 	console.log('io: a user connected');
 	socket.on('login',function(name){
-		username = name;
-		io.emit('chat message',{'username':name,'message':'joined the room'});
+		username = sanitizer.sanitize(name);
+		io.emit('chat message',{'username':username,'message':'joined the room'});
 		console.log('User has set username to: ' + username);
 	});
 	socket.on('chat message',function(msgObject){
+		msgObject.username = sanitizer.sanitize(msgObject.username);
+		msgObject.message = sanitizer.sanitize(msgObject.message);
 		console.log(msgObject.username + ': ' + msgObject.message);
 		io.emit('chat message',msgObject);
 	});

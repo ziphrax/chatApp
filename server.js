@@ -18,13 +18,15 @@ app.get('/data', function(request,response){
 });
 
 io.on('connection',function(socket){
+	var username =  'unknown';
 	console.log('io: a user connected');
-	socket.on('login',function(username){
+	socket.on('login',function(name){
+		username = name;
 		console.log('User has set username to: ' + username);
 	});
 	socket.on('chat message',function(msg){
-		console.log('message: ' + msg);
-		io.emit('chat message',msg);
+		console.log(username + ': ' + msg);
+		io.emit('chat message',username + ': ' + msg);
 	});
 	socket.on('disconnect', function(){
 		console.log('io: a user disconnected');

@@ -22,16 +22,17 @@ io.on('connection',function(socket){
 	console.log('io: a user connected');
 	socket.on('login',function(name){
 		username = name;
+		io.emit('chat message',{'username':name,'message':'joined the room'});
 		console.log('User has set username to: ' + username);
 	});
-	socket.on('chat message',function(msg){
-		console.log(username + ': ' + msg);
-		io.emit('chat message',username + ': ' + msg);
+	socket.on('chat message',function(msgObject){
+		console.log(msgObject.username + ': ' + msgObject.message);
+		io.emit('chat message',msgObject);
 	});
 	socket.on('disconnect', function(){
 		console.log('io: a user disconnected');
 	});
-}); 
+});
 
 
 app.start = app.listen = function(){

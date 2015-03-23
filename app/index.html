@@ -3,6 +3,16 @@
 <head>
 	<title>App</title>
 	<link rel="stylesheet" href="/css/bootstrap.css" />
+	<style type="text/css">
+		.other {
+			background: #fafffa;
+			text-align:left;
+		}
+		.yourself {
+			background: #fafaff;
+			text-align:right;
+		}
+	</style>
 </head>
 <body>
 
@@ -15,21 +25,21 @@
 			<div class="form-group">
 				<label for="username">Username: </label>
 				<input type="text" id="username" placeholder="Enter a username..." />
-				<button class="btn btn-success">Send</button>
+				<button class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> Join</button>
 			</div>
 		</form>
 	</div>
 
 	<div class="chatting">
-		
-		<ul class="messages list-group">		
+
+		<ul class="messages list-group">
 		</ul>
 
 		<form id="messagebox">
 			<div class="form-group">
 				<label for="message">New Message: </label>
 				<input type="text" id="message" />
-				<button class="btn btn-success">Send</button>
+				<button class="btn btn-success"><i class="glyphicon glyphicon-send"></i> Send</button>
 			</div>
 		</form>
 	</div>

@@ -1,12 +1,12 @@
 $(function(){
 	var socket = io();
-	var username = 'default';
+	var my_username = 'default';
 
 	$('.chatting').hide();
 
 	$('form#join').submit(function(){
-		username = $('#username').val()
-		socket.emit('login',username);
+		my_username = $('#username').val()
+		socket.emit('login',my_username);
 		$('.not-chatting').fadeOut(function(){
 			$('.chatting').fadeIn();
 		});
@@ -14,14 +14,26 @@ $(function(){
 	});
 
 	$('form#messagebox').submit(function(){
-		socket.emit('chat message',$('#message').val());
+		var msgObject = {
+			'username': my_username,
+			'message': $('#message').val()
+		};
+		socket.emit('chat message',msgObject);
 		$('#message').val('');
 		return false;
 	});
 
 	socket.on('chat message',function(msg){
 		console.log(msg);
-		$('ul.messages').append($('<li class="list-group-item">').text(msg));
+		var text = '';
+		var cssClass= 'yourself';
+		if(msg.username == my_username){
+			text = 'You: ' + msg.message;
+		} else {
+			text = msg.username + ': ' + msg.message;
+			cssClass='other';
+		}
+		$('ul.messages').append($('<li class="list-group-item '+ cssClass +'">').text(text));
 	});
 
 });

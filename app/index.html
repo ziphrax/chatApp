@@ -22,11 +22,17 @@
 
 	<div class="not-chatting">
 		<form id="join">
-			<div class="form-group">
-				<label for="username">Username: </label>
-				<input type="text" id="username" placeholder="Enter a username..." />
-				<button class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> Join</button>
-			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<label for="username">Username: </label>
+						<div class="input-group">
+							<input type="text" class="form-control" id="username" placeholder="Enter a username...">
+							<span class="input-group-btn">
+								<button class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> Join</button>
+							</span>
+					</div><!-- /input-group -->
+				</div><!-- /.col-lg-6 -->
+			</div><!-- /.row -->
 		</form>
 	</div>
 
@@ -36,11 +42,17 @@
 		</ul>
 
 		<form id="messagebox">
-			<div class="form-group">
-				<label for="message">New Message: </label>
-				<input type="text" id="message" />
-				<button class="btn btn-success"><i class="glyphicon glyphicon-send"></i> Send</button>
-			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<label for="message">New Message: </label>
+						<div class="input-group">
+							<input type="text" class="form-control" id="message" placeholder="Enter message here...">
+							<span class="input-group-btn">
+								<button class="btn btn-success"><i class="glyphicon glyphicon-send"></i> Send</button>
+							</span>
+					</div><!-- /input-group -->
+				</div><!-- /.col-lg-6 -->
+			</div><!-- /.row -->
 		</form>
 	</div>
 </div>

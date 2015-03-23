@@ -5,6 +5,7 @@ var express = require('express')
 		, sanitizer = require('sanitizer');
 
 var logger = require('./app/logger');
+var users = [];
 
 app.use(logger);
 app.use(express.static('public'));

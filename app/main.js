@@ -24,7 +24,6 @@ $(function(){
 	});
 
 	socket.on('chat message',function(msg){
-		console.log(msg);
 		var text = '';
 		var cssClass= 'yourself';
 		if(msg.username == my_username){

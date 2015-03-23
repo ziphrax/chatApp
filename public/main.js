@@ -13,7 +13,7 @@ $(function(){
 		return false;
 	});
 
-	$('form#messagebox').submit(function(){
+	$('#sendMessage').on('click',function(){
 		var msgObject = {
 			'username': my_username,
 			'message': $('#message').val()
@@ -21,6 +21,12 @@ $(function(){
 		socket.emit('chat message',msgObject);
 		$('#message').val('');
 		return false;
+	});
+
+	$('#disconnect').on('click',function(){
+		if(confirm('Are you sure you wish to leave?')){
+			socket.disconnect();
+		}
 	});
 
 	socket.on('chat message',function(msg){

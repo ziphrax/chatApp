@@ -1,0 +1,18 @@
+{
+  "name": "chatApp",
+  "version": "1.0.0",
+  "homepage": "https://github.com/ziphrax/chatApp",
+  "authors": [
+    "David Jones <daverival@hotmail.com>"
+  ],
+  "description": "a chat app",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

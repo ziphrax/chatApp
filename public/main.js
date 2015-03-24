@@ -15,7 +15,9 @@ socket.on('updaterooms', function (rooms, current_room) {
     console.log(cachedRooms);
     $.each(rooms, function(key, value) {
     	var icon = '';
-    	if(value.requiresPassword ){
+    	if(value.requiresPassword && value.name == current_room){
+    		icon = '<i class="glyphicon glyphicon-ok"></i> ';
+    	} else if (value.requiresPassword){
     		icon = '<i class="glyphicon glyphicon-lock"></i> ';
     	}
         if(value.name == current_room){

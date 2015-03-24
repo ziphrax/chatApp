@@ -18,8 +18,8 @@ var rooms = {
         requiresPassword: false,
         password : ''
     },
-    'Locked Room' : {
-        name : 'Locked Room',
+    'Sexy Wives' : {
+        name : 'Sexy Wives',
         requiresPassword: true,
         password : 'password'
     }
@@ -32,7 +32,7 @@ app.get('/',function(request,response){
 	response.sendFile(__dirname + '/public/index.html');
 });
 
-io.sockets.on('connection', function(socket) {    
+io.sockets.on('connection', function(socket) {
     socket.on('adduser', function(username) {
         if(validateUsername(username)){
             socket.username = sanitizer.sanitize(username);
@@ -40,7 +40,7 @@ io.sockets.on('connection', function(socket) {
             usernames[socket.username] = socket.username;
             socket.join('Lobby');
             socket.emit('updatechat', 'SERVER', 'you have connected to Lobby');
-            socket.broadcast.to('Lobby').emit('updatechat', 'SERVER', socket.username + ' has connected to this room');       
+            socket.broadcast.to('Lobby').emit('updatechat', 'SERVER', socket.username + ' has connected to this room');
             socket.emit('updaterooms', makeRoomsSafeToSend(rooms), 'Lobby');
         } else {
             socket.emit('error', 'Invalid Username');

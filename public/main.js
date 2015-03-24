@@ -6,7 +6,7 @@ socket.on('connect', function(){
 });
 
 socket.on('updatechat', function (username, data) {
-    $('#conversation').append('<li class="list-group-item"><b>'+ username + ':</b> ' + data + '</li>');
+    $('#conversation').append('<li class="list-group-item"><b>'+ username + ': ' + formatedTime() +'-></b> ' + data + '</li>');
 });
 
 socket.on('updaterooms', function (rooms, current_room) {
@@ -26,6 +26,8 @@ socket.on('updaterooms', function (rooms, current_room) {
         else {
             $('#rooms').append('<li role="presentation"><a href="#" onclick="switchRoom(\''+value.name+'\')">' + icon + value.name + '</a></lit>');
         }
+        var objDiv = document.getElementById("conversation");
+        objDiv.scrollTop = objDiv.scrollHeight;
     });
 });
 
@@ -37,10 +39,17 @@ socket.on('disconnect',function(){
     alert('Disconnected by server :-(');
 });
 
-function switchRoom(room){	
+function formatedTime(){
+  var d = new Date();
+  return  d.getHours() + ':' +
+  d.getMinutes() + ':' +
+  d.getSeconds();
+}
+
+function switchRoom(room){
 	var password ='';
 	if(cachedRooms[room].requiresPassword){
-		password = prompt('Please enter password');	
+		password = prompt('Please enter password');
 	}
     socket.emit('switchRoom',{name: room, password: password});
 }

@@ -5,7 +5,7 @@ socket.on('connect', function(){
 });
 
 socket.on('updatechat', function (username, data) {
-    $('#conversation').append('<b>'+ username + ':</b> ' + data + '<br>');
+    $('#conversation').append('<li class="list-group-item"><b>'+ username + ':</b> ' + data + '</li>');
 });
 
 
@@ -13,10 +13,10 @@ socket.on('updaterooms', function (rooms, current_room) {
     $('#rooms').empty();
     $.each(rooms, function(key, value) {
         if(value == current_room){
-            $('#rooms').append('<div>' + value + '</div>');
+            $('#rooms').append('<li role="presentation" class="active"><a href="#">' + value + '</a></li>');
         }
         else {
-            $('#rooms').append('<div><a href="#" onclick="switchRoom(\''+value+'\')">' + value + '</a></div>');
+            $('#rooms').append('<li role="presentation"><a href="#" onclick="switchRoom(\''+value+'\')">' + value + '</a></lit>');
         }
     });
 });
@@ -40,6 +40,6 @@ $(function(){
     });
 
     $('#roombutton').click(function(){
-        socket.emit('create', prompt("New Room name?: "));
+        //socket.emit('create', prompt("New Room name?"));
     });
 });

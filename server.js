@@ -6,7 +6,7 @@ var express = require('express')
 
 var logger = require('./app/logger');
 var usernames = {};
-var rooms = ['lobby'];
+var rooms = ['Lobby','Room A','Room B'];
 
 app.use(logger);
 app.use(express.static('public'));
@@ -32,7 +32,7 @@ io.sockets.on('connection', function(socket) {
     });
 
     socket.on('create', function(room) {
-        rooms.push(room);
+        //rooms.push(room);
         socket.emit('updaterooms', rooms, socket.room);
     });
 

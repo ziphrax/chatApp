@@ -9,8 +9,7 @@ var gulp = require('gulp'),
 	},
 	source = {
 		js:[
-			 	'app/main.js',
-				'server.js'
+			 	'app/main.js'
 		],
 		html: 'app/index.html'
 	};

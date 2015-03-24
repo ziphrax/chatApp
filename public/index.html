@@ -6,28 +6,42 @@
 </head>
 <body>
 
-	<nav class="navbar navbar-default">
-		<div class="container-fluid">
-			<div class="navbar-header">
-				<a class="navbar-brand" href="#">
-					<i class="glyphicon glyphicon-envelope"></i> ChatApp
-				</a>
+	<div class="row">
+		<nav class="navbar navbar-default">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<a class="navbar-brand" href="#">
+						 <i class="glyphicon glyphicon-envelope"></i> ChatApp
+					</a>
+				</div>
 			</div>
-		</div>
-	</nav>
+		</nav>
+	</div>
 
 	<div class="container">
 
-		<div>
+		<div class="row">
 			<!--b>ROOMS</b-->
-			<ul id="rooms" class="nav nav-pills"></ul>
+			<div class="col-xs-12">
+				<ul id="rooms" class="nav nav-pills"></ul>
+			</div>
+			<!--b>Conversation</b-->
+			<div class="col-xs-12">
+				<ul id="conversation" class="list-group"></ul>
+			</div>
 		</div>
 
-		<div>
-			<b>Conversation</b>
-			<ul id="conversation" class="list-group"></ul>
-			<input id="data"/>
-			<input type="button" id="datasend" value="send" />
+		<div class="row">
+			<div class="col-xs-12">
+				<form>
+					<div class="input-group">
+					<input id="data" type="text" class="form-control"/>
+					<span class="input-group-btn">
+						<button type="button" id="datasend" value="send" class="btn btn-success"><i class="glyphicon glyphicon-send"></i>  Send</button>
+					</span>
+					</div>
+				</form>
+			</div>
 		</div>
 
 		<!--div>

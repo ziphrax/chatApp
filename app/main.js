@@ -32,11 +32,11 @@ socket.on('updaterooms', function (rooms, current_room) {
 });
 
 socket.on('error',function(error){
-    alert('There was an error: ' + error);
+  $('#conversation').append('<li class="list-group-item"><b>SERVER: ' + formatedTime() +'-></b> Whoops something went wrong' + error + '</li>');
 });
 
 socket.on('disconnect',function(){
-    alert('Disconnected by server :-(');
+  $('#conversation').append('<li class="list-group-item"><b>SERVER: ' + formatedTime() +'-></b> Lost connection to the server :-(</li>');
 });
 
 function formatedTime(){

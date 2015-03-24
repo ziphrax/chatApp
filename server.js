@@ -18,8 +18,8 @@ var rooms = {
         requiresPassword: false,
         password : ''
     },
-    'Sexy Wives' : {
-        name : 'Sexy Wives',
+    'Locked Room' : {
+        name : 'Locked Room',
         requiresPassword: true,
         password : 'password'
     }

@@ -59,6 +59,7 @@ $(function(){
         e.preventDefault();
         var message = $('#data').val();
         $('#data').val('');
+        $('#data').focus();
         socket.emit('sendchat', message);
     });
 

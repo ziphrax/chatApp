@@ -2,7 +2,8 @@ var express = require('express')
 	, app = express()
   	, server = require('http').createServer(app)
   	, io = require('socket.io').listen(server)
-	, sanitizer = require('sanitizer');
+	, sanitizer = require('sanitizer')
+    , favicon = require('express-favicon');
 
 var logger = require('./app/logger');
 var usernames = {};
@@ -26,6 +27,7 @@ var rooms = {
 
 app.use(logger);
 app.use(express.static('public'));
+app.use(favicon(__dirname + '/public/favicon.ico'));
 app.get('/',function(request,response){
 	response.sendFile(__dirname + '/public/index.html');
 });

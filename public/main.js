@@ -46,7 +46,8 @@ function switchRoom(room){
 }
 
 $(function(){
-    $('#datasend').click( function() {
+    $('#datasend').click( function(e) {
+        e.preventDefault();
         var message = $('#data').val();
         $('#data').val('');
         socket.emit('sendchat', message);
@@ -54,12 +55,13 @@ $(function(){
 
     $('#data').keypress(function(e) {
         if(e.which == 13) {
+            e.preventDefault();
             $(this).blur();
             $('#datasend').focus().click();
         }
     });
 
-    $('#roombutton').click(function(){
+    //$('#roombutton').click(function(){
         //socket.emit('create', prompt("New Room name?"));
-    });
+    //});
 });

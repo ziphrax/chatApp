@@ -5,7 +5,8 @@ var express = require('express')
 		, sanitizer = require('sanitizer');
 
 var logger = require('./app/logger');
-var users = [];
+var usernames = {};
+var rooms = ['lobby'];
 
 app.use(logger);
 app.use(express.static('public'));
@@ -19,24 +20,45 @@ app.get('/data', function(request,response){
 	response.end();
 });
 
-io.on('connection',function(socket){
-	var username =  'unknown';
-	console.log('io: a user connected');
-	socket.on('login',function(name){
-		username = sanitizer.sanitize(name);
-		io.emit('chat message',{'username':username,'message':'joined the room'});
-		console.log('User has set username to: ' + username);
-	});
-	socket.on('chat message',function(msgObject){
-		msgObject.username = sanitizer.sanitize(msgObject.username);
-		msgObject.message = sanitizer.sanitize(msgObject.message);
-		console.log(msgObject.username + ': ' + msgObject.message);
-		io.emit('chat message',msgObject);
-	});
-	socket.on('disconnect', function(){
-		console.log('io: a user disconnected');
-	});
-});
+io.sockets.on('connection', function(socket) {
+    socket.on('adduser', function(username) {
+        socket.username = username;
+        socket.room = 'Lobby';
+        usernames[username] = username;
+        socket.join('Lobby');
+        socket.emit('updatechat', 'SERVER', 'you have connected to Lobby');
+        socket.broadcast.to('Lobby').emit('updatechat', 'SERVER', username + ' has connected to this room');
+        socket.emit('updaterooms', rooms, 'Lobby');
+    });
+
+    socket.on('create', function(room) {
+        rooms.push(room);
+        socket.emit('updaterooms', rooms, socket.room);
+    });
+
+    socket.on('sendchat', function(data) {
+        io.sockets["in"](socket.room).emit('updatechat', socket.username, data);
+    });
+
+    socket.on('switchRoom', function(newroom) {
+        var oldroom;
+        oldroom = socket.room;
+        socket.leave(socket.room);
+        socket.join(newroom);
+        socket.emit('updatechat', 'SERVER', 'you have connected to ' + newroom);
+        socket.broadcast.to(oldroom).emit('updatechat', 'SERVER', socket.username + ' has left this room');
+        socket.room = newroom;
+        socket.broadcast.to(newroom).emit('updatechat', 'SERVER', socket.username + ' has joined this room');
+        socket.emit('updaterooms', rooms, newroom);
+    });
+
+    socket.on('disconnect', function() {
+        delete usernames[socket.username];
+        io.sockets.emit('updateusers', usernames);
+        socket.broadcast.emit('updatechat', 'SERVER', socket.username + ' has disconnected');
+        socket.leave(socket.room);
+    });
+ });
 
 
 app.start = app.listen = function(){

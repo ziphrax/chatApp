@@ -1,44 +1,45 @@
+var socket = io.connect();
+
+socket.on('connect', function(){
+    socket.emit('adduser', prompt("What's your name: "));
+});
+
+socket.on('updatechat', function (username, data) {
+    $('#conversation').append('<b>'+ username + ':</b> ' + data + '<br>');
+});
+
+
+socket.on('updaterooms', function (rooms, current_room) {
+    $('#rooms').empty();
+    $.each(rooms, function(key, value) {
+        if(value == current_room){
+            $('#rooms').append('<div>' + value + '</div>');
+        }
+        else {
+            $('#rooms').append('<div><a href="#" onclick="switchRoom(\''+value+'\')">' + value + '</a></div>');
+        }
+    });
+});
+
+function switchRoom(room){
+    socket.emit('switchRoom', room);
+}
+
 $(function(){
-	var socket = io();
-	var my_username = 'default';
+    $('#datasend').click( function() {
+        var message = $('#data').val();
+        $('#data').val('');
+        socket.emit('sendchat', message);
+    });
 
-	$('.chatting').hide();
+    $('#data').keypress(function(e) {
+        if(e.which == 13) {
+            $(this).blur();
+            $('#datasend').focus().click();
+        }
+    });
 
-	$('form#join').submit(function(){
-		my_username = $('#username').val()
-		socket.emit('login',my_username);
-		$('.not-chatting').fadeOut(function(){
-			$('.chatting').fadeIn();
-		});
-		return false;
-	});
-
-	$('#sendMessage').on('click',function(){
-		var msgObject = {
-			'username': my_username,
-			'message': $('#message').val()
-		};
-		socket.emit('chat message',msgObject);
-		$('#message').val('');
-		return false;
-	});
-
-	$('#disconnect').on('click',function(){
-		if(confirm('Are you sure you wish to leave?')){
-			socket.disconnect();
-		}
-	});
-
-	socket.on('chat message',function(msg){
-		var text = '';
-		var cssClass= 'yourself';
-		if(msg.username == my_username){
-			text = 'You: ' + msg.message;
-		} else {
-			text = msg.username + ': ' + msg.message;
-			cssClass='other';
-		}
-		$('ul.messages').append($('<li class="list-group-item '+ cssClass +'">').text(text));
-	});
-
+    $('#roombutton').click(function(){
+        socket.emit('create', prompt("New Room name?: "));
+    });
 });

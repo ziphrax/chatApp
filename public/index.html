@@ -3,61 +3,23 @@
 <head>
 	<title>App</title>
 	<link rel="stylesheet" href="/css/bootstrap.css" />
-	<style type="text/css">
-		.other {
-			background: #fafffa;
-			text-align:left;
-		}
-		.yourself {
-			background: #fafaff;
-			text-align:right;
-		}
-	</style>
 </head>
 <body>
+ 	<div>
+        <b>ROOMS</b>
+        <div id="rooms"></div>
+    </div>
 
-<div class="container">
+    <div>
+        <div id="conversation"></div>
+        <input id="data"/>
+        <input type="button" id="datasend" value="send" />
+    </div>
 
-	<h2>Messages</h2>
-
-	<div class="not-chatting">
-		<form id="join">
-			<div class="row">
-				<div class="col-xs-12">
-					<label for="username">Username: </label>
-						<div class="input-group">
-							<input type="text" class="form-control" id="username" placeholder="Enter a username...">
-							<span class="input-group-btn">
-								<button class="btn btn-success"><i class="glyphicon glyphicon-ok"></i>  Join</button>
-							</span>
-					</div><!-- /input-group -->
-				</div><!-- /.col-lg-6 -->
-			</div><!-- /.row -->
-		</form>
-	</div>
-
-	<div class="chatting">
-
-		<ul class="messages list-group">
-		</ul>
-
-		<form id="messagebox">
-			<div class="row">
-				<div class="col-xs-12">
-					<label for="message">New Message: </label>
-						<div class="input-group">
-							<input type="text" class="form-control" id="message" placeholder="Enter message here...">
-							<span class="input-group-btn">
-								<button class="btn btn-success" id="sendMessage"><i class="glyphicon glyphicon-send"></i>  Send</button>
-								<button class="btn btn-default" id="disconnect"><i class="glyphicon glyphicon-remove"></i>  Leave</button>
-							</span>
-					</div><!-- /input-group -->
-				</div><!-- /.col-lg-6 -->
-			</div><!-- /.row -->
-		</form>
-	</div>
-</div>
-
+   <div>
+       <div id="room creation"></div>
+        <input type="button" id="roombutton" value="create room" />
+   </div>
 
 <script src="jquery.js"></script>
 <script src="bootstrap.js"></script>

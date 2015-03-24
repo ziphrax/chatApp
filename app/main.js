@@ -29,6 +29,14 @@ socket.on('updaterooms', function (rooms, current_room) {
     });
 });
 
+socket.on('error',function(error){
+    alert('There was an error: ' + error);
+});
+
+socket.on('disconnect',function(){
+    alert('Disconnected by server :-(');
+});
+
 function switchRoom(room){	
 	var password ='';
 	if(cachedRooms[room].requiresPassword){

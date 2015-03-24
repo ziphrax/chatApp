@@ -32,7 +32,7 @@ app.get('/',function(request,response){
 
 io.sockets.on('connection', function(socket) {    
     socket.on('adduser', function(username) {
-        //if(username.length > 4){
+        if(validateUsername(username)){
             socket.username = sanitizer.sanitize(username);
             socket.room = 'Lobby';
             usernames[socket.username] = socket.username;
@@ -40,9 +40,10 @@ io.sockets.on('connection', function(socket) {
             socket.emit('updatechat', 'SERVER', 'you have connected to Lobby');
             socket.broadcast.to('Lobby').emit('updatechat', 'SERVER', socket.username + ' has connected to this room');       
             socket.emit('updaterooms', makeRoomsSafeToSend(rooms), 'Lobby');
-        /*} else {
+        } else {
+            socket.emit('error', 'Invalid Username');
             socket.disconnect();
-        }*/
+        }
     });
     /*socket.on('create', function(room) {
         //rooms.push(room);
@@ -84,6 +85,18 @@ function makeRoomsSafeToSend(rooms){
         safeToSendRooms[item.name] = {name:item.name,requiresPassword:item.requiresPassword};
     });
     return safeToSendRooms
+}
+
+function validateUsername(name){
+    var isValid = true;
+    if((name || '').length < 4){
+        isValid = false;
+    }
+    if(usernames[name])
+    {
+        isValid = false;
+    }
+    return isValid
 }
 
 app.start = app.listen = function(){

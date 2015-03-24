@@ -31,6 +31,14 @@ app.use(favicon(__dirname + '/public/favicon.ico'));
 app.get('/',function(request,response){
 	response.sendFile(__dirname + '/public/index.html');
 });
+app.get('/terms-of-service',function(request,response){
+	response.sendFile(__dirname + '/public/terms.html');
+});
+
+app.get('/news',function(request,response){
+	response.sendFile(__dirname + '/public/news.html');
+});
+
 
 io.sockets.on('connection', function(socket) {
     socket.on('adduser', function(username) {

@@ -11,7 +11,7 @@ var gulp = require('gulp'),
 		js:[
 			 	'app/main.js'
 		],
-		html: 'app/index.html'
+		html: ['app/*.html']
 	};
 
 gulp.task('default',['move-dependencies','js-source','html'],function(){});

@@ -27,7 +27,7 @@ var rooms = {
 
 app.use(logger);
 app.use(express.static('public'));
-app.use(favicon(__dirname + '/public/favicon.ico'));
+//app.use(favicon(__dirname + '/public/favicon.ico'));
 app.get('/',function(request,response){
 	response.sendFile(__dirname + '/public/index.html');
 });

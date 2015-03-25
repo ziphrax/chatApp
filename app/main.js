@@ -12,7 +12,6 @@ socket.on('updatechat', function (username, data) {
 socket.on('updaterooms', function (rooms, current_room) {
     $('#rooms').empty();
     cachedRooms = rooms;
-    console.log(cachedRooms);
     $.each(rooms, function(key, value) {
     	var icon = '';
     	if(value.requiresPassword && value.name == current_room){

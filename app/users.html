@@ -45,27 +45,12 @@
 
     <div class="row">
       <div class="col-xs-12">
-          <h1>News</h1>
+          <h1>Users Online</h1>
       </div>
     </div>
     <div class="row">
       <div class="col-xs-12">
-          <h2>ChatApp Beta Anouncement <span class="small">24th March 2015</span></h2>
-
-          <p>Welcome,</p>
-          <p class="text-justify">ChatApp has finally been released to the wild. For the time being it is a pretty straight foward and simple chat application but as we go fowards more and more features will be added.</p>
-          <p class="text-justify">The site has been made using the latest technologies so may have the odd bug here and there whilst we work out the kinks.</p>
-          <p class="text-justify">Some of the features we have planned are:
-              <ul>
-                <li>Private messaging</li>
-                <li>Image sharing</li>
-                <li>Permenant logins and user registration</li>
-              </ul>
-          </p>
-          <p class="text-justify">If you have any comments, find any bugs or have any suggestions on how we can improve the site please send us an email to <a href="mailto:comments@chatty.io">comments@chatty.io</a></p>
-          <p>From</p>
-          <p>The Development Team</p>
-
+         <ul class="users list-group"></ul>
       </div>
     </div>
 
@@ -84,5 +69,25 @@
 
 <script src="jquery.js"></script>
 <script src="bootstrap.js"></script>
+<script>
+  $(function(){
+    
+    var timer = setInterval(updateUsers,3000);
+    updateUsers();
+    
+    function updateUsers(){
+      $.get('/data/users',function(data){        
+        $('.users').html('');
+        if(data){
+          $.each(data,function(index,username){
+            $('.users').append('<li class="list-group-item">'+ username +'</li>');
+          });     
+        }
+      });
+      
+    }
+    
+  });
+</script>
 </body>
 </html>

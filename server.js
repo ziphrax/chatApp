@@ -30,21 +30,22 @@ app.use(logger);
 app.use(express.static('public'));
 //app.use(favicon(__dirname + '/public/favicon.ico'));
 app.get('/',function(request,response){
-	response.sendFile(__dirname + '/public/index.html');
-    response.end();
+	response.sendFile(__dirname + '/public/index.html');    
 });
 app.get('/terms-of-service',function(request,response){
-	response.sendFile(__dirname + '/public/terms.html');
-    response.end();
+	response.sendFile(__dirname + '/public/terms.html');    
 });
 
 app.get('/news',function(request,response){
-	response.sendFile(__dirname + '/public/news.html');
-    response.end();
+	response.sendFile(__dirname + '/public/news.html');    
 });
 
 app.get('/users',function(request,response){
-    response.json(usernames);
+    response.sendFile(__dirname + '/public/users.html');        
+});
+
+app.get('/data/users',function(request,response){    
+    response.json(usernames);    
     response.end();
 });
 

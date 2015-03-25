@@ -29,6 +29,10 @@ socket.on('updaterooms', function (rooms, current_room) {
     });
 });
 
+socket.on('usercount',function(count){
+  $('#usercount').text(count);
+});
+
 socket.on('error',function(error){
   $('#conversation').append('<li class="list-group-item"><b>SERVER: ' + formatedTime() +'-></b> Whoops something went wrong' + error + '</li>');
   scrollConversation();

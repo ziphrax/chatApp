@@ -40,8 +40,10 @@ app.get('/news',function(request,response){
 	response.sendFile(__dirname + '/public/news.html');
 });
 
-
 io.sockets.on('connection', function(socket) {
+
+    socket.emit('usercount',io.sockets.sockets.length);  
+
     socket.on('adduser', function(username) {
         if(validateUsername(username)){
             socket.username = sanitizer.sanitize(username);
@@ -50,12 +52,14 @@ io.sockets.on('connection', function(socket) {
             socket.join('Lobby');
             socket.emit('updatechat', 'SERVER', 'you have connected to Lobby');
             socket.broadcast.to('Lobby').emit('updatechat', 'SERVER', socket.username + ' has connected to this room');
-            socket.emit('updaterooms', makeRoomsSafeToSend(rooms), 'Lobby');
+            socket.emit('updaterooms', makeRoomsSafeToSend(rooms), 'Lobby');    
+            socket.broadcast.emit('usercount',io.sockets.sockets.length);  
         } else {
             socket.emit('error', 'Invalid Username');
             socket.disconnect();
-        }
+        }        
     });
+
     /*socket.on('create', function(room) {
         //rooms.push(room);
         socket.emit('updaterooms', rooms, socket.room);
@@ -72,10 +76,11 @@ io.sockets.on('connection', function(socket) {
             socket.leave(socket.room);
             socket.join(newroom.name);
             socket.emit('updatechat', 'SERVER', 'you have connected to ' + newroom.name);
-            socket.broadcast.to(oldroom).emit('updatechat', 'SERVER', socket.username + ' has left this room');
+            socket.broadcast.to(oldroom).emit('updatechat', 'SERVER', socket.username + ' has left this room');            
             socket.room = newroom.name;
             socket.broadcast.to(newroom).emit('updatechat', 'SERVER', socket.username + ' has joined this room');
-            socket.emit('updaterooms', rooms, newroom.name);
+            socket.broadcast.emit('usercount',io.sockets.sockets.length);        
+            socket.emit('updaterooms', makeRoomsSafeToSend(rooms), newroom.name);            
         } else {
             socket.emit('updatechat', 'SERVER', 'you cant connect to that room. Incorrect password.');
         }
@@ -85,6 +90,7 @@ io.sockets.on('connection', function(socket) {
         delete usernames[socket.username];
         io.sockets.emit('updateusers', usernames);
         socket.broadcast.emit('updatechat', 'SERVER', socket.username + ' has disconnected');
+        socket.broadcast.emit('usercount',io.sockets.sockets.length);               
         socket.leave(socket.room);
     });
  });

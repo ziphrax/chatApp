@@ -82,6 +82,8 @@
           $.each(data,function(index,username){
             $('.users').append('<li class="list-group-item">'+ username +'</li>');
           });     
+        } else {
+          $('.users').append('<li class="list-group-item">There are no users online in the rooms.</li>');
         }
       });
       

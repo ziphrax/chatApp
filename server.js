@@ -7,6 +7,7 @@ var express = require('express')
 
 var logger = require('./app/logger');
 var usernames = {};
+var port = process.env.PORT || 5000
 var rooms = {
     'Lobby' : {
         name : 'Lobby',
@@ -113,4 +114,4 @@ app.start = app.listen = function(){
   return server.listen.apply(server, arguments)
 }
 
-app.start(3000)
+app.start(port)

@@ -26,7 +26,7 @@
         <div class="container-fluid">
           <div class="navbar-header">
             <a class="navbar-brand" href="/">
-               <i class="glyphicon glyphicon-envelope"></i> ChatApp
+               <i class="glyphicon glyphicon-envelope"></i> Chatsplosion
             </a>
           </div>
           <div>
@@ -62,7 +62,7 @@
   <div class="container">
     <div class="well well-sm">
       <p class="text-muted text-center">By using this application you agree to follow the <a href="/terms-of-service"  target="_blank">Terms of Service</a></p>
-      <p class="text-muted text-center">ChatApp 2015 All Rights Reserved</p>
+      <p class="text-muted text-center">Chatsplosion 2015 All Rights Reserved</p>
     </div>
   </div>
 
@@ -71,24 +71,24 @@
 <script src="bootstrap.js"></script>
 <script>
   $(function(){
-    
+
     var timer = setInterval(updateUsers,15000);
     updateUsers();
-    
+
     function updateUsers(){
-      $.get('/data/users',function(data){        
+      $.get('/data/users',function(data){
         $('.users').html('');
         if(data){
           $.each(data,function(index,username){
             $('.users').append('<li class="list-group-item">'+ username +'</li>');
-          });     
+          });
         } else {
           $('.users').append('<li class="list-group-item">There are no users online in the rooms.</li>');
         }
       });
-      
+
     }
-    
+
   });
 </script>
 </body>

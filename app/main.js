@@ -7,6 +7,7 @@ socket.on('connect', function(){
 
 socket.on('updatechat', function (username, data) {
     $('#conversation').append('<li class="list-group-item"><b>'+ username + ': ' + formatedTime() +'-></b> ' + data + '</li>');
+    scrollConversation();
 });
 
 socket.on('updaterooms', function (rooms, current_room) {
@@ -24,19 +25,24 @@ socket.on('updaterooms', function (rooms, current_room) {
         }
         else {
             $('#rooms').append('<li role="presentation"><a href="#" onclick="switchRoom(\''+value.name+'\')">' + icon + value.name + '</a></lit>');
-        }
-        var objDiv = document.getElementById("conversation");
-        objDiv.scrollTop = objDiv.scrollHeight;
+        }        
     });
 });
 
 socket.on('error',function(error){
   $('#conversation').append('<li class="list-group-item"><b>SERVER: ' + formatedTime() +'-></b> Whoops something went wrong' + error + '</li>');
+  scrollConversation();
 });
 
 socket.on('disconnect',function(){
   $('#conversation').append('<li class="list-group-item"><b>SERVER: ' + formatedTime() +'-></b> Lost connection to the server :-(</li>');
+  scrollConversation();
 });
+
+function scrollConversation(){
+  var objDiv = document.getElementById("conversation");
+  objDiv.scrollTop = objDiv.scrollHeight;
+}
 
 function formatedTime(){
   var d = new Date();

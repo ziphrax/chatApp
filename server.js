@@ -63,8 +63,7 @@ io.sockets.on('connection', function(socket) {
             socket.broadcast.to('Lobby').emit('updatechat', 'SERVER', socket.username + ' has connected to this room');
             socket.emit('updaterooms', makeRoomsSafeToSend(rooms), 'Lobby');    
             socket.broadcast.emit('usercount',io.sockets.sockets.length);  
-        } else {
-            socket.emit('error', 'Invalid Username');
+        } else {            
             socket.disconnect();
         }        
     });

@@ -29,7 +29,7 @@ var rooms = {
 };
 
 app.use(logger);
-app.use(cacher);
+//app.use(cacher);
 app.use(compression());
 app.use(express.static('public'));
 //app.use(favicon(__dirname + '/public/favicon.ico'));

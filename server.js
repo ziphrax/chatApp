@@ -7,7 +7,7 @@ var express = require('express')
     , compression = require('compression');
 
 var logger = require('./app/logger');
-var cacher = require('./app/cacher');
+//var cacher = require('./app/cacher');
 var usernames = {};
 var port = process.env.PORT || 80;
 var rooms = {

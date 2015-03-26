@@ -1,11 +1,7 @@
 var express = require('express')
 	, app = express()
   	, server = require('http').createServer(app)
-  	, io = require('socket.io')
-        .enable('browser client minification')
-        .enable('browser client etag')
-        .enable('browser client gzip')
-        .listen(server)
+  	, io = require('socket.io').listen(server)
 	, sanitizer = require('sanitizer')
     , favicon = require('express-favicon')
     , compression = require('compression');

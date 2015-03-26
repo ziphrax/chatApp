@@ -7,6 +7,7 @@ var express = require('express')
     , compression = require('compression');
 
 var logger = require('./app/logger');
+var cacher = require('./app/cacher');
 var usernames = {};
 var port = process.env.PORT || 80;
 var rooms = {
@@ -28,6 +29,7 @@ var rooms = {
 };
 
 app.use(logger);
+app.use(cacher);
 app.use(compression());
 app.use(express.static('public'));
 //app.use(favicon(__dirname + '/public/favicon.ico'));

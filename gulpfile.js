@@ -5,7 +5,9 @@ var gulp = require('gulp'),
 			'bower_components/bootstrap/dist/js/bootstrap.js'
 		],
 		fonts: ['bower_components/bootstrap/dist/fonts/*'],
-		css: ['bower_components/bootstrap/dist/css/*']
+		css: ['bower_components/bootstrap/dist/css/*.min.*',
+				'bower_components/bootstrap/dist/css/*.map'
+			]
 	},
 	source = {
 		js:[
@@ -34,7 +36,6 @@ gulp.task('html',function(){
 	gulp.src(source.html)
 		.pipe(gulp.dest('./public/'));
 });
-
 
 gulp.task('watch',['js-source','html'],function(){
 	gulp.watch(source.js,['js-source']);

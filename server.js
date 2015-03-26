@@ -31,7 +31,9 @@ var rooms = {
 app.use(logger);
 app.use(cacher);
 app.use(compression());
-app.use(express.static('public'));
+app.use(express.static('public',{
+    maxAge: 120000
+}));
 //app.use(favicon(__dirname + '/public/favicon.ico'));
 app.get('/',function(request,response){
 	response.sendFile(__dirname + '/public/index.html');

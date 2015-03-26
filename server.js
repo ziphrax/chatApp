@@ -28,7 +28,7 @@ var rooms = {
 };
 
 app.use(logger);
-app.use(compression);
+app.use(compression());
 app.use(express.static('public'));
 //app.use(favicon(__dirname + '/public/favicon.ico'));
 app.get('/',function(request,response){

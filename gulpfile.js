@@ -1,8 +1,8 @@
 var gulp = require('gulp'),
 	dependencies = {
 		js: [
-			'bower_components/jquery/dist/jquery.js',
-			'bower_components/bootstrap/dist/js/bootstrap.js'
+			'bower_components/jquery/dist/jquery.min.js',
+			'bower_components/bootstrap/dist/js/bootstrap.min.js'
 		],
 		fonts: ['bower_components/bootstrap/dist/fonts/*'],
 		css: ['bower_components/bootstrap/dist/css/*.min.*',

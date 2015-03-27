@@ -74,6 +74,25 @@ io.sockets.on('connection', function(socket) {
         }
     });
 
+    socket.on('create',function(roomName,password){
+        var newRoom = new Room({
+            name : sanitizer.sanitize(roomName),
+            createdDate : new Date(),
+            requiresPassword : password.length > 0,
+            password : password,
+            displayOrder: Object.keys(rooms).length + 1
+        }).save(function(err){
+            console.error(err);
+        });
+        rooms[sanitizer.sanitize(roomName)] = {
+            name : sanitizer.sanitize(roomName),
+            requiresPassword: password.length > 0,
+            password : password
+        };
+        socket.emit('updatechat', 'SERVER', 'New Room has been created: ' + sanitizer.sanitize(roomName));
+        socket.emit('updaterooms', makeRoomsSafeToSend(rooms), sanitizer.sanitize(roomName));
+    });
+
     socket.on('sendchat', function(data) {
         io.sockets["in"](socket.room).emit('updatechat', socket.username, sanitizer.sanitize(data));
     });

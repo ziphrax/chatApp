@@ -80,7 +80,9 @@ $(function(){
         }
     });
 
-    //$('#roombutton').click(function(){
-        //socket.emit('create', prompt("New Room name?"));
-    //});
+    $('#createroom').click(function(){
+        var roomName = prompt("New Room name?");
+        var password = prompt("Password for the room?");
+        socket.emit('create', roomName,password);
+    });
 });

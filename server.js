@@ -4,29 +4,28 @@ var express = require('express')
   	, io = require('socket.io').listen(server)
 	, sanitizer = require('sanitizer')
     , favicon = require('express-favicon')
-    , compression = require('compression');
+    , compression = require('compression')
+    , mongoose = require('mongoose');
+
+var Room = require('./model/room');
 
 var logger = require('./app/logger');
 var cacher = require('./app/cacher');
 var usernames = {};
 var port = process.env.PORT || 80;
-var rooms = {
-    'Lobby' : {
-        name : 'Lobby',
-        requiresPassword: false,
-        password : ''
-    },
-    'Open Room' : {
-        name : 'Open Room',
-        requiresPassword: false,
-        password : ''
-    },
-    'Locked Room' : {
-        name : 'Locked Room',
-        requiresPassword: true,
-        password : 'password'
+var mongooseURI = process.env.MONGOLAB_URI || 'mongodb://localhost/chatApp';
+
+mongoose.connect(mongooseURI, function ( err,res) {
+    if(err){
+        console.log('ERROR connecting to: ' + mongooseURI + '. ' + err);
+    } else {
+        console.log('Succeeded connecting to: ' + mongooseURI);
     }
-};
+});
+
+var rooms = {};
+
+
 
 app.use(logger);
 app.use(cacher);
@@ -74,11 +73,6 @@ io.sockets.on('connection', function(socket) {
             socket.disconnect();
         }
     });
-
-    /*socket.on('create', function(room) {
-        //rooms.push(room);
-        socket.emit('updaterooms', rooms, socket.room);
-    });*/
 
     socket.on('sendchat', function(data) {
         io.sockets["in"](socket.room).emit('updatechat', socket.username, sanitizer.sanitize(data));
@@ -131,6 +125,24 @@ function validateUsername(name){
     return isValid
 }
 
+function initServer(){    
+    var roomQuery = Room.find({});
+    roomQuery.exec(function(err,docs){
+        if(err){
+            console.log('Error.initServer: ' + err);
+        } else {
+            docs.forEach(function(room){
+                rooms[room.name] = {
+                    name : room.name,
+                    requiresPassword: room.requiresPassword,
+                    password : room.password
+                }
+            });
+        }
+    });
+}
+
+initServer();
 app.start = app.listen = function(){
   return server.listen.apply(server, arguments)
 }

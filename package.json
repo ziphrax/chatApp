@@ -26,6 +26,7 @@
   },
   "homepage": "https://github.com/ziphrax/chatApp",
   "dependencies": {
+    "chai": "^2.1.2",
     "compression": "^1.4.3",
     "express": "^4.12.3",
     "express-favicon": "^1.0.1",

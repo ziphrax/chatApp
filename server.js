@@ -145,7 +145,7 @@ function validateUsername(name){
 }
 
 function initServer(){    
-    var roomQuery = Room.find({});
+    var roomQuery = Room.find({}).sort([['requiresPassword','ascending'],['displayOrder','ascending']]);
     roomQuery.exec(function(err,docs){
         if(err){
             console.log('Error.initServer: ' + err);

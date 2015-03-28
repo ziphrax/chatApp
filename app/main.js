@@ -93,8 +93,9 @@ $(function(){
     });
 
     $('#createroom').click(function(){
-        var roomName = $('#roomname').val();
+        var roomName = $('#roomname').val();        
         var password = $('#roompassword').val();
+        $('#roomname, #roompassword').val('');
         socket.emit('create', roomName,password);
     });
 

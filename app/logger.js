@@ -1,11 +1,4 @@
-var mongoose = require('mongoose');
-var LogSchema = new mongoose.Schema({
-	time: Date,
-	message: String,
-	ip: String
-});
-
-var Log = mongoose.model('Log',LogSchema);
+var Log = require('./model/log');
 
 module.exports = function logger(request,response,next){
 	var start = +new Date();
@@ -19,6 +12,8 @@ module.exports = function logger(request,response,next){
 		var message =   method + ' ' + url + ' ' + duration + ' ms';
 		var log = new Log({
 			time:new Date(),
+			url: url,
+			method: method,
 			ip:ip,
 			message:message
 		}).save(function(err){

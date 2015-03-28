@@ -36,6 +36,7 @@ $(function(){
               else {
                   $('#rooms').append('<li role="presentation"><a href="#" class="inactive" data-room=\''+value.name+'\'">' + icon + value.name + '</a></lit>');
               }
+              $('#rooms li a').off('click');
               $('#rooms').find('li a.inactive').on('click',function(e){
                 var room = $(this).data('room');
                 var password ='';

@@ -95,6 +95,7 @@ io.sockets.on('connection', function(socket) {
 
     socket.on('sendchat', function(data) {
         io.sockets["in"](socket.room).emit('updatechat', socket.username, sanitizer.sanitize(data));
+				logger.chatLog(socket.username,	sanitizer.sanitize(data),socket.room,'sockets');			
     });
 
     socket.on('switchRoom', function(newroom) {
@@ -144,7 +145,7 @@ function validateUsername(name){
     return isValid
 }
 
-function initServer(){    
+function initServer(){
     var roomQuery = Room.find({}).sort([['requiresPassword','ascending'],['displayOrder','ascending']]);
     roomQuery.exec(function(err,docs){
         if(err){
@@ -163,6 +164,7 @@ function initServer(){
 
 initServer();
 app.start = app.listen = function(){
+	logger.log('','','','SERVER Starting up...','');
   return server.listen.apply(server, arguments)
 }
 

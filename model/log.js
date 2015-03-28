@@ -4,7 +4,8 @@ var LogSchema = new mongoose.Schema({
   message: String,
   url: String,
   method: String,
-  ip: String
+  ip: String,
+  duration: String
 });
 
 module.exports = mongoose.model('Log',LogSchema);

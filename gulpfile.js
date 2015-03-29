@@ -16,7 +16,7 @@ var gulp = require('gulp'),
 		html: ['app/*.html']
 	};
 
-gulp.task('default',['move-dependencies','js-source','html'],function(){});
+gulp.task('default',['move-dependencies','js-source'],function(){});
 
 gulp.task('move-dependencies',function(){
 	gulp.src(dependencies.js)
@@ -32,12 +32,6 @@ gulp.task('js-source',function(){
 		.pipe(gulp.dest('./public/'));
 });
 
-gulp.task('html',function(){
-	gulp.src(source.html)
-		.pipe(gulp.dest('./public/'));
-});
-
-gulp.task('watch',['js-source','html'],function(){
+gulp.task('watch',['js-source'],function(){
 	gulp.watch(source.js,['js-source']);
-	gulp.watch(source.html,['html']);
 });

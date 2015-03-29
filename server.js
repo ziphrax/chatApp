@@ -1,8 +1,8 @@
 var express = require('express')
-	, app = express()
+		, app = express()
   	, server = require('http').createServer(app)
   	, io = require('socket.io').listen(server)
-	, sanitizer = require('sanitizer')
+		, sanitizer = require('sanitizer')
     , favicon = require('express-favicon')
     , compression = require('compression')
     , mongoose = require('mongoose');
@@ -23,9 +23,9 @@ mongoose.connect(mongooseURI, function ( err,res) {
     }
 });
 
+app.set('view engine','ejs');
+
 var rooms = {};
-
-
 
 app.use(logger);
 app.use(cacher);
@@ -35,18 +35,18 @@ app.use(express.static('public',{
 }));
 //app.use(favicon(__dirname + '/public/favicon.ico'));
 app.get('/',function(request,response){
-	response.sendFile(__dirname + '/public/index.html');
+	response.render('pages/index');
 });
 app.get('/terms-of-service',function(request,response){
-	response.sendFile(__dirname + '/public/terms.html');
+	response.render('pages/terms');
 });
 
 app.get('/news',function(request,response){
-	response.sendFile(__dirname + '/public/news.html');
+	response.render('pages/news');
 });
 
 app.get('/users',function(request,response){
-    response.sendFile(__dirname + '/public/users.html');
+	response.render('pages/users');
 });
 
 app.get('/data/users',function(request,response){
@@ -95,7 +95,7 @@ io.sockets.on('connection', function(socket) {
 
     socket.on('sendchat', function(data) {
         io.sockets["in"](socket.room).emit('updatechat', socket.username, sanitizer.sanitize(data));
-				logger.chatLog(socket.username,	sanitizer.sanitize(data),socket.room,'sockets');			
+				logger.chatLog(socket.username,	sanitizer.sanitize(data),socket.room,'sockets');
     });
 
     socket.on('switchRoom', function(newroom) {

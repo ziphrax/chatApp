@@ -8,6 +8,8 @@ var express = require('express')
     , mongoose = require('mongoose');
 
 var Room = require('./model/room');
+var Log = require('./model/log');
+var ChatLog = require('./model/chatLog');
 
 var logger = require('./app/logger');
 var cacher = require('./app/cacher');
@@ -52,6 +54,39 @@ app.get('/users',function(request,response){
 app.get('/data/users',function(request,response){
     response.json(usernames);
     response.end();
+});
+
+app.get('/data/logs/:token',function(request,response){
+    if(request.params.token == '241085.0129'){    
+        Log.find().exec(function(err,docs){
+            if(err){
+                console.log(err);
+                response.status(500).send(err);
+            } else {
+                response.json(docs);
+                response.end();        
+            }
+        });
+    } else {
+        response.status(401).send('Unauthorized');
+    }    
+});
+
+app.get('/data/chatlogs/:token',function(request,response){
+    if(request.params.token == '241085.0129'){    
+        ChatLog.find().exec(function(err,docs){
+            if(err){
+                console.log(err);
+                response.status(500).send(err);
+            } else {
+                response.json(docs);
+                response.end();        
+            }
+        });
+    } else {
+        response.status(401).send('Unauthorized');
+    }
+    
 });
 
 io.sockets.on('connection', function(socket) {

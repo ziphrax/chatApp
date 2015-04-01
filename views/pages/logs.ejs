@@ -58,7 +58,7 @@
           		<tr>
           			<th>time</th>
 					<th>method</th>
-					<th>ip</th>
+					<!---th>ip</th--->
 					<th>url</th>
 					<th>message</th>
 					<th>duration</th>
@@ -158,12 +158,11 @@
 	    					'<tr>'
 		    					+'<td>' + item.time + '</td>'
 								+'<td>' + item.method + '</td>'
-								+'<td>' + item.ip + '</td>'
 								+'<td>' + item.url + '</td>'
 								+'<td>' + (item.message || '') + '</td>'
 								+'<td>' + item.duration + '</td>' +
 	    					'</tr>'
-	    				);
+	    				);//+'<td>' + item.ip + '</td>'
 	    			});
 	    		}).fail(function(err){
 	    			console.log('Failed to get raw data');

@@ -60,7 +60,7 @@ app.get('/data/users',function(request,response){
     response.end();
 });
 
-app.get('/data/logs/hourhitrate/:token',function(request,response){
+app.get('/data/logs/dailyhitrate/:token',function(request,response){
     if(request.params.token == '241085.0129'){    
         var options = {};
         options.map = function(){
@@ -92,6 +92,23 @@ app.get('/data/logs/hourhitrate/:token',function(request,response){
     } else {
         response.status(401).send('Unauthorized');
     }    
+});
+
+app.get('/data/logs/raw/:token',function(request,response){
+    if(request.params.token == '241085.0129'){    
+        Log.find().exec(function(err,docs){
+            if(err){
+                console.log(err);
+                response.status(500).send(err);
+            } else {
+                response.json(docs);
+                response.end();        
+            }
+        });
+    } else {
+        response.status(401).send('Unauthorized');
+    }
+    
 });
 
 app.get('/data/chatlogs/:token',function(request,response){

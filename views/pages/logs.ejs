@@ -87,18 +87,13 @@
   		respondCanvas();
 
 	    function getLogs(){
-	    	$.get('/data/logs/hourhitrate/241085.0129')
+	    	$.get('/data/logs/dailyhitrate/241085.0129')
 	    		.done(function(logs){
 	    			var parsedData = $.map(logs,function(val,i){
 	    				return val.value;
 	    			});
 	    			var parsedLabels = $.map(logs,function(val,i){
-	    				if(i % 6 == 0) {
-	    					return val._id;	
-	    				} else {
-	    					return '';
-	    				}
-	    				
+	    				return val._id;		    				
 	    			});
 	    			var data = {
 	    				labels: parsedLabels,

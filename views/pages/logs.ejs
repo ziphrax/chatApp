@@ -93,7 +93,12 @@
 	    				return val.value;
 	    			});
 	    			var parsedLabels = $.map(logs,function(val,i){
-	    				return val._id;
+	    				if(i % 6 == 0) {
+	    					return val._id;	
+	    				} else {
+	    					return '';
+	    				}
+	    				
 	    			});
 	    			var data = {
 	    				labels: parsedLabels,

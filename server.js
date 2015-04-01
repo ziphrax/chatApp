@@ -64,7 +64,7 @@ app.get('/data/logs/hourhitrate/:token',function(request,response){
     if(request.params.token == '241085.0129'){    
         var options = {};
         options.map = function(){
-            var d = this.time;
+            var d = this.time;            
             d.setMinutes(0);
             d.setSeconds(0);
             d.setMilliseconds(0);

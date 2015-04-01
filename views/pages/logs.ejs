@@ -41,15 +41,33 @@
 
     <div class="row">
       <div class="col-xs-12">
-          <h1>Hourly Hit Rate</h1>
+          <h1>Daily Hit Rate</h1>
       </div>
     </div>
     <div class="row-fluid">
       <div class="col-xs-12" id="container-logchart">        
       	<canvas id="logChart" height="400">      	
       	</canvas> 
+      </div>      
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12">
+          <table class="table" id="rawlogs">
+          	<thead>
+          		<tr>
+          			<th>time</th>
+					<th>method</th>
+					<th>ip</th>
+					<th>url</th>
+					<th>message</th>
+					<th>duration</th>
+          		</tr>
+          	</thead>
+          	<tbody>
+          	</tbody>
+          </table>
       </div>
-      <div class="col-xs-12">&nbsp;</div>
     </div>
 
 
@@ -81,12 +99,13 @@
   			var ctx = document.getElementById('logChart').getContext("2d");
 		    ctx.canvas.width = jQuery("#container-logchart").width();
 		    ctx.canvas.height = jQuery("#container-logchart").height();		    
-		    getLogs();
+		    getCanvasLogs();
 		}
 
   		respondCanvas();
+  		getRawLogs();
 
-	    function getLogs(){
+	    function getCanvasLogs(){
 	    	$.get('/data/logs/dailyhitrate/241085.0129')
 	    		.done(function(logs){
 	    			var parsedData = $.map(logs,function(val,i){
@@ -125,15 +144,31 @@
 	    			};	    			
 	    			var ctx = document.getElementById('logChart').getContext("2d");
 	    			var logChart = new Chart(ctx).Line(data,options);
-
-
-	    			
 	    		})
 	    		.fail(function(err){
 	    			console.log(err);
 	    		});
 	    }
 
+	    function getRawLogs(){
+	    	$.get('/data/logs/raw/241085.0129')
+	    		.done(function(logs){
+	    			$.each(logs,function(index,item){
+	    				$('#rawlogs').find('tbody').append(
+	    					'<tr>'
+		    					+'<td>' + item.time + '</td>'
+								+'<td>' + item.method + '</td>'
+								+'<td>' + item.ip + '</td>'
+								+'<td>' + item.url + '</td>'
+								+'<td>' + (item.message || '') + '</td>'
+								+'<td>' + item.duration + '</td>' +
+	    					'</tr>'
+	    				);
+	    			});
+	    		}).fail(function(err){
+	    			console.log('Failed to get raw data');
+	    		});
+	    }
 	});
 </script>
 </body>

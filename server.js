@@ -51,22 +51,43 @@ app.get('/users',function(request,response){
 	response.render('pages/users');
 });
 
+app.get('/admin/logs',function(request,response){
+    response.render('pages/logs');
+});
+
 app.get('/data/users',function(request,response){
     response.json(usernames);
     response.end();
 });
 
-app.get('/data/logs/:token',function(request,response){
+app.get('/data/logs/hourhitrate/:token',function(request,response){
     if(request.params.token == '241085.0129'){    
-        Log.find().exec(function(err,docs){
+        var options = {};
+        options.map = function(){
+            var d = this.time;
+            d.setMinutes(0);
+            d.setSeconds(0);
+            d.setMilliseconds(0);
+            emit(d,this.ip);
+        }
+
+        options.reduce = function(key,values){
+            var sum = 0;
+            for(var v in values){
+                sum += 1;
+            }
+            return sum;
+        };
+
+        Log.mapReduce(options,function(err,results,stats){
             if(err){
                 console.log(err);
                 response.status(500).send(err);
             } else {
-                response.json(docs);
-                response.end();        
-            }
-        });
+                console.log("hitrate map reduce took %d ms", stats.processtime);                
+                response.json(results);      
+            }                
+        });       
     } else {
         response.status(401).send('Unauthorized');
     }    

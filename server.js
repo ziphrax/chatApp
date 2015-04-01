@@ -5,7 +5,8 @@ var express = require('express')
 		, sanitizer = require('sanitizer')
     , favicon = require('express-favicon')
     , compression = require('compression')
-    , mongoose = require('mongoose');
+    , mongoose = require('mongoose')
+    , ipfilter = require('express-ipfilter');
 
 var Room = require('./model/room');
 var Log = require('./model/log');
@@ -28,9 +29,11 @@ mongoose.connect(mongooseURI, function ( err,res) {
 app.set('view engine','ejs');
 
 var rooms = {};
+var ips = ['218.17.147.45','72.51.39.202','58.177.86.10'];
 
 app.use(logger);
 app.use(cacher);
+app.use(ipfilter(ips));
 app.use(compression());
 app.use(express.static('public',{ maxAge: 120000 }));
 

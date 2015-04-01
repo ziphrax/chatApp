@@ -31,6 +31,7 @@
     "ejs": "^2.3.1",
     "express": "^4.12.3",
     "express-favicon": "^1.0.1",
+    "express-ipfilter": "0.0.19",
     "gulp": "^3.8.11",
     "gulp-csso": "^1.0.0",
     "jquery": "^2.1.3",

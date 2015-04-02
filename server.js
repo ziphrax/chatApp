@@ -246,19 +246,46 @@ function initServer(){
 }
 
 function parseMessage(data){    
-    var re = /(http|https)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/ig;
-    var msg = data;
-    var matches = data.match(re);
+    var parsedImageData = parseImageURLS(data);
+    data = parsedImageData.data;
+    
+    var parseYoutubeData = parseYoutubeMessage(data);
+    data = parseYoutubeData.data;
+    
+    var msg =  sanitizer.sanitize(data) + parsedImageData.msg + parseYoutubeData.msg; 
 
-    msg =  sanitizer.sanitize(data.replace(re,''));            
+    return msg;
+}
 
-    if(matches && matches.length > 0){
-        for(var i = 0; i< matches.length;i++){
-            msg += "<br /><img class='img-rounded' src='" + matches[i] +"' width='300'/>";                
+function parseImageURLS(data){
+    data = data.replace(re,'');
+    var re = /\bhttps?:[^)''"]+\.(?:jpg|jpeg|gif|png)/ig;
+    var img_matches = data.match(re);
+    var msg = '';
+    if(img_matches && img_matches.length > 0){
+        for(var i = 0; i< img_matches.length;i++){
+            msg += "<br /><img class='img-rounded' src='" + img_matches[i] +"' width='300'/>";                
         }
     } 
 
-    return msg;
+    return {data: data, msg: msg};
+}
+
+function parseYoutubeMessage(data){
+    data = data.replace(youtube,'');     
+    var youtube = /(?:https?:\/\/)?(?:www\.)?youtu(?:.be\/|be\.com\/watch\?v=|be\.com\/v\/)(.{8,})/g
+    var youtube_matches = data.match(youtube);
+    var msg = '';
+    if(youtube_matches && youtube_matches.length > 0){
+        for(var i = 0; i< youtube_matches.length;i++){            
+            msg += '<br /><object type="application/x-shockwave-flash" style="width:300px; height:246px;" data="'+ youtube_matches[i] + '?color2=FBE9EC&amp;version=3">'
+                + '<param name="movie" value="' + youtube_matches[i] +'?color2=FBE9EC&amp;version=3" />'
+                + '<param name="allowFullScreen" value="true" />'
+                + '<param name="allowscriptaccess" value="false" />'
+                + '</object>';
+        }
+    } 
+    return {data: data, msg: msg};
 }
 
 initServer();

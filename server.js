@@ -1,8 +1,9 @@
 var express = require('express')
-		, app = express()
+    , basicAuth = require('basic-auth-connect')
+	, app = express()
   	, server = require('http').createServer(app)
   	, io = require('socket.io').listen(server)
-		, sanitizer = require('sanitizer')
+	, sanitizer = require('sanitizer')
     , favicon = require('express-favicon')
     , compression = require('compression')
     , mongoose = require('mongoose')
@@ -30,6 +31,8 @@ app.set('view engine','ejs');
 
 var rooms = {};
 var ips = ['218.17.147.45','72.51.39.202','58.177.86.10'];
+//just for testing
+var auth = basicAuth('Admin42', 'Pro1337p4ss');
 
 app.use(logger);
 app.use(cacher);
@@ -54,16 +57,16 @@ app.get('/users',function(request,response){
 	response.render('pages/users');
 });
 
-app.get('/admin/logs',function(request,response){
-    response.render('pages/logs');
-});
-
 app.get('/data/users',function(request,response){
     response.json(usernames);
     response.end();
 });
 
-app.get('/data/logs/dailyhitrate/:token',function(request,response){
+app.get('/admin/logs',auth,function(request,response){
+    response.render('pages/logs');
+});
+
+app.get('/data/logs/dailyhitrate/:token',auth,function(request,response){
     if(request.params.token == '241085.0129'){    
         var options = {};
         options.map = function(){
@@ -97,7 +100,7 @@ app.get('/data/logs/dailyhitrate/:token',function(request,response){
     }    
 });
 
-app.get('/data/logs/raw/:token',function(request,response){
+app.get('/data/logs/raw/:token',auth,function(request,response){
     if(request.params.token == '241085.0129'){    
         Log.find().exec(function(err,docs){
             if(err){
@@ -114,7 +117,7 @@ app.get('/data/logs/raw/:token',function(request,response){
     
 });
 
-app.get('/data/chatlogs/:token',function(request,response){
+app.get('/data/chatlogs/:token',auth,function(request,response){
     if(request.params.token == '241085.0129'){    
         ChatLog.find().exec(function(err,docs){
             if(err){

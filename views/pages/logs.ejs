@@ -5,13 +5,18 @@
   <link rel="stylesheet" href="/css/bootstrap.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-  	 canvas {
+  	canvas {
 	    position: relative;
 	}
 	.row-fluid > * {
 	    height: 200px;
 	}
+	#rawlogs {
+		table-layout: fixed;
+	}
 	#rawlogs tbody tr td {
+		white-space: nowrap;
+  		overflow: hidden;
 		text-overflow: ellipsis;
 	}
   </style>

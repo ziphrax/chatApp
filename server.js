@@ -174,8 +174,9 @@ io.sockets.on('connection', function(socket) {
     });
 
     socket.on('sendchat', function(data) {
-        io.sockets["in"](socket.room).emit('updatechat', socket.username, sanitizer.sanitize(data));
-				logger.chatLog(socket.username,	sanitizer.sanitize(data),socket.room,'sockets');
+        var msg = parseMessage(data);
+        io.sockets["in"](socket.room).emit('updatechat', socket.username, msg);
+		logger.chatLog(socket.username,	sanitizer.sanitize(data),socket.room,'sockets');
     });
 
     socket.on('switchRoom', function(newroom) {
@@ -242,6 +243,22 @@ function initServer(){
             });
         }
     });
+}
+
+function parseMessage(data){    
+    var re = /(http|https)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/ig;
+    var msg = data;
+    var matches = data.match(re);
+
+    msg =  sanitizer.sanitize(data.replace(re,''));            
+
+    if(matches && matches.length > 0){
+        for(var i = 0; i< matches.length;i++){
+            msg += "<br /><img class='img-rounded' src='" + matches[i] +"' width='300'/>";                
+        }
+    } 
+
+    return msg;
 }
 
 initServer();

@@ -158,11 +158,11 @@
 	    			$.each(logs,function(index,item){
 	    				$('#rawlogs').find('tbody').append(
 	    					'<tr>'
-		    					+'<td>' + item.time + '</td>'
-								+'<td>' + item.method + '</td>'
-								+'<td>' + item.url + '</td>'
-								+'<td>' + (item.message || '') + '</td>'
-								+'<td>' + item.duration + '</td>' +
+		    					+'<td class="col-xs-1">' + item.time + '</td>'
+								+'<td class="col-xs-1">' + item.method + '</td>'
+								+'<td class="col-xs-4">' + item.url + '</td>'
+								+'<td class="col-xs-5">' + (item.message || '') + '</td>'
+								+'<td class="col-xs-1">' + item.duration + '</td>' +
 	    					'</tr>'
 	    				);//+'<td>' + item.ip + '</td>'
 	    			});

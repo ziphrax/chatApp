@@ -67,10 +67,10 @@ app.get('/admin/logs',auth,function(request,response){
 });
 
 app.get('/data/logs/dailyhitrate/:token',auth,function(request,response){
-    if(request.params.token == '241085.0129'){    
+    if(request.params.token == '241085.0129'){
         var options = {};
         options.map = function(){
-            var d = this.time;            
+            var d = this.time;
             d.setHours(0);
             d.setMinutes(0);
             d.setSeconds(0);
@@ -91,47 +91,47 @@ app.get('/data/logs/dailyhitrate/:token',auth,function(request,response){
                 console.log(err);
                 response.status(500).send(err);
             } else {
-                console.log("hitrate map reduce took %d ms", stats.processtime);                
-                response.json(results);      
-            }                
-        });       
+                console.log("hitrate map reduce took %d ms", stats.processtime);
+                response.json(results);
+            }
+        });
     } else {
         response.status(401).send('Unauthorized');
-    }    
+    }
 });
 
 app.get('/data/logs/raw/:token',auth,function(request,response){
-    if(request.params.token == '241085.0129'){    
+    if(request.params.token == '241085.0129'){
         Log.find().exec(function(err,docs){
             if(err){
                 console.log(err);
                 response.status(500).send(err);
             } else {
                 response.json(docs);
-                response.end();        
+                response.end();
             }
         });
     } else {
         response.status(401).send('Unauthorized');
     }
-    
+
 });
 
 app.get('/data/chatlogs/:token',auth,function(request,response){
-    if(request.params.token == '241085.0129'){    
+    if(request.params.token == '241085.0129'){
         ChatLog.find().exec(function(err,docs){
             if(err){
                 console.log(err);
                 response.status(500).send(err);
             } else {
                 response.json(docs);
-                response.end();        
+                response.end();
             }
         });
     } else {
         response.status(401).send('Unauthorized');
     }
-    
+
 });
 
 io.sockets.on('connection', function(socket) {
@@ -245,14 +245,14 @@ function initServer(){
     });
 }
 
-function parseMessage(data){    
+function parseMessage(data){
     var parsedImageData = parseImageURLS(data);
     data = parsedImageData.data;
-    
+
     var parseYoutubeData = parseYoutubeMessage(data);
     data = parseYoutubeData.data;
-    
-    var msg =  sanitizer.sanitize(data) + parsedImageData.msg + parseYoutubeData.msg; 
+
+    var msg =  sanitizer.sanitize(data) + parsedImageData.msg + parseYoutubeData.msg;
 
     return msg;
 }
@@ -264,27 +264,24 @@ function parseImageURLS(data){
     var msg = '';
     if(img_matches && img_matches.length > 0){
         for(var i = 0; i< img_matches.length;i++){
-            msg += "<br /><img class='img-rounded' src='" + img_matches[i] +"' width='300'/>";                
+            msg += "<br /><img class='img-rounded' src='" + img_matches[i] +"' width='300'/>";
         }
-    } 
+    }
 
     return {data: data, msg: msg};
 }
 
 function parseYoutubeMessage(data){
-    data = data.replace(youtube,'');     
-    var youtube = /(?:https?:\/\/)?(?:www\.)?youtu(?:.be\/|be\.com\/watch\?v=|be\.com\/v\/)(.{8,})/g
+    data = data.replace(youtube,'');
+    var youtube = /^.*(?:youtu.be\/|v\/|e\/|u\/\w+\/|embed\/|v=)([^#\&\?]*).*/;
     var youtube_matches = data.match(youtube);
     var msg = '';
-    if(youtube_matches && youtube_matches.length > 0){
-        for(var i = 0; i< youtube_matches.length;i++){            
-            msg += '<br /><object type="application/x-shockwave-flash" style="width:300px; height:246px;" data="'+ youtube_matches[i] + '?color2=FBE9EC&amp;version=3">'
-                + '<param name="movie" value="' + youtube_matches[i] +'?color2=FBE9EC&amp;version=3" />'
-                + '<param name="allowFullScreen" value="true" />'
-                + '<param name="allowscriptaccess" value="false" />'
-                + '</object>';
-        }
-    } 
+    if(youtube_matches && youtube_matches.length == 2){
+        console.log(youtube_matches);
+            msg = '<br /><iframe width="560" height="315" src="https://www.youtube.com/embed/' + youtube_matches[1] + '" frameborder="0" allowfullscreen></iframe>';
+    } else if(youtube_matches.length > 0) {
+      msg = ' <br /><i> You may only link one video at a time from youtube</i><br />';
+    }
     return {data: data, msg: msg};
 }
 

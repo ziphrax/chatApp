@@ -279,7 +279,7 @@ function parseYoutubeMessage(data){
     if(youtube_matches && youtube_matches.length == 2){
         console.log(youtube_matches);
             msg = '<br /><iframe width="560" height="315" src="https://www.youtube.com/embed/' + youtube_matches[1] + '" frameborder="0" allowfullscreen></iframe>';
-    } else if(youtube_matches.length > 0) {
+    } else if( youtube_matches && youtube_matches.length > 0) {
       msg = ' <br /><i> You may only link one video at a time from youtube</i><br />';
     }
     return {data: data, msg: msg};

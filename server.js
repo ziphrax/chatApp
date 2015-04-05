@@ -1,18 +1,18 @@
 var express = require('express')
     , basicAuth = require('basic-auth-connect')
-	, app = express()
+	  , app = express()
   	, server = require('http').createServer(app)
   	, io = require('socket.io').listen(server)
-	, sanitizer = require('sanitizer')
+	  , sanitizer = require('sanitizer')
     , favicon = require('express-favicon')
     , compression = require('compression')
     , mongoose = require('mongoose')
-    , ipfilter = require('express-ipfilter');
+    , ipfilter = require('express-ipfilter')
+    , bodyParser = require('body-parser');
 
 var Room = require('./model/room');
 var Log = require('./model/log');
 var ChatLog = require('./model/chatLog');
-
 var logger = require('./app/logger');
 var cacher = require('./app/cacher');
 var usernames = {};
@@ -34,13 +34,20 @@ var ips = ['218.17.147.45','72.51.39.202','58.177.86.10'];
 //just for testing
 var auth = basicAuth('Admin42', 'Pro1337p4ss');
 
+var surveys = require('./routes/surveys');
+
 app.use(logger);
 app.use(cacher);
 app.use(ipfilter(ips));
 app.use(compression());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public',{ maxAge: 120000 }));
 
-//app.use(favicon(__dirname + '/public/favicon.ico'));
+
+app.use('/surveys',auth,surveys);
+app.get('/new-survey',auth,function(request,response){
+  response.render('pages/new-survey');
+});
 
 app.get('/',function(request,response){
 	response.render('pages/index');
@@ -69,7 +76,7 @@ app.get('/admin/logs',auth,function(request,response){
 app.get('/data/logs/dailyhitrate/:token',auth,function(request,response){
     if(request.params.token == '241085.0129'){
         var options = {};
-        options.map = function(){
+        options.map = function(){            
             var d = this.time;
             d.setHours(0);
             d.setMinutes(0);

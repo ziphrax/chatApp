@@ -27,6 +27,7 @@
   "homepage": "https://github.com/ziphrax/chatApp",
   "dependencies": {
     "basic-auth-connect": "^1.0.0",
+    "body-parser": "^1.12.2",
     "chai": "^2.1.2",
     "compression": "^1.4.3",
     "ejs": "^2.3.1",

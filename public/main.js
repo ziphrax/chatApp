@@ -94,8 +94,7 @@ $(function(){
     });
 
     function inviteToChat(username){
-      socket.emit('invite', me, username);
-      alert('Invite sent to: ' + username );
+      socket.emit('invite', me, username);      
     };
 
     function scrollConversation(){

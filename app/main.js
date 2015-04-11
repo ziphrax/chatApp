@@ -26,10 +26,18 @@ $(function(){
             };
           });
           $('#conversation li:last-child a.join').on('click',function(e){
-            var room = $(this).data('room');
             e.preventDefault();
+            var room = $(this).data('room');
             socket.emit('switchRoom',{name: room, password: ''});
           });
+
+          $('#conversation li:last-child a.decline').on('click',function(e){
+            e.preventDefault();
+            var username = $(this).data('username');
+            socket.emit('decline',username);
+            $(this).parent().remove();
+          });
+
           scrollConversation();
       });
 

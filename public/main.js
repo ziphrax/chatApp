@@ -1,4 +1,5 @@
 var socket;
+var me = 'unknown';
 $(function(){
 
     $('#join').click(function(e){
@@ -9,6 +10,7 @@ $(function(){
 
       socket.on('connect', function(){
           var username = $('#username').val();
+          me = username;
           socket.emit('adduser', username);
           $('.disconnected').fadeOut(500,function(){
             $('.connected').fadeIn();
@@ -16,7 +18,18 @@ $(function(){
       });
 
       socket.on('updatechat', function (username, data) {
-          $('#conversation').append('<li class="list-group-item"><b>'+ username + ': ' + formatedTime() +'-></b> ' + data + '</li>');
+          $('#conversation').append('<li class="list-group-item"><b><span class="username">'+ username + '</span>: ' + formatedTime() +'-></b> ' + data + '</li>');
+          $('#conversation li:last-child .username').on('dblclick',function(e){
+            var username = $(this).text();
+            if(confirm('Would you like to invite ' + username + ' to private chat?')){
+              inviteToChat(username);
+            };
+          });
+          $('#conversation li:last-child a.join').on('click',function(e){
+            var room = $(this).data('room');
+            e.preventDefault();
+            socket.emit('switchRoom',{name: room, password: ''});
+          });
           scrollConversation();
       });
 
@@ -72,6 +85,11 @@ $(function(){
         }
     });
 
+    function inviteToChat(username){
+      socket.emit('invite', me, username);
+      alert('Invite sent to: ' + username );
+    };
+
     function scrollConversation(){
       var objDiv = document.getElementById("conversation");
       objDiv.scrollTop = objDiv.scrollHeight;
@@ -93,7 +111,7 @@ $(function(){
     });
 
     $('#createroom').click(function(){
-        var roomName = $('#roomname').val();        
+        var roomName = $('#roomname').val();
         var password = $('#roompassword').val();
         $('#roomname, #roompassword').val('');
         socket.emit('create', roomName,password);

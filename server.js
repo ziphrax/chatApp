@@ -76,7 +76,7 @@ app.get('/admin/logs',auth,function(request,response){
 app.get('/data/logs/dailyhitrate/:token',auth,function(request,response){
     if(request.params.token == '241085.0129'){
         var options = {};
-        options.map = function(){            
+        options.map = function(){
             var d = this.time;
             d.setHours(0);
             d.setMinutes(0);
@@ -149,7 +149,10 @@ io.sockets.on('connection', function(socket) {
         if(validateUsername(username)){
             socket.username = sanitizer.sanitize(username);
             socket.room = 'Lobby';
-            usernames[socket.username] = socket.username;
+            usernames[socket.username] = {
+                username : socket.username,
+                socketId: socket.id
+            };
             socket.join('Lobby');
             socket.emit('updatechat', 'SERVER', 'you have connected to Lobby');
             socket.broadcast.to('Lobby').emit('updatechat', 'SERVER', socket.username + ' has connected to this room');
@@ -160,6 +163,7 @@ io.sockets.on('connection', function(socket) {
             socket.disconnect();
         }
     });
+
 
     socket.on('create',function(roomName,password){
         var newRoom = new Room({
@@ -183,7 +187,23 @@ io.sockets.on('connection', function(socket) {
     socket.on('sendchat', function(data) {
         var msg = parseMessage(data);
         io.sockets["in"](socket.room).emit('updatechat', socket.username, msg);
-		logger.chatLog(socket.username,	sanitizer.sanitize(data),socket.room,'sockets');
+		    logger.chatLog(socket.username,	sanitizer.sanitize(data),socket.room,'sockets');
+    });
+
+    socket.on('invite',function(from,to){
+      var socketId = usernames[to].socketId;
+      var newRoomName = from + '-' + to + +new Date();
+
+      rooms[newRoomName] = {
+          name : newRoomName,
+          requiresPassword: false,
+          password : '',
+          private : true
+      };
+
+      console.log(socketId);
+      socket.broadcast.to(socketId).emit('updatechat','SERVER', from + ' has invited you to chat. <a href="#' + from + '" data-room="'+ newRoomName +'" class="join">Click here to join</a>');
+      socket.emit('updatechat','SERVER', 'Private chat room has been created. <a href="#' + from + '" data-room="'+ newRoomName +'" class="join">Click here to join</a>');
     });
 
     socket.on('switchRoom', function(newroom) {
@@ -218,7 +238,9 @@ function makeRoomsSafeToSend(rooms){
     var safeToSendRooms = {};
     Object.keys(rooms).forEach(function(key){
         var item = rooms[key];
-        safeToSendRooms[item.name] = {name:item.name,requiresPassword:item.requiresPassword};
+        if(!item.private){
+          safeToSendRooms[item.name] = {name:item.name,requiresPassword:item.requiresPassword};
+        }
     });
     return safeToSendRooms
 }

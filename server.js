@@ -212,7 +212,11 @@ io.sockets.on('connection', function(socket) {
             oldroom = socket.room;
             socket.leave(socket.room);
             socket.join(newroom.name);
-            socket.emit('updatechat', 'SERVER', 'you have connected to ' + newroom.name);
+            if(!rooms[newroom.name].private){
+              socket.emit('updatechat', 'SERVER', 'you have connected to ' + newroom.name);
+            } else {
+              socket.emit('updatechat', 'SERVER', 'you have connected to private chat.');
+            }
             socket.broadcast.to(oldroom).emit('updatechat', 'SERVER', socket.username + ' has left this room');
             socket.room = newroom.name;
             socket.broadcast.to(newroom).emit('updatechat', 'SERVER', socket.username + ' has joined this room');

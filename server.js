@@ -7,12 +7,12 @@ var express = require('express')
     , favicon = require('express-favicon')
     , compression = require('compression')
     , mongoose = require('mongoose')
-    , ipfilter = require('express-ipfilter')
     , bodyParser = require('body-parser');
 
 var Room = require('./model/room');
 var Log = require('./model/log');
 var ChatLog = require('./model/chatLog');
+var banner = require('./app/banner');
 var logger = require('./app/logger');
 var cacher = require('./app/cacher');
 var usernames = {};
@@ -30,15 +30,14 @@ mongoose.connect(mongooseURI, function ( err,res) {
 app.set('view engine','ejs');
 
 var rooms = {};
-var ips = ['218.17.147.45','72.51.39.202','58.177.86.10'];
 //just for testing
 var auth = basicAuth('Admin42', 'Pro1337p4ss');
 
 var surveys = require('./routes/surveys');
 
 app.use(logger);
+app.use(banner);
 app.use(cacher);
-app.use(ipfilter(ips));
 app.use(compression());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public',{ maxAge: 120000 }));

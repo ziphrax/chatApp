@@ -19,7 +19,7 @@ $(function(){
 
       socket.on('updatechat', function (username, data) {
           $('#conversation').append('<li class="list-group-item"><b><span class="username">'+ username + '</span>: ' + formatedTime() +'-></b> ' + data + '</li>');
-          $('#conversation li:last-child .username').on('dblclick',function(e){
+          $('#conversation li:last-child .username').on('click',function(e){
             var username = $(this).text();
             if(confirm('Would you like to invite ' + username + ' to private chat?')){
               inviteToChat(username);
@@ -94,7 +94,7 @@ $(function(){
     });
 
     function inviteToChat(username){
-      socket.emit('invite', me, username);      
+      socket.emit('invite', me, username);
     };
 
     function scrollConversation(){

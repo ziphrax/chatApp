@@ -45,7 +45,7 @@ function banIP(IPAddress,Reason){
 
 function checkRequest(IPAddress,request){
   var result = true;
-  var re = /(\/cgi-bin|\/php|.cgi|.php|HTTP|cfg|git)/ig;
+  var re = /(\/cgi-bin|\/php|.cgi|.php|HTTP|cfg|git|w00tw00t)/ig;
 
   if(request.match(re)){
     result = false;

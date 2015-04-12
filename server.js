@@ -28,12 +28,18 @@ mongoose.connect(mongooseURI, function ( err,res) {
 });
 
 app.set('view engine','ejs');
+app.disable('x-powered-by');
 
 var rooms = {};
 //just for testing
 var auth = basicAuth('Admin42', 'Pro1337p4ss');
 
 var surveys = require('./routes/surveys');
+
+app.use(function(req, res, next) {
+    res.header('X-Clacks-Overhead', 'GNU Terry Pratchett');
+    next();
+});
 
 app.use(logger);
 app.use(banner);

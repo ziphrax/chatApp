@@ -29,7 +29,7 @@ router.route('/')
       }
     });
   });
-/*
+
 router.route('/surveys/:id').put(function(req,res){
   Survey.findOne({_id: req.params.id},function(err,survey){
     if(err){
@@ -65,6 +65,6 @@ router.route('/surveys/:id').put(function(req,res){
       res.json({message: 'Successfully deleted'});
     }
   });
-});*/
+});
 
 module.exports = router;

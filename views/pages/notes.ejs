@@ -13,7 +13,7 @@
       <nav class="navbar navbar-default">
         <div class="container-fluid">
           <div class="navbar-header">
-             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
               <i class="glyphicon glyphicon-menu-hamburger"></i>
              </button>
             <a class="navbar-brand" href="/">
@@ -22,8 +22,8 @@
           </div>
           <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-              <li><a href="/">Home</a></li>
-              <li><a href="/notes">Notes</a></li>
+              <li ><a href="/">Home</a></li>
+              <li class="active"><a href="/notes">Notes</a></li>
               <li><a href="/news">News</a></li>
               <li><a href="/terms-of-service">Terms</a></li>
             </ul>
@@ -37,45 +37,15 @@
 
     <div class="row">
       <div class="col-xs-12">
-          <h1>Surveys</h1>
+          <h1>Notes</h1>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12">
+         <ul class="notes list-group"></ul>
       </div>
     </div>
 
-    <div class="row">
-     <div class="col-xs-12">
-      <form>
-        <h2>New Survey</h2>
-
-        <div class="form-group">
-          <label>Name</label>
-          <input type="text" name="name" class="form-control" />
-        </div>
-
-        <div class="checkbox">
-          <label>
-            <input type="checkbox" name="requiresPassword"/> Requires Password
-          </label>
-        </div>
-
-        <div class="form-group">
-          <label>Password</label>
-          <input type="text" name="password" class="form-control" />
-        </div>
-
-        <div class="form-group">
-          <label>Name</label>
-          <select name="surveyType" class="form-control">
-            <option value="">NA</option>
-            <option value="Basic">Basic Survey</option>
-            <option value="Advanced">Advanced Survey</option>
-          </select>
-        </div>
-
-        <button type="submit" class="btn btn-success" name="submit" value="submit">Submit</button>
-
-      </form>
-     </div>
-   </div>
 
   </div> <!-- /container -->
 
@@ -93,22 +63,20 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 <script>
   $(function(){
-    $('form').on('submit',function(e){
-      e.preventDefault();
-      $.ajax({
-        type: "POST",
-        url: "/surveys",
-        data: $('form').serialize(),
-        success: function(data){
-          alert(data.message);
-
-        },
-        error: function(err){
-          alert(err);
+    getNotes();
+    function getNotes(){
+      $.get('/data/notes',function(data){
+        $('.notes').html('');
+        if(data){
+          $.each(data,function(index,note){
+            $('.notes').append('<li class="list-group-item" data-id="' + note._id +'">' + note.from + ':-> ' + note.content +'</li>');
+          });
+        } else {
+          $('.users').append('<li class="list-group-item">There are no notes saved.</li>');
         }
       });
-    });
-});
+    }
+  });
 </script>
 </body>
 </html>

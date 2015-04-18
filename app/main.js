@@ -68,7 +68,7 @@ $(function(){
 
           $('#conversation li:last-child .glyphicon-star-empty').on('click',function(e){
             e.preventDefault();
-            $.post('/notes',{content: data, from: username, owner: me});
+            $.post('/data/notes',{content: data, from: username, owner: me});
             $(this).toggleClass('.glyphicon-star-empty .glyphicon-star')
             $(this).remove();
           });

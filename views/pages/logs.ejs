@@ -39,9 +39,10 @@
           <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
               <li ><a href="/">Home</a></li>
+              <li><a href="/notes">Notes</a></li>
               <li class="active"><a href="/news">News</a></li>
               <li><a href="/terms-of-service">Terms</a></li>
-            </ul>           
+            </ul>
           </div>
         </div>
       </nav>
@@ -53,10 +54,10 @@
       </div>
     </div>
     <div class="row-fluid">
-      <div class="col-xs-12" id="container-logchart">        
-      	<canvas id="logChart" height="400">      	
-      	</canvas> 
-      </div>      
+      <div class="col-xs-12" id="container-logchart">
+      	<canvas id="logChart" height="400">
+      	</canvas>
+      </div>
     </div>
 
     <div class="row">
@@ -65,7 +66,7 @@
           	<thead>
           		<tr>
           			<th class="col-xs-2">time</th>
-					<th class="col-xs-1">method</th>					
+					<th class="col-xs-1">method</th>
 					<th class="col-xs-4">url</th>
 					<th class="col-xs-4">message</th>
 					<th class="col-xs-1">duration</th>
@@ -96,7 +97,7 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js" charset="utf-8"></script>
 <script>
-	var data = {};	
+	var data = {};
 
   	$(function(){
   		$(window).resize(respondCanvas);
@@ -105,7 +106,7 @@
   			var c = $('#logChart');
   			var ctx = document.getElementById('logChart').getContext("2d");
 		    ctx.canvas.width = jQuery("#container-logchart").width();
-		    ctx.canvas.height = jQuery("#container-logchart").height();		    
+		    ctx.canvas.height = jQuery("#container-logchart").height();
 		    getCanvasLogs();
 		}
 
@@ -119,7 +120,7 @@
 	    				return val.value;
 	    			});
 	    			var parsedLabels = $.map(logs,function(val,i){
-	    				return val._id;		    				
+	    				return val._id;
 	    			});
 	    			var data = {
 	    				labels: parsedLabels,
@@ -138,7 +139,7 @@
 	    			};
 
 	    			var options = {
-	    				scaleBeginAtZero : true,					    
+	    				scaleBeginAtZero : true,
 					    scaleShowGridLines : true,
 					    scaleGridLineColor : "rgba(0,0,0,.05)",
 					    scaleGridLineWidth : 1,
@@ -148,7 +149,7 @@
 					    barStrokeWidth : 2,
 					    barValueSpacing : 5,
 					    barDatasetSpacing : 1
-	    			};	    			
+	    			};
 	    			var ctx = document.getElementById('logChart').getContext("2d");
 	    			var logChart = new Chart(ctx).Line(data,options);
 	    		})

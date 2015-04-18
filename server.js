@@ -49,7 +49,9 @@ var surveys = require('./routes/surveys');
 var notes = require('./routes/notes');
 
 app.use('/surveys',auth,surveys);
-app.use('/notes',notes);
+app.use('/data/notes',notes);
+
+
 app.get('/new-survey',auth,function(request,response){
   response.render('pages/new-survey');
 });
@@ -63,6 +65,10 @@ app.get('/terms-of-service',function(request,response){
 
 app.get('/news',function(request,response){
 	response.render('pages/news');
+});
+
+app.get('/notes',function(request,response){
+  response.render('pages/notes');
 });
 
 app.get('/users',function(request,response){

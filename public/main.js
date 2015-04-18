@@ -18,7 +18,7 @@ $(function(){
       });
 
       socket.on('updatechat', function (username, data) {
-          $('#conversation').append('<li class="list-group-item"><b><span class="username">'+ username + '</span>: ' + formatedTime() +'-></b> ' + data + '</li>');
+          $('#conversation').append('<li class="list-group-item"><b><span class="username"></i>'+ username + '</span>: ' + formatedTime() +' -> <span class="saveForLater" title="Save as note"><i class="glyphicon glyphicon-star-empty"></i><span></b> ' + data + '</li>');
           $('#conversation li:last-child .username').on('click',function(e){
             var username = $(this).text();
             if(confirm('Would you like to invite ' + username + ' to private chat?')){
@@ -36,6 +36,13 @@ $(function(){
             var username = $(this).data('username');
             socket.emit('decline',username);
             $(this).parent().remove();
+          });
+
+          $('#conversation li:last-child .glyphicon-star-empty').on('click',function(e){
+            e.preventDefault();
+            $.post('/notes',{content: data, from: username, owner: me});
+            $(this).toggleClass('.glyphicon-star-empty .glyphicon-star')
+            $(this).remove();
           });
 
           scrollConversation();

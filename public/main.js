@@ -40,7 +40,7 @@ $(function(){
           socket.emit('adduser', username);
           $('.disconnected').fadeOut(500,function(){
             $('.connected').fadeIn(500,function(){
-              $("input#username").focus();
+              $("input#data").focus();
             });
           });
       });

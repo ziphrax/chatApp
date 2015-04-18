@@ -16,7 +16,7 @@ var banner = require('./app/banner');
 var logger = require('./app/logger');
 var cacher = require('./app/cacher');
 var usernames = {};
-var port = 3000;
+var port = process.env.PORT || 80;
 var mongooseURI = process.env.MONGOLAB_URI || 'mongodb://localhost/chatApp';
 
 mongoose.connect(mongooseURI, function ( err,res) {
@@ -30,26 +30,26 @@ mongoose.connect(mongooseURI, function ( err,res) {
 app.set('view engine','ejs');
 app.disable('x-powered-by');
 
-var rooms = {};
-//just for testing
-var auth = basicAuth('Admin42', 'Pro1337p4ss');
-
-var surveys = require('./routes/surveys');
-
-app.use(function(req, res, next) {
-    res.header('X-Clacks-Overhead', 'GNU Terry Pratchett');
-    next();
-});
-
 app.use(logger);
 app.use(banner);
 app.use(cacher);
 app.use(compression());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public',{ maxAge: 120000 }));
+app.use(function(req, res, next) {
+    res.header('X-Clacks-Overhead', 'GNU Terry Pratchett');
+    next();
+});
 
+var rooms = {};
+//just for testing
+var auth = basicAuth('Admin42', 'Pro1337p4ss');
+
+var surveys = require('./routes/surveys');
+var notes = require('./routes/notes');
 
 app.use('/surveys',auth,surveys);
+app.use('/notes',notes);
 app.get('/new-survey',auth,function(request,response){
   response.render('pages/new-survey');
 });

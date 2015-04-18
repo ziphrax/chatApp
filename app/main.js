@@ -1,7 +1,7 @@
 var socket;
 var me = 'unknown';
 $(function(){
-
+  $("input#username").focus();
   $(window).bind('keypress',function(e){
     var isLogin = $("input#username").is(":active");
     var isChatMessage = $("input#data").is(":active");
@@ -39,7 +39,9 @@ $(function(){
           me = username;
           socket.emit('adduser', username);
           $('.disconnected').fadeOut(500,function(){
-            $('.connected').fadeIn();
+            $('.connected').fadeIn(500,function(){
+              $("input#username").focus();
+            });
           });
       });
 

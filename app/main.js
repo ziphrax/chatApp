@@ -2,7 +2,33 @@ var socket;
 var me = 'unknown';
 $(function(){
 
-    $('#join').click(function(e){
+  $(window).bind('keypress',function(e){
+    var isLogin = $("input#username").is(":active");
+    var isChatMessage = $("input#data").is(":active");
+    if ( e.keyCode == 13 && !(isLogin || isChatMessage)) {
+      e.preventDefault();
+    }
+  });
+
+    $('#userlogin').bind('keypress', function(e){
+     if ( e.keyCode == 13 ) {
+       e.preventDefault();
+       handleJoin(e);
+     }
+   });
+
+    $('#join').click(handleJoin);
+
+
+    $('#data').keypress(function(e) {
+        if(e.which == 13) {
+            e.preventDefault();
+            $(this).blur();
+            $('#datasend').focus().click();
+        }
+    });
+
+    function handleJoin(e){
       io.connect();
       e.preventDefault();
       socket = io.connect();;
@@ -89,20 +115,11 @@ $(function(){
         $('#conversation').append('<li class="list-group-item"><b>SERVER: ' + formatedTime() +'-></b> Lost connection to the server :-(</li>');
         scrollConversation();
       });
-    });
-
-
-    $('#data').keypress(function(e) {
-        if(e.which == 13) {
-            e.preventDefault();
-            $(this).blur();
-            $('#datasend').focus().click();
-        }
-    });
+    }
 
     function inviteToChat(username){
       socket.emit('invite', me, username);
-    };
+    }
 
     function scrollConversation(){
       var objDiv = document.getElementById("conversation");

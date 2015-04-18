@@ -16,7 +16,7 @@ var banner = require('./app/banner');
 var logger = require('./app/logger');
 var cacher = require('./app/cacher');
 var usernames = {};
-var port = process.env.PORT || 80;
+var port = process.env.PORT || 3000;
 var mongooseURI = process.env.MONGOLAB_URI || 'mongodb://localhost/chatApp';
 
 mongoose.connect(mongooseURI, function ( err,res) {

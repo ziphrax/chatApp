@@ -1,0 +1,20 @@
+<html>
+	<head><title>Login - Chatsplosion.com</title></head>
+	<body>
+		
+		<div class="container-fluid">
+			<%if (this.err){ %>
+				<p class="alert alert-danger"><%= err.message %></p>
+			<% } %>
+			
+			<form method="post">
+				<label for="username">Username: </label>
+				<input type="text" name="username" />
+				<label for="password">Password: </label>
+				<input type="passowrd" name="password" />
+				<input type="submit" name="submit" value="Register" />
+			</form>
+
+		</div>
+	</body>
+</html>

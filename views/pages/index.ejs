@@ -40,6 +40,9 @@
 				<div class="col-xs-12">
 					<form id="userlogin">
 						<div class="alert alert-info" role="alert">
+							<% if( this.user) { %>
+								<p>Logged In as: <%= this.user.username %></p>
+							<% } %>
 							<p><i class="glyphicon glyphicon-user"></i> Please pick a <strong>username</strong> to join the <strong>lobby.</strong></p>
 							<p>Your username cannot be the same as someone already online and it must be at least 4 characters long.</p>
 						</div>

@@ -5,39 +5,35 @@ var express = require('express');
 var router = express.Router();
 
 router.route('/')
-	.get( function(req, res) {
-		console.log('/GET');
+	.get( function(req, res) {		
 		return res.render('pages/login/index', { user : req.user });
 	})
 	.post(passport.authenticate('local',{
 		successRedirect: '/login/success/',
 		failureRedirect: '/login/failure/',
-		failureFlash: true 
+		failureFlash: false 
 	}));
 
 router.route('/success')
-	.get(function(req,res){
-		return res.render('pages/login/success')
+	.get(function(req,res){		
+		return res.render('pages/login/success',{ user :  req.user.username });
 	});
 
 router.route('/failure')
 	.get(function(req,res){
-		return res.render('pages/login/failure')
+		return res.render('pages/login/failure', { failure : req.err});
 	});
 
 router.route('/register')
 	.get(function(req, res) {
-		console.log('/GET register ');
-      res.render('pages/login/register', { });
+     	res.render('pages/login/register', { });
   	}).post(function(req, res) {
-  		console.log('/register POST  ');
     	User.register(new User({ username : req.body.username }), req.body.password, function(err, user) {
         if (err) {
             return res.render('pages/login/register', { user : user, err : err });
         }
-        console.log('/Authenticate redirect to / ');
         passport.authenticate('local')(req, res, function () {
-          res.redirect('/');
+          return res.redirect('/');
         });
     });
   });

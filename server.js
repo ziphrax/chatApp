@@ -44,111 +44,23 @@ app.use(function(req, res, next) {
 
 var rooms = {};
 var auth = basicAuth('Admin42', 'Pro1337p4ss');
-var notes = require('./routes/notes');
+
 var surveysRoute = require('./routes/surveys');
+var routes = require('./routes/routes');
+var dataRoutes = require('./routes/data');
+
+app.use('/',routes);
+app.use('/data',dataRoutes)
 
 app.use('/surveys',auth,surveysRoute);
 
-app.use('/data/notes',notes);
-
-app.get('/new-survey',auth,function(request,response){
-  response.render('pages/new-survey');
-});
-
-app.get('/',function(request,response){
-	response.render('pages/index', { user : request.user });
-});
-app.get('/terms-of-service',function(request,response){
-	response.render('pages/terms');
-});
-
-app.get('/news',function(request,response){
-	response.render('pages/news');
-});
-
-app.get('/notes',function(request,response){
-  response.render('pages/notes');
-});
-
-app.get('/users',function(request,response){
-	response.render('pages/users');
-});
-
 app.get('/data/users',function(request,response){
-    response.json(usernames);
-    response.end();
+		response.json(usernames);
+		response.end();
 });
 
 app.get('/admin/logs',auth,function(request,response){
     response.render('pages/logs');
-});
-
-app.get('/data/logs/dailyhitrate/:token',auth,function(request,response){
-    if(request.params.token == '241085.0129'){
-        var options = {};
-        options.map = function(){
-            var d = this.time;
-            d.setHours(0);
-            d.setMinutes(0);
-            d.setSeconds(0);
-            d.setMilliseconds(0);
-            emit(d,this.ip);
-        }
-
-        options.reduce = function(key,values){
-            var sum = 0;
-            for(var v in values){
-                sum += 1;
-            }
-            return sum;
-        };
-
-        Log.mapReduce(options,function(err,results,stats){
-            if(err){
-                console.log(err);
-                response.status(500).send(err);
-            } else {
-                console.log("hitrate map reduce took %d ms", stats.processtime);
-                response.json(results);
-            }
-        });
-    } else {
-        response.status(401).send('Unauthorized');
-    }
-});
-
-app.get('/data/logs/raw/:token',auth,function(request,response){
-    if(request.params.token == '241085.0129'){
-        Log.find().exec(function(err,docs){
-            if(err){
-                console.log(err);
-                response.status(500).send(err);
-            } else {
-                response.json(docs);
-                response.end();
-            }
-        });
-    } else {
-        response.status(401).send('Unauthorized');
-    }
-
-});
-
-app.get('/data/chatlogs/:token',auth,function(request,response){
-    if(request.params.token == '241085.0129'){
-        ChatLog.find().exec(function(err,docs){
-            if(err){
-                console.log(err);
-                response.status(500).send(err);
-            } else {
-                response.json(docs);
-                response.end();
-            }
-        });
-    } else {
-        response.status(401).send('Unauthorized');
-    }
-
 });
 
 io.sockets.on('connection', function(socket) {

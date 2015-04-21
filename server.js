@@ -3,18 +3,11 @@ var express = require('express')
     , basicAuth = require('basic-auth-connect')
     , bodyParser = require('body-parser')
     , compression = require('compression')
-    , cookieParser = require('cookie-parser')
     , favicon = require('express-favicon')
-    , flash = require('connect-flash')
-    , io = require('socket.io').listen(server)
     , mongoose = require('mongoose')
-    , passport = require('passport')    
-    , localStategy = require('passport-local').Strategy
     , sanitizer = require('sanitizer')
     , server = require('http').createServer(app)
-    , session = require('express-session');
-
-var MongoStore = require('connect-mongo')(session);
+		, io = require('socket.io').listen(server);
 
 var Room = require('./model/room');
 var Log = require('./model/log');
@@ -42,37 +35,18 @@ app.use(logger);
 app.use(banner);
 app.use(cacher);
 app.use(compression());
-app.use(cookieParser());
-app.use(session({
-    secret: 'SuperSecret3',
-    saveUninitialized: false,
-    resave: false,
-    store: new MongoStore({ url: 'mongodb://localhost/chatAppSessions' })
-}));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public',{ maxAge: 120000 }));
 app.use(function(req, res, next) {
     res.header('X-Clacks-Overhead', 'GNU Terry Pratchett');
     next();
 });
-app.use(flash());
-
-app.use(passport.initialize());
-app.use(passport.session());
-
-passport.use(new localStategy(User.authenticate()));
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
 
 var rooms = {};
-//just for testing
 var auth = basicAuth('Admin42', 'Pro1337p4ss');
-
-var loginRoute = require('./routes/login');
 var notes = require('./routes/notes');
 var surveysRoute = require('./routes/surveys');
 
-app.use('/login',loginRoute);
 app.use('/surveys',auth,surveysRoute);
 
 app.use('/data/notes',notes);

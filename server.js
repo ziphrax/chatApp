@@ -7,15 +7,13 @@ var express = require('express')
     , mongoose = require('mongoose')
     , sanitizer = require('sanitizer')
     , server = require('http').createServer(app)
-		, io = require('socket.io').listen(server);
+		, io = require('socket.io').listen(server)
+		, banner = require('./app/banner')
+		, logger = require('./app/logger')
+		, cacher = require('./app/cacher');
 
 var Room = require('./model/room');
-var Log = require('./model/log');
-var ChatLog = require('./model/chatLog');
-var User = require('./model/user');
-var banner = require('./app/banner');
-var logger = require('./app/logger');
-var cacher = require('./app/cacher');
+
 var usernames = {};
 var port = process.env.PORT || 3000;
 var mongooseURI = process.env.MONGOLAB_URI || 'mongodb://localhost/chatApp';
@@ -45,14 +43,14 @@ app.use(function(req, res, next) {
 var rooms = {};
 var auth = basicAuth('Admin42', 'Pro1337p4ss');
 
-var surveysRoute = require('./routes/surveys');
+
 var routes = require('./routes/routes');
-var dataRoutes = require('./routes/data');
+
 
 app.use('/',routes);
-app.use('/data',dataRoutes)
 
-app.use('/surveys',auth,surveysRoute);
+
+
 
 app.get('/data/users',function(request,response){
 		response.json(usernames);

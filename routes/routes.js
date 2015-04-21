@@ -3,6 +3,12 @@ var express = require('express');
 var router = express.Router();
 
 var auth = basicAuth('Admin42', 'Pro1337p4ss');
+var dataRoutes = require('../routes/data');
+var surveysRoute = require('../routes/surveys');
+
+
+router.use('/data',dataRoutes);
+router.use('/surveys',auth,surveysRoute);
 
 router.route('/')
   .get(function(request,response){

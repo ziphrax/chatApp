@@ -2,21 +2,13 @@
 	<head><title>Login - Chatsplosion.com</title></head>
 	<body>
 		
-		<div class="container-fluid">
-			<%if (this.err){ %>
-				<p class="alert alert-danger"><%= err.message %></p>
-			<% } %>
-
-			<%if (this.info){ %>
-				<p class="alert alert-danger"><%= info %></p>
-			<% } %>
-			
+		<div class="container-fluid">		
 			<form method="post">
 				<label for="username">Username: </label>
 				<input type="text" name="username" />
 				<label for="password">Password: </label>
 				<input type="passowrd" name="password" />
-				<input type="submit" name="submit" value="Register" />
+				<input type="submit" name="submit" value="login" />
 			</form>
 
 		</div>

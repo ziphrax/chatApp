@@ -1,22 +1,64 @@
 var express = require('express')
 	, app = express()
     , basicAuth = require('basic-auth-connect')
+    , cookieParser = require('cookie-parser')
     , bodyParser = require('body-parser')
     , compression = require('compression')
     , favicon = require('express-favicon')
     , mongoose = require('mongoose')
+    , passport = require('passport')
     , sanitizer = require('sanitizer')
+    , session = require('express-session')
+    , LocalStrategy = require('passport-local').Strategy
     , server = require('http').createServer(app)
-		, io = require('socket.io').listen(server)
-		, banner = require('./app/banner')
-		, logger = require('./app/logger')
-		, cacher = require('./app/cacher');
+	, io = require('socket.io').listen(server)
+	, banner = require('./app/banner')
+	, logger = require('./app/logger')
+	, cacher = require('./app/cacher')
+    , flash   = require('connect-flash')
+    , engine = require('ejs-locals');;
 
 var Room = require('./model/room');
 
 var usernames = {};
 var port = process.env.PORT || 3000;
 var mongooseURI = process.env.MONGOLAB_URI || 'mongodb://localhost/chatApp';
+
+app.engine('ejs', engine);
+
+app.set('view engine','ejs');
+app.disable('x-powered-by');
+
+app.use(logger);
+app.use(banner);
+app.use(cacher);
+app.use(compression());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
+
+require('./config/passport')(passport);
+
+app.use(session({ 
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: false
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(express.static('public',{ maxAge: 120000 }));
+app.use(flash());
+
+app.use(function(req, res, next) {
+    res.header('X-Clacks-Overhead', 'GNU Terry Pratchett');
+    next();
+});
+
+var User = require('./model/user');
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 mongoose.connect(mongooseURI, function ( err, res ) {
     if(err){
@@ -26,31 +68,13 @@ mongoose.connect(mongooseURI, function ( err, res ) {
     }
 });
 
-app.set('view engine','ejs');
-app.disable('x-powered-by');
-
-app.use(logger);
-app.use(banner);
-app.use(cacher);
-app.use(compression());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static('public',{ maxAge: 120000 }));
-app.use(function(req, res, next) {
-    res.header('X-Clacks-Overhead', 'GNU Terry Pratchett');
-    next();
-});
-
 var rooms = {};
 var auth = basicAuth('Admin42', 'Pro1337p4ss');
 
 
 var routes = require('./routes/routes');
 
-
 app.use('/',routes);
-
-
-
 
 app.get('/data/users',function(request,response){
 		response.json(usernames);

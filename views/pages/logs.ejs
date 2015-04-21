@@ -114,7 +114,7 @@
   		getRawLogs();
 
 	    function getCanvasLogs(){
-	    	$.get('/data/logs/dailyhitrate/241085.0129')
+	    	$.get('/data/logs/dailyhitrate')
 	    		.done(function(logs){
 	    			var parsedData = $.map(logs,function(val,i){
 	    				return val.value;
@@ -159,7 +159,7 @@
 	    }
 
 	    function getRawLogs(){
-	    	$.get('/data/logs/raw/241085.0129')
+	    	$.get('/data/logs/')
 	    		.done(function(logs){
 	    			$.each(logs,function(index,item){
 	    				$('#rawlogs').find('tbody').append(

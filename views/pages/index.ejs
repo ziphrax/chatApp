@@ -35,41 +35,35 @@
 			</nav>
 		</div>
 
-		<div class="disconnected">
-			<div class="row">
-				<div class="col-xs-12">
-					<form id="userlogin">
-						<div class="alert alert-info" role="alert">
-							
-							<% if( user) { %>
-								<p>Logged In as: <%= user.username %></p>
-							<% } else { %>
-								<a href="./login">Login</a> <a href="./register">Register</a>
-							<% } %>
-							
-							<p><i class="glyphicon glyphicon-user"></i> Please pick a <strong>username</strong> to join the <strong>lobby.</strong></p>
-							<p>Your username cannot be the same as someone already online and it must be at least 4 characters long.</p>
-						</div>
-						<label for="username">Username</label>
-						<div class="input-group">
-							<input id="username" type="text" class="form-control"/>
-							<span class="input-group-btn">
-								<button type="button" id="join" value="Join" class="btn btn-success">Join</button>
-							</span>
-						</div>
-					</form>
-				</div>
+		
+		<div class="row">
+			<div class="col-xs-12">
+				<form id="userlogin">
+					<div class="alert alert-info" role="alert">						
+						<% if( user) { %>
+							<p>Logged In as: <%= user.username %> <a href="./logout">Logout</a></p>
+							<input id="username" type="hidden" class="form-control" value="<%= user.username %>"/>
+							<div class="disconnected">
+							<button type="button" id="join" value="Join" class="btn btn-success">Join</button>
+							</div>
+							<div class="connected" style="display:none;">
+								<p><i class="glyphicon glyphicon-info"></i>
+									Any saved notes are available to anyone via the notes page.
+								</p>
+							</div>
+						<% } else { %>
+							<a href="./login">Login</a> <a href="./register">Register
+							</a>
+						<% } %>
+					</div>						
+				</form>
 			</div>
 		</div>
+		
 
 		<div class="connected" style="display:none;">
 			<div class="row">
 				<div class="col-xs-12">
-					<div class="alert alert-info" role="alert">
-						<p><i class="glyphicon glyphicon-info"></i>
-							Any saved notes are available to anyone via the notes page.
-						</p>
-					</div>
 					<ul id="rooms" class="nav nav-tabs"></ul>
 				</div>
 			</div>

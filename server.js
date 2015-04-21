@@ -31,7 +31,7 @@ app.disable('x-powered-by');
 
 app.use(logger);
 app.use(banner);
-app.use(cacher);
+//app.use(cacher);
 app.use(compression());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));

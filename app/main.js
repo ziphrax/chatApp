@@ -2,6 +2,7 @@ var socket;
 var me = 'unknown';
 $(function(){
   $("input#username").focus();
+
   $(window).bind('keypress',function(e){
     var isChatMessage = $("input#data").is(":active");
     if ( e.keyCode == 13 && !(isChatMessage)) {
@@ -9,17 +10,9 @@ $(function(){
     }
   });
 
-    $('#userlogin').bind('keypress', function(e){
-     if ( e.keyCode == 13 ) {
-       e.preventDefault();
-       handleJoin(e);
-     }
-   });
-
     $('#join').click(handleJoin);
 
     $('#datasend').hide();
-
 
     $('#data').keypress(function(e) {
         if(e.which == 13) {
@@ -30,7 +23,6 @@ $(function(){
     });
 
     function handleJoin(e){
-
       $('#join').fadeOut(500,function(){
         $('#datasend').fadeIn();
       })
@@ -38,17 +30,14 @@ $(function(){
       e.preventDefault();
       socket = io.connect();;
       var cachedRooms = [];
-
-      socket.on('connect', function(){
-          var username = 'testing';
-          me = username;
-          socket.emit('adduser', username);
-          $('.disconnected').fadeOut(500,function(){
-            $('.connected').fadeIn(500,function(){
-              $("input#data").focus();
-            });
-          });
+      
+      socket.emit('adduser');
+      $('.disconnected').fadeOut(500,function(){
+        $('.connected').fadeIn(500,function(){
+          $("input#data").focus();
+        });
       });
+
 
       socket.on('updatechat', function (username, data) {
           $('#conversation').append('<li class="list-group-item"><b><span class="username"></i>'+ username + '</span>: ' + formatedTime() +' -> <span class="saveForLater" title="Save as note"><i class="glyphicon glyphicon-star-empty"></i><span></b> ' + data + '</li>');

@@ -35,7 +35,7 @@ app.disable('x-powered-by');
 
 app.use(logger);
 app.use(banner);
-//app.use(cacher);
+
 app.use(compression());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -106,7 +106,7 @@ io.use(passportSocketIo.authorize({
 
 io.sockets.on('connection', function(socket) {
 
-    socket.emit('usercount',io.sockets.sockets.length);
+		console.log('io.on.connection');
 
     socket.on('adduser', function() {
 					username = socket.request.user.username;

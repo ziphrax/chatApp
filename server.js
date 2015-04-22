@@ -95,7 +95,7 @@ app.get('/admin/logs',auth,function(request,response){
 
 io.use(passportSocketIo.authorize({
 	cookieParser: cookieParser,       // the same middleware you registrer in express
-	key:          'express.sid',       // the name of the cookie where express/connect stores its session_id
+	key:          'connect.sid',       // the name of the cookie where express/connect stores its session_id
 	secret:       'keyboard cat',    // the session_secret to parse the cookie
 	store:        sessionStore,        // we NEED to use a sessionstore. no memorystore please
 	success:      onAuthorizeSuccess,  // *optional* callback on success - read more below
@@ -107,9 +107,7 @@ io.sockets.on('connection', function(socket) {
     socket.emit('usercount',io.sockets.sockets.length);
 
     socket.on('adduser', function() {
-
-					console.log(socket.request.user);
-					username = '123t';
+					username = socket.request.user.username;
           socket.username = sanitizer.sanitize(username);
           socket.room = 'Lobby';
           usernames[socket.username] = {
@@ -295,21 +293,11 @@ function onAuthorizeSuccess(data, accept){
 }
 
 function onAuthorizeFail(data, message, error, accept){
-	if(error)
-		throw new Error(message);
 	console.log('failed connection to socket.io:', message);
 
 	// We use this callback to log all of our failed connections.
 	accept(null, false);
 
-	// OR
-
-	// If you use socket.io@1.X the callback looks different
-	// If you don't want to accept the connection
-	if(error)
-		accept(new Error(message));
-	// this error will be sent to the user as a special error-package
-	// see: http://socket.io/docs/client-api/#socket > error-object
 }
 
 initServer();

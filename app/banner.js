@@ -7,14 +7,14 @@ module.exports = function banner(request,response,next){
   var stream = process.stdout;
   var url = request.url;
   var method = request.method;
-  var ip = request.headers['X-Forwarded-For'] || request.connection.remoteAddress;
+  var ip = request.headers['X-Real-IP']  || request.headers['X-Forwarded-For'] || request.connection.remoteAddress;
 
   BannedIP.find({ip: ip},function(err,docs){
     if(err){
       console.log(err);
       response.status(500).send('Internal Error');
     } else {
-      if(docs.length > 0){
+      if(docs && docs.length > 0){
         logger.log('','DeniedIP',ip,'IPBanned' ,'');
         response.status(401).send('Request Denied');
       } else {

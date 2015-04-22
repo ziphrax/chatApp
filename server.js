@@ -9,14 +9,18 @@ var express = require('express')
     , passport = require('passport')
     , sanitizer = require('sanitizer')
     , session = require('express-session')
+		, MongoStore = require('connect-mongo')(session)
     , LocalStrategy = require('passport-local').Strategy
     , server = require('http').createServer(app)
-	, io = require('socket.io').listen(server)
-	, banner = require('./app/banner')
-	, logger = require('./app/logger')
-	, cacher = require('./app/cacher')
+		, io = require('socket.io').listen(server)
+		, banner = require('./app/banner')
+		, logger = require('./app/logger')
+		, cacher = require('./app/cacher')
     , flash   = require('connect-flash')
-    , engine = require('ejs-locals');;
+    , engine = require('ejs-locals')
+		, passportSocketIo = require("passport.socketio");
+
+
 
 var Room = require('./model/room');
 
@@ -39,10 +43,13 @@ app.use(cookieParser());
 
 require('./config/passport')(passport);
 
-app.use(session({ 
+var sessionStore = new MongoStore({ mongooseConnection: mongoose.connection });
+
+app.use(session({
     secret: 'keyboard cat',
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: false,
+		store: sessionStore
 }));
 
 app.use(passport.initialize());
@@ -85,27 +92,35 @@ app.get('/admin/logs',auth,function(request,response){
     response.render('pages/logs');
 });
 
+
+io.use(passportSocketIo.authorize({
+	cookieParser: cookieParser,       // the same middleware you registrer in express
+	key:          'express.sid',       // the name of the cookie where express/connect stores its session_id
+	secret:       'keyboard cat',    // the session_secret to parse the cookie
+	store:        sessionStore,        // we NEED to use a sessionstore. no memorystore please
+	success:      onAuthorizeSuccess,  // *optional* callback on success - read more below
+	fail:         onAuthorizeFail,     // *optional* callback on fail/error - read more below
+}));
+
 io.sockets.on('connection', function(socket) {
 
     socket.emit('usercount',io.sockets.sockets.length);
 
-    socket.on('adduser', function(username) {
-        if(validateUsername(username)){
-            socket.username = sanitizer.sanitize(username);
-            socket.room = 'Lobby';
-            usernames[socket.username] = {
-                username : socket.username,
-                socketId: socket.id
-            };
-            socket.join('Lobby');
-            socket.emit('updatechat', 'SERVER', 'you have connected to Lobby');
-            socket.broadcast.to('Lobby').emit('updatechat', 'SERVER', socket.username + ' has connected to this room');
-            socket.emit('updaterooms', makeRoomsSafeToSend(rooms), 'Lobby');
-            socket.broadcast.emit('usercount',io.sockets.sockets.length);
-        } else {
-            socket.emit('updatechat','SERVER','username already in use');
-            socket.disconnect();
-        }
+    socket.on('adduser', function() {
+
+					console.log(socket.request.user);
+					username = '123t';
+          socket.username = sanitizer.sanitize(username);
+          socket.room = 'Lobby';
+          usernames[socket.username] = {
+              username : socket.username,
+              socketId: socket.id
+          };
+          socket.join('Lobby');
+          socket.emit('updatechat', 'SERVER', 'you have connected to Lobby');
+          socket.broadcast.to('Lobby').emit('updatechat', 'SERVER', socket.username + ' has connected to this room');
+          socket.emit('updaterooms', makeRoomsSafeToSend(rooms), 'Lobby');
+          socket.broadcast.emit('usercount',io.sockets.sockets.length);
     });
 
 
@@ -264,6 +279,37 @@ function parseYoutubeMessage(data){
       msg = ' <br /><i> You may only link one video at a time from youtube</i><br />';
     }
     return {data: data, msg: msg};
+}
+
+function onAuthorizeSuccess(data, accept){
+	console.log('successful connection to socket.io');
+
+	// The accept-callback still allows us to decide whether to
+	// accept the connection or not.
+	accept(null, true);
+
+	// OR
+
+	// If you use socket.io@1.X the callback looks different
+	accept();
+}
+
+function onAuthorizeFail(data, message, error, accept){
+	if(error)
+		throw new Error(message);
+	console.log('failed connection to socket.io:', message);
+
+	// We use this callback to log all of our failed connections.
+	accept(null, false);
+
+	// OR
+
+	// If you use socket.io@1.X the callback looks different
+	// If you don't want to accept the connection
+	if(error)
+		accept(new Error(message));
+	// this error will be sent to the user as a special error-package
+	// see: http://socket.io/docs/client-api/#socket > error-object
 }
 
 initServer();

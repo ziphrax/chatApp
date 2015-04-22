@@ -3,9 +3,8 @@ var me = 'unknown';
 $(function(){
   $("input#username").focus();
   $(window).bind('keypress',function(e){
-    var isLogin = $("input#username").is(":active");
     var isChatMessage = $("input#data").is(":active");
-    if ( e.keyCode == 13 && !(isLogin || isChatMessage)) {
+    if ( e.keyCode == 13 && !(isChatMessage)) {
       e.preventDefault();
     }
   });
@@ -19,6 +18,8 @@ $(function(){
 
     $('#join').click(handleJoin);
 
+    $('#datasend').hide();
+
 
     $('#data').keypress(function(e) {
         if(e.which == 13) {
@@ -29,13 +30,17 @@ $(function(){
     });
 
     function handleJoin(e){
+
+      $('#join').fadeOut(500,function(){
+        $('#datasend').fadeIn();
+      })
       io.connect();
       e.preventDefault();
       socket = io.connect();;
       var cachedRooms = [];
 
       socket.on('connect', function(){
-          var username = $('#username').val();
+          var username = 'testing';
           me = username;
           socket.emit('adduser', username);
           $('.disconnected').fadeOut(500,function(){

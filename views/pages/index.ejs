@@ -28,67 +28,166 @@
 							<li><a href="/terms-of-service">Terms</a></li>
 						</ul>
 						<ul class="nav navbar-nav navbar-right">
-							<li class="text-right"><a href="/users"><b>Users online:</b> <span id="usercount">joining...</span></a><li>
+							<!--li class="text-right"><a href="/users"><b>Users online:</b> <span id="usercount">joining...</span></a><li-->
+							<li class="text-right">
+								<% if( user) { %>
+									<p class="navbar-text">Logged In as: <%= user.username %> <a href="./logout">Logout</a><p>
+								<% } else { %>
+									<div class="col-xs-12">
+										<div class="row">
+											<form id="userlogin" method="post" action="./login" class="navbar-text">
+													<div class="col-xs-2">
+														<label>Username</label>
+													</div>
+													<div class="col-xs-4">
+														<input type="text" name="username" class="form-control"/>
+													</div>
+													<div class="col-xs-4">
+														<input type="password" name="password" class="form-control"/>
+													</div>
+													<div class="col-xs-2">
+														<button type="submit" class="btn btn-default">Login</button>
+													</div>
+											</form>
+										</div>
+									</div>
+
+								<% } %>
+							</li>
 						</ul>
 					</div>
 				</div>
 			</nav>
 		</div>
 
-		
-		<div class="row">
-			<div class="col-xs-12">
-				<form id="userlogin">
-					<div class="alert alert-info" role="alert">						
-						<% if( user) { %>
-							<p>Logged In as: <%= user.username %> <a href="./logout">Logout</a></p>
-							<input id="username" type="hidden" class="form-control" value="<%= user.username %>"/>
-							<div class="disconnected">
-							<button type="button" id="join" value="Join" class="btn btn-success">Join</button>
+		<% if( user) { %>
+			<div class="connected">
+				<div class="row">
+					<div class="col-xs-12">
+						<ul id="rooms" class="nav nav-tabs">
+							<li role="presentation" class="active"><a href="#" data-room="Lobby">Lobby</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<ul id="conversation" class="list-group"></ul>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<form>
+							<div class="input-group">
+							<input id="data" type="text" class="form-control"/>
+							<span class="input-group-btn">
+								<button type="button" id="join" value="send" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i>  Join</button>
+								<button type="button" id="datasend" value="send" class="btn btn-success"><i class="glyphicon glyphicon-send"></i>  Send</button>
+								<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+									<i class="glyphicon glyphicon-plus"></i>	Create Room
+								</button>
+							</span>
 							</div>
-							<div class="connected" style="display:none;">
-								<p><i class="glyphicon glyphicon-info"></i>
-									Any saved notes are available to anyone via the notes page.
-								</p>
-							</div>
-						<% } else { %>
-							<a href="./login">Login</a> <a href="./register">Register
-							</a>
-						<% } %>
-					</div>						
-				</form>
-			</div>
-		</div>
-		
-
-		<div class="connected" style="display:none;">
-			<div class="row">
-				<div class="col-xs-12">
-					<ul id="rooms" class="nav nav-tabs"></ul>
+						</form>
+					</div>
 				</div>
-			</div>
-			<div class="row">
+
+			<% } else { %>
+				<div class="row">
+					<div class="col-xs-12">
+							<h1>News</h1>
+					</div>
+				</div>
+
+				<div class="row">
 				<div class="col-xs-12">
-					<ul id="conversation" class="list-group"></ul>
+						<h2>Saving Notes <span class="small">19th April 2015</span></h2>
+
+						<p>Saving Notes</p>
+						<p class="text-justify">By clicking on the star icon next to a post you can now save that message as a note. For the time being these are available for everyone to see and is great way to share important messages and keep information. We are looking at how we can improve this feature in future, but we do have plans already to add filters based on user defined tags so that you can search through these more efficiently.</p>
+						<p>From</p>
+						<p>The Development Team</p>
+
 				</div>
 			</div>
 
-
-			<div class="row">
+				<div class="row">
 				<div class="col-xs-12">
-					<form>
-						<div class="input-group">
-						<input id="data" type="text" class="form-control"/>
-						<span class="input-group-btn">
-							<button type="button" id="datasend" value="send" class="btn btn-success"><i class="glyphicon glyphicon-send"></i>  Send</button>
-							<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
-								<i class="glyphicon glyphicon-plus"></i>	Create Room
-							</button>
-						</span>
-						</div>
-					</form>
+						<h2>New Private Chat Messages <span class="small">11th April 2015</span></h2>
+
+						<p>In the latest update</p>
+						<p class="text-justify">We have just added new private chat rooms in addition to the passworded rooms you can create. Just double click on the username of someone in your lobby and invite them to chat. A message will appear in both users browsers to join the new room.</p>
+						<p class="text-justify"><i>Note: These new private chat rooms are not visible to other users and you are limited to one at a time. This feature will be exapanded upon soon however.</i></p>
+						<p>From</p>
+						<p>The Development Team</p>
+
 				</div>
 			</div>
+
+				<div class="row">
+				<div class="col-xs-12">
+						<h2>Easter Gift <span class="small">3rd April 2015</span></h2>
+
+						<p>Happy Easter!!</p>
+						<p class="text-justify">We figured we would give you all a small gift in this easter update. You can now send images and youtube videos in your messages.</p>
+						<p>To send images just copy and paste the url into your message. So for example "http://content63.eol.org/content/2012/08/09/02/43233_580_360.jpg".</P>
+						<p>To include a youtube video copy and paste the youtube url into your message. "https://www.youtube.com/watch?v=dQw4w9WgXcQ".</p>
+						<p>For the time being you can only post one youtube video at a time but we plan on improving on that soon. We are also looking at adding further content types you can send in your messages and maybe adding markdown support.</p>
+						<p>As always if you get any issues please contact us.</p>
+						<p>From</p>
+						<p>The Development Team</p>
+
+				</div>
+			</div>
+
+
+				<div class="row">
+					<div class="col-xs-12">
+							<h2>Backend Improvements <span class="small">30th March 2015</span></h2>
+
+							<p>Just a quick update,</p>
+							<p class="text-justify">So we spent last week adding a number of backend improvments upon which we will be able to build future functionality. Although you currently will not notice many changes they are there to make our lives easier. As always though, if you do start to have issues, please email in.</p>
+							<p>From</p>
+							<p>The Development Team</p>
+
+					</div>
+				</div>
+
+
+				<div class="row">
+					<div class="col-xs-12">
+							<h2>Shiny New Chatsplosion Server <span class="small">25th March 2015</span></h2>
+
+							<p>Exciting!</p>
+							<p class="text-justify">So with our beta release with have moved our application to dedicated hosting. We now have a shiney new server that should be overkill for our purposes. We are hopefull however that Chatsplosion will get super popular in future and we shall be greatful for it.</p>
+							<p class="text-justify">We have estimated that even without tweaking we should be able to support somehwere between 10,000 and 15,000 concurrent users.</p>
+							<p>From</p>
+							<p>The Development Team</p>
+
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-xs-12">
+							<h2>Chatsplosion Beta Anouncement <span class="small">24th March 2015</span></h2>
+
+							<p>Welcome,</p>
+							<p class="text-justify">Chatsplosion has finally been released to the wild. For the time being it is a pretty straight foward and simple chat application but as we go fowards more and more features will be added.</p>
+							<p class="text-justify">The site has been made using the latest technologies so may have the odd bug here and there whilst we work out the kinks.</p>
+							<p class="text-justify">Some of the features we have planned are:
+									<ul>
+										<li>Private messaging</li>
+										<li>Image sharing</li>
+										<li>Permenant logins and user registration</li>
+									</ul>
+							</p>
+							<p class="text-justify">If you have any comments, find any bugs or have any suggestions on how we can improve the site please send us an email to <a href="mailto:tbc@example.com">tbc</a></p>
+							<p>From</p>
+							<p>The Development Team</p>
+
+					</div>
+				</div>
+
+			<% } %>
 
 		<!-- Modal -->
 		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -138,11 +237,6 @@
 
 
 		</div> <!--- end of connected--->
-
-		<!--div>
-			<div id="room creation">
-			<input type="button" id="roombutton" value="create room" />
-		</div-->
 
 	</div> <!-- /container -->
 

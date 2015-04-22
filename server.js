@@ -43,6 +43,14 @@ app.use(cookieParser());
 
 require('./config/passport')(passport);
 
+mongoose.connect(mongooseURI, function ( err, res ) {
+		if(err){
+				console.log('ERROR connecting to: ' + mongooseURI + '. ' + err);
+		} else {
+				console.log('Succeeded connecting to: ' + mongooseURI);
+		}
+});
+
 var sessionStore = new MongoStore({ mongooseConnection: mongoose.connection });
 
 app.use(session({
@@ -67,13 +75,7 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-mongoose.connect(mongooseURI, function ( err, res ) {
-    if(err){
-        console.log('ERROR connecting to: ' + mongooseURI + '. ' + err);
-    } else {
-        console.log('Succeeded connecting to: ' + mongooseURI);
-    }
-});
+
 
 var rooms = {};
 var auth = basicAuth('Admin42', 'Pro1337p4ss');

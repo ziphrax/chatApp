@@ -7,7 +7,7 @@ module.exports = function banner(request,response,next){
   var stream = process.stdout;
   var url = request.url;
   var method = request.method;
-  var ip = request.headers['X-Real-IP'] || request.connection.remoteAddress;
+  var ip = request.headers['x-real-ip'] || request.connection.remoteAddress;
 
   BannedIP.find({ip: ip},function(err,docs){
     if(err){

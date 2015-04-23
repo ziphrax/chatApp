@@ -31,7 +31,7 @@
 							<!--li class="text-right"><a href="/users"><b>Users online:</b> <span id="usercount">joining...</span></a><li-->
 							<li class="text-right">
 								<% if( user) { %>
-									<p class="navbar-text">Logged In as: <%= user.username %> <a href="./logout">Logout</a><p>
+									<p class="navbar-text">Logged In as: <%= user.username %> <a href="./logout">Logout</a> &nbsp; Users Online: <span id="usercount">0</span><p>
 								<% } else { %>
 									<button type="button" class="btn btn-success navbar-btn" data-toggle="modal" data-target="#loginModal">
 									  Login
@@ -39,8 +39,9 @@
 									<button type="button" class="btn btn-primary navbar-btn" data-toggle="modal" data-target="#registerModal">
 									  Register
 									</button>
-								<% } %>
 									<p class="navbar-text">Users Online: <span id="usercount">0</span></p>
+								<% } %>
+
 							</li>
 						</ul>
 					</div>

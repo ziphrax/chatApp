@@ -112,58 +112,79 @@ io.on('connection', function(socket) {
         socket.emit('usercount',io.sockets.sockets.length);
 
 		socket.on('adduser',function(){
-			username = socket.request.user.username;
-			socket.username = sanitizer.sanitize(username);
-			socket.room = 'Lobby';
-			usernames[socket.username] = {
-					username : socket.username,
-					socketId: socket.id
-			};
-			socket.join('Lobby');
-			socket.emit('updatechat', 'SERVER', 'you have connected to Lobby');
-			socket.broadcast.to('Lobby').emit('updatechat', 'SERVER', socket.username + ' has connected to this room');
-			socket.emit('updaterooms', makeRoomsSafeToSend(rooms), 'Lobby');
-			socket.broadcast.emit('usercount',io.sockets.sockets.length);
+            if(socket.request.user.logged_in){
+    			username = socket.request.user.username;
+    			socket.username = sanitizer.sanitize(username);
+    			socket.room = 'Lobby';
+    			usernames[socket.username] = {
+    					username : socket.username,
+    					socketId: socket.id
+    			};
+    			socket.join('Lobby');
+    			socket.emit('updatechat', 'SERVER', 'you have connected to Lobby');
+    			socket.broadcast.to('Lobby').emit('updatechat', 'SERVER', socket.username + ' has connected to this room');
+    			socket.emit('updaterooms', makeRoomsSafeToSend(rooms), 'Lobby');
+    			socket.broadcast.emit('usercount',io.sockets.sockets.length);
+             } else {
+                socket.emit('updatechat', 'SERVER', 'You are not authorized to join rooms.');
+                socket.leave(socket.room);
+            }
 		});
 
     socket.on('create',function(roomName,password){
-        var newRoom = new Room({
-            name : sanitizer.sanitize(roomName),
-            createdDate : new Date(),
-            requiresPassword : password.length > 0,
-            password : password,
-            displayOrder: Object.keys(rooms).length + 1
-        }).save(function(err){
-            console.error(err);
-        });
-        rooms[sanitizer.sanitize(roomName)] = {
-            name : sanitizer.sanitize(roomName),
-            requiresPassword: password.length > 0,
-            password : password
-        };
-        socket.emit('updatechat', 'SERVER', 'New Room has been created: ' + sanitizer.sanitize(roomName));
-        socket.emit('updaterooms', makeRoomsSafeToSend(rooms), sanitizer.sanitize(roomName));
+        if(socket.request.user.logged_in){
+            var newRoom = new Room({
+                name : sanitizer.sanitize(roomName),
+                createdDate : new Date(),
+                requiresPassword : password.length > 0,
+                password : password,
+                displayOrder: Object.keys(rooms).length + 1
+            }).save(function(err){
+                console.error(err);
+            });
+            rooms[sanitizer.sanitize(roomName)] = {
+                name : sanitizer.sanitize(roomName),
+                requiresPassword: password.length > 0,
+                password : password
+            };
+            socket.emit('updatechat', 'SERVER', 'New Room has been created: ' + sanitizer.sanitize(roomName));
+            socket.emit('updaterooms', makeRoomsSafeToSend(rooms), sanitizer.sanitize(roomName));
+        } else {
+            socket.emit('updatechat', 'SERVER', 'You are not authorized to create rooms.');
+            socket.leave(socket.room);
+        }
     });
 
     socket.on('sendchat', function(data) {
-        var msg = parseMessage(data);
-        io.sockets["in"](socket.room).emit('updatechat', socket.username, msg);
-		    logger.chatLog(socket.username,	sanitizer.sanitize(data),socket.room,'sockets');
+        if(socket.request.user.logged_in){
+            var msg = parseMessage(data);
+            io.sockets["in"](socket.room).emit('updatechat', socket.username, msg);
+    		logger.chatLog(socket.username,	sanitizer.sanitize(data),socket.room,'sockets');
+        } else {
+            socket.emit('updatechat', 'SERVER', 'You are not authorized to send chat.');
+            socket.leave(socket.room);
+        }
     });
 
-    socket.on('invite',function(from,to){
-      var socketId = usernames[to].socketId;
-      var newRoomName = from + '-' + to + +new Date();
+    socket.on('invite',function(to){
+        if(socket.request.user.logged_in){
+          var from = socket.username;
+          var socketId = usernames[to].socketId;
+          var newRoomName = from + '-' + to + +new Date();
 
-      rooms[newRoomName] = {
-          name : newRoomName,
-          requiresPassword: false,
-          password : '',
-          private : true
-      };
+          rooms[newRoomName] = {
+              name : newRoomName,
+              requiresPassword: false,
+              password : '',
+              private : true
+          };
 
-      socket.broadcast.to(socketId).emit('updatechat','SERVER', from + ' has invited you to chat. <a href="#' + from + '" data-room="'+ newRoomName +'" class="join">Click here to join</a> <a href="#" class="decline" data-username="'+ from +'"> or Decline</a>');
-      socket.emit('updatechat','SERVER', 'Private chat room has been created. <a href="#' + from + '" data-room="'+ newRoomName +'" class="join">Click here to join</a>');
+          socket.broadcast.to(socketId).emit('updatechat','SERVER', from + ' has invited you to chat. <a href="#' + from + '" data-room="'+ newRoomName +'" class="join">Click here to join</a> <a href="#" class="decline" data-username="'+ from +'"> or Decline</a>');
+          socket.emit('updatechat','SERVER', 'Private chat room has been created. <a href="#' + from + '" data-room="'+ newRoomName +'" class="join">Click here to join</a>');
+         } else {
+            socket.emit('updatechat', 'SERVER', 'You are not authorized to invite people to chat.');
+            socket.leave(socket.room);
+        }
     });
 
     socket.on('decline',function(username){
@@ -172,23 +193,28 @@ io.on('connection', function(socket) {
     });
 
     socket.on('switchRoom', function(newroom) {
-        if(rooms[newroom.name].password == newroom.password){
-            var oldroom;
-            oldroom = socket.room;
-            socket.leave(socket.room);
-            socket.join(newroom.name);
-            if(!rooms[newroom.name].private){
-              socket.emit('updatechat', 'SERVER', 'you have connected to ' + newroom.name);
+        if(socket.request.user.logged_in){
+            if(rooms[newroom.name].password == newroom.password){
+                var oldroom;
+                oldroom = socket.room;
+                socket.leave(socket.room);
+                socket.join(newroom.name);
+                if(!rooms[newroom.name].private){
+                  socket.emit('updatechat', 'SERVER', 'you have connected to ' + newroom.name);
+                } else {
+                  socket.emit('updatechat', 'SERVER', 'you have connected to private chat.');
+                }
+                socket.broadcast.to(oldroom).emit('updatechat', 'SERVER', socket.username + ' has left this room');
+                socket.room = newroom.name;
+                socket.broadcast.to(newroom).emit('updatechat', 'SERVER', socket.username + ' has joined this room');
+                socket.broadcast.emit('usercount',io.sockets.sockets.length);
+                socket.emit('updaterooms', makeRoomsSafeToSend(rooms), newroom.name);
             } else {
-              socket.emit('updatechat', 'SERVER', 'you have connected to private chat.');
+                socket.emit('updatechat', 'SERVER', 'you cant connect to that room. Incorrect password.');
             }
-            socket.broadcast.to(oldroom).emit('updatechat', 'SERVER', socket.username + ' has left this room');
-            socket.room = newroom.name;
-            socket.broadcast.to(newroom).emit('updatechat', 'SERVER', socket.username + ' has joined this room');
-            socket.broadcast.emit('usercount',io.sockets.sockets.length);
-            socket.emit('updaterooms', makeRoomsSafeToSend(rooms), newroom.name);
         } else {
-            socket.emit('updatechat', 'SERVER', 'you cant connect to that room. Incorrect password.');
+            socket.emit('updatechat', 'SERVER', 'You are not authorized to join rooms.');
+            socket.leave(socket.room);
         }
     });
 
@@ -285,17 +311,12 @@ function parseYoutubeMessage(data){
 
 function onAuthorizeSuccess(data, accept){
 	console.log('successful connection to socket.io');
-
-	// If you use socket.io@1.X the callback looks different
 	accept();
 }
 
 function onAuthorizeFail(data, message, error, accept){
 	console.log('failed connection to socket.io:', message);
-
-	// We use this callback to log all of our failed connections.
 	accept(null, false);
-
 }
 
 initServer();

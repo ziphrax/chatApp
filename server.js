@@ -108,6 +108,8 @@ var count = 1;
 io.on('connection', function(socket) {
 		console.log('io.on.connection');
 
+        socket.emit('updaterooms', makeRoomsSafeToSend(rooms), 'Lobby');
+
 		socket.on('adduser',function(){
 			username = socket.request.user.username;
 			socket.username = sanitizer.sanitize(username);

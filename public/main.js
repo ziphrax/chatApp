@@ -3,9 +3,6 @@ $(function(){
   var me = 'unknown';
   var cachedRooms = [];
 
-  $("input#username").focus();
-
-
   socket.on('updatechat', function (username, data) {
       $('#conversation').append('<li class="list-group-item"><b><span class="username"></i>'+ username + '</span>: ' + formatedTime() +' -> <span class="saveForLater" title="Save as note"><i class="glyphicon glyphicon-star-empty"></i><span></b> ' + data + '</li>');
       $('#conversation li:last-child .username').on('click',function(e){

@@ -33,25 +33,12 @@
 								<% if( user) { %>
 									<p class="navbar-text">Logged In as: <%= user.username %> <a href="./logout">Logout</a><p>
 								<% } else { %>
-									<div class="col-xs-12">
-										<div class="row">
-											<form id="userlogin" method="post" action="./login" class="navbar-text">
-													<div class="col-xs-2">
-														<label>Username</label>
-													</div>
-													<div class="col-xs-4">
-														<input type="text" name="username" class="form-control"/>
-													</div>
-													<div class="col-xs-4">
-														<input type="password" name="password" class="form-control"/>
-													</div>
-													<div class="col-xs-2">
-														<button type="submit" class="btn btn-default">Login</button>
-													</div>
-											</form>
-										</div>
-									</div>
-
+									<button type="button" class="btn btn-success navbar-btn" data-toggle="modal" data-target="#loginModal">
+									  Login
+									</button>
+									<button type="button" class="btn btn-primary navbar-btn" data-toggle="modal" data-target="#registerModal">
+									  Register
+									</button>
 								<% } %>
 							</li>
 						</ul>
@@ -61,18 +48,74 @@
 		</div>
 
 		<% if( !user) { %>
+			<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">				
+					<form id="userlogin" method="post" action="./login">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+							<h4 class="modal-title">Login</h4>
+						</div>
+						<div class="modal-body">
+							<div class="row">
+								<div class="col-xs-2">
+									<label>Username</label>
+								</div>
+								<div class="col-xs-4">
+									<input type="text" name="username" class="form-control"/>
+								</div>
+								<div class="col-xs-4">
+									<input type="password" name="password" class="form-control"/>
+								</div>		
+							</div>		
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+							<button type="submit" name="submit" class="btn btn-primary">Login</button>
+						</div>
+					</form>		
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
+
+
+		<div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="registerModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<form method="post" action="/register">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+							<h4 class="modal-title">Register</h4>
+						</div>
+						<div class="modal-body">				
+							<div class="row">
+								<div class="col-xs-2">
+									<label for="username">Username: </label>
+								</div>
+								<div class="col-xs-5">
+									<input type="text" name="username" />
+								</div>
+								<div class="col-xs-2">
+									<label for="password">Password: </label>
+								</div>
+								<div class="col-xs-5">
+									<input type="passowrd" name="password" />
+								</div>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+							<button type="submit" name="submit" class="btn btn-primary">Register</button>
+						</div>
+					</form>		
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
 
 			<div class="connected">
 				<div class="row">
 					<div class="col-xs-12">
-						<form method="post" action="/register">
-								<h2>Register</h2>
-								<label for="username">Username: </label>
-								<input type="text" name="username" />
-								<label for="password">Password: </label>
-								<input type="passowrd" name="password" />
-								<input type="submit" name="submit" value="Register" />
-						</form>
+						
 					</div>
 				</div>
 			</div>

@@ -109,6 +109,7 @@ io.on('connection', function(socket) {
 		console.log('io.on.connection');
 
         socket.emit('updaterooms', makeRoomsSafeToSend(rooms), 'Lobby');
+        socket.emit('usercount',io.sockets.sockets.length);
 
 		socket.on('adduser',function(){
 			username = socket.request.user.username;

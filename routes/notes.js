@@ -5,8 +5,8 @@ var express = require('express');
 var router = express.Router();
 
 router.route('/')
-  .get(function(req,res){
-    Note.find().exec(function(err,docs){
+  .get(function(req,res){    
+    Note.find({owner:req.user.username}).exec(function(err,docs){
       if(err){
         res.status(500).send(err);
       } else {
@@ -18,7 +18,7 @@ router.route('/')
     var note = new Note();
     note.content = req.body.content;
     note.from = req.body.from;
-    note.owner = req.body.owner;
+    note.owner = req.user.username;
     note.time = new Date();
     note.tags = req.body.tags;
 

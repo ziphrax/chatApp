@@ -100,28 +100,28 @@ io.use(
 
 io.on('connection', function( socket ) {		
 
-        socket.emit( 'updaterooms' , makeRoomsSafeToSend( rooms ) , 'Lobby' );
-        socket.emit( 'usercount' , io.sockets.sockets.length );
+    socket.emit( 'updaterooms' , makeRoomsSafeToSend( rooms ) , 'Lobby' );
+    socket.emit( 'usercount' , io.sockets.sockets.length );
 
-		socket.on( 'adduser' , function(){
-            if( socket.request.user.logged_in ){
-    			username = socket.request.user.username;
-    			socket.username = sanitizer.sanitize( username );
-    			socket.room = 'Lobby';
-    			usernames[socket.username] = {
-    					username : socket.username,
-    					socketId: socket.id
-    			};
-    			socket.join( 'Lobby' );
-    			socket.emit( 'updatechat' , 'SERVER' , 'you have connected to Lobby' );
-    			socket.broadcast.to( 'Lobby' ).emit( 'updatechat' , 'SERVER' , socket.username + ' has connected to this room' );
-    			socket.emit( 'updaterooms' , makeRoomsSafeToSend( rooms ) , 'Lobby' );
-    			socket.broadcast.emit( 'usercount',io.sockets.sockets.length );
-             } else {
-                socket.emit( 'updatechat', 'SERVER', 'You are not authorized to join rooms.' );
-                socket.leave( socket.room );
-            }
-		});
+	socket.on( 'adduser' , function(){
+        if( socket.request.user.logged_in ){
+			username = socket.request.user.username;
+			socket.username = sanitizer.sanitize( username );
+			socket.room = 'Lobby';
+			usernames[socket.username] = {
+					username : socket.username,
+					socketId: socket.id
+			};
+			socket.join( 'Lobby' );
+			socket.emit( 'updatechat' , 'SERVER' , 'you have connected to Lobby' );
+			socket.broadcast.to( 'Lobby' ).emit( 'updatechat' , 'SERVER' , socket.username + ' has connected to this room' );
+			socket.emit( 'updaterooms' , makeRoomsSafeToSend( rooms ) , 'Lobby' );
+			socket.broadcast.emit( 'usercount',io.sockets.sockets.length );
+         } else {
+            socket.emit( 'updatechat', 'SERVER', 'You are not authorized to join rooms.' );
+            socket.leave( socket.room );
+        }
+	});
 
     socket.on('create',function(roomName,password){
         if(socket.request.user.logged_in){

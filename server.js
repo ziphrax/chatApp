@@ -103,26 +103,25 @@ io.use(passportSocketIo.authorize({
 	success:      onAuthorizeSuccess,  // *optional* callback on success - read more below
 	fail:         onAuthorizeFail,     // *optional* callback on fail/error - read more below
 }));
+var count = 1;
 
-io.sockets.on('connection', function(socket) {
-
+io.on('connection', function(socket) {
 		console.log('io.on.connection');
 
-    socket.on('adduser', function() {
-					username = socket.request.user.username;
-          socket.username = sanitizer.sanitize(username);
-          socket.room = 'Lobby';
-          usernames[socket.username] = {
-              username : socket.username,
-              socketId: socket.id
-          };
-          socket.join('Lobby');
-          socket.emit('updatechat', 'SERVER', 'you have connected to Lobby');
-          socket.broadcast.to('Lobby').emit('updatechat', 'SERVER', socket.username + ' has connected to this room');
-          socket.emit('updaterooms', makeRoomsSafeToSend(rooms), 'Lobby');
-          socket.broadcast.emit('usercount',io.sockets.sockets.length);
-    });
-
+		socket.on('adduser',function(){
+			username = socket.request.user.username;
+			socket.username = sanitizer.sanitize(username);
+			socket.room = 'Lobby';
+			usernames[socket.username] = {
+					username : socket.username,
+					socketId: socket.id
+			};
+			socket.join('Lobby');
+			socket.emit('updatechat', 'SERVER', 'you have connected to Lobby');
+			socket.broadcast.to('Lobby').emit('updatechat', 'SERVER', socket.username + ' has connected to this room');
+			socket.emit('updaterooms', makeRoomsSafeToSend(rooms), 'Lobby');
+			socket.broadcast.emit('usercount',io.sockets.sockets.length);
+		});
 
     socket.on('create',function(roomName,password){
         var newRoom = new Room({
@@ -283,12 +282,6 @@ function parseYoutubeMessage(data){
 
 function onAuthorizeSuccess(data, accept){
 	console.log('successful connection to socket.io');
-
-	// The accept-callback still allows us to decide whether to
-	// accept the connection or not.
-	accept(null, true);
-
-	// OR
 
 	// If you use socket.io@1.X the callback looks different
 	accept();

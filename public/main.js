@@ -107,7 +107,7 @@ $(function(){
 
 
     function inviteToChat(username){
-      socket.emit('invite', me, username);
+      socket.emit('invite', username);
     }
 
     function scrollConversation(){

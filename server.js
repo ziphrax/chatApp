@@ -47,7 +47,7 @@ require('./config/passport')(passport);
 
 mongoose.connect(mongooseURI, function ( err, res ) {
 	if(err){ logger.log('','','','ERROR connecting to: ' + mongooseURI + '. ' + err,''); }
-	else { logger.log('','','','Succeeded connecting to: ' + mongooseURI),'') }
+	else { logger.log('','','','Succeeded connecting to: ' + mongooseURI,'') }
 });
 
 var sessionStore = new MongoStore({ mongooseConnection: mongoose.connection });

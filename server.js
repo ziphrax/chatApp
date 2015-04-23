@@ -9,24 +9,27 @@ var express = require('express')
     , passport = require('passport')
     , sanitizer = require('sanitizer')
     , session = require('express-session')
-		, MongoStore = require('connect-mongo')(session)
+	, MongoStore = require('connect-mongo')(session)
     , LocalStrategy = require('passport-local').Strategy
     , server = require('http').createServer(app)
-		, io = require('socket.io').listen(server)
-		, banner = require('./app/banner')
-		, logger = require('./app/logger')
-		, cacher = require('./app/cacher')
+	, io = require('socket.io').listen(server)
+	, banner = require('./app/banner')
+	, logger = require('./app/logger')
+	, cacher = require('./app/cacher')
     , flash   = require('connect-flash')
     , engine = require('ejs-locals')
-		, passportSocketIo = require("passport.socketio");
-
-
-
-var Room = require('./model/room');
+	, passportSocketIo = require("passport.socketio");
 
 var usernames = {};
+var rooms = {};
+
 var port = process.env.PORT || 3000;
 var mongooseURI = process.env.MONGOLAB_URI || 'mongodb://localhost/chatApp';
+
+var auth = basicAuth('Admin42', 'Pro1337p4ss');
+var Room = require('./model/room');
+var User = require('./model/user');
+var routes = require('./routes/routes');
 
 app.engine('ejs', engine);
 
@@ -35,7 +38,6 @@ app.disable('x-powered-by');
 
 app.use(logger);
 app.use(banner);
-
 app.use(compression());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -44,21 +46,20 @@ app.use(cookieParser());
 require('./config/passport')(passport);
 
 mongoose.connect(mongooseURI, function ( err, res ) {
-		if(err){
-				console.log('ERROR connecting to: ' + mongooseURI + '. ' + err);
-		} else {
-				console.log('Succeeded connecting to: ' + mongooseURI);
-		}
+	if(err){ logger.log('','','','ERROR connecting to: ' + mongooseURI + '. ' + err,''); }
+	else { logger.log('','','','Succeeded connecting to: ' + mongooseURI),'') }
 });
 
 var sessionStore = new MongoStore({ mongooseConnection: mongoose.connection });
 
-app.use(session({
-    secret: 'keyboard cat',
-    resave: false,
-    saveUninitialized: false,
-		store: sessionStore
-}));
+app.use(
+    session({
+        secret: 'keyboard cat',
+        resave: false,
+        saveUninitialized: false,
+    	store: sessionStore
+    })
+);
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -70,18 +71,9 @@ app.use(function(req, res, next) {
     next();
 });
 
-var User = require('./model/user');
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
-
-
-
-var rooms = {};
-var auth = basicAuth('Admin42', 'Pro1337p4ss');
-
-
-var routes = require('./routes/routes');
 
 app.use('/',routes);
 
@@ -95,39 +87,39 @@ app.get('/admin/logs',auth,function(request,response){
 });
 
 
-io.use(passportSocketIo.authorize({
-	cookieParser: cookieParser,       // the same middleware you registrer in express
-	key:          'connect.sid',       // the name of the cookie where express/connect stores its session_id
-	secret:       'keyboard cat',    // the session_secret to parse the cookie
-	store:        sessionStore,        // we NEED to use a sessionstore. no memorystore please
-	success:      onAuthorizeSuccess,  // *optional* callback on success - read more below
-	fail:         onAuthorizeFail,     // *optional* callback on fail/error - read more below
-}));
-var count = 1;
+io.use(
+    passportSocketIo.authorize({
+    	cookieParser: cookieParser,       
+    	key:          'connect.sid',      
+    	secret:       'keyboard cat',    
+    	store:        sessionStore,      
+    	success:      onAuthorizeSuccess,
+    	fail:         onAuthorizeFail,   
+    })
+);
 
-io.on('connection', function(socket) {
-		console.log('io.on.connection');
+io.on('connection', function( socket ) {		
 
-        socket.emit('updaterooms', makeRoomsSafeToSend(rooms), 'Lobby');
-        socket.emit('usercount',io.sockets.sockets.length);
+        socket.emit( 'updaterooms' , makeRoomsSafeToSend( rooms ) , 'Lobby' );
+        socket.emit( 'usercount' , io.sockets.sockets.length );
 
-		socket.on('adduser',function(){
-            if(socket.request.user.logged_in){
+		socket.on( 'adduser' , function(){
+            if( socket.request.user.logged_in ){
     			username = socket.request.user.username;
-    			socket.username = sanitizer.sanitize(username);
+    			socket.username = sanitizer.sanitize( username );
     			socket.room = 'Lobby';
     			usernames[socket.username] = {
     					username : socket.username,
     					socketId: socket.id
     			};
-    			socket.join('Lobby');
-    			socket.emit('updatechat', 'SERVER', 'you have connected to Lobby');
-    			socket.broadcast.to('Lobby').emit('updatechat', 'SERVER', socket.username + ' has connected to this room');
-    			socket.emit('updaterooms', makeRoomsSafeToSend(rooms), 'Lobby');
-    			socket.broadcast.emit('usercount',io.sockets.sockets.length);
+    			socket.join( 'Lobby' );
+    			socket.emit( 'updatechat' , 'SERVER' , 'you have connected to Lobby' );
+    			socket.broadcast.to( 'Lobby' ).emit( 'updatechat' , 'SERVER' , socket.username + ' has connected to this room' );
+    			socket.emit( 'updaterooms' , makeRoomsSafeToSend( rooms ) , 'Lobby' );
+    			socket.broadcast.emit( 'usercount',io.sockets.sockets.length );
              } else {
-                socket.emit('updatechat', 'SERVER', 'You are not authorized to join rooms.');
-                socket.leave(socket.room);
+                socket.emit( 'updatechat', 'SERVER', 'You are not authorized to join rooms.' );
+                socket.leave( socket.room );
             }
 		});
 
@@ -240,18 +232,6 @@ function makeRoomsSafeToSend(rooms){
     return safeToSendRooms
 }
 
-function validateUsername(name){
-    var isValid = true;
-    if((name || '').length < 4){
-        isValid = false;
-    }
-    if(usernames[name])
-    {
-        isValid = false;
-    }
-    return isValid
-}
-
 function initServer(){
     var roomQuery = Room.find({}).sort([['requiresPassword','ascending'],['displayOrder','ascending']]);
     roomQuery.exec(function(err,docs){
@@ -309,20 +289,12 @@ function parseYoutubeMessage(data){
     return {data: data, msg: msg};
 }
 
-function onAuthorizeSuccess(data, accept){
-	console.log('successful connection to socket.io');
-	accept();
-}
-
-function onAuthorizeFail(data, message, error, accept){
-	console.log('failed connection to socket.io:', message);
-	accept(null, false);
-}
+function onAuthorizeSuccess(data, accept){ accept(); }
+function onAuthorizeFail(data, message, error, accept){ accept(null, false); }
 
 initServer();
 app.start = app.listen = function(){
 	logger.log('','','','SERVER Starting up...','');
-  return server.listen.apply(server, arguments)
+    return server.listen.apply(server, arguments)
 }
-
 app.start(port)

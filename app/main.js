@@ -1,7 +1,7 @@
 $(function(){
   var socket = io();
   var me = 'unknown';
-  var cachedRooms = [];
+  var cachedRooms = [];  
 
   socket.on('updatechat', function (username, data) {
       $('#conversation').append('<li class="list-group-item"><b><span class="username"></i>'+ username + '</span>: ' + formatedTime() +' -> <span class="saveForLater" title="Save as note"><i class="glyphicon glyphicon-star-empty"></i><span></b> ' + data + '</li>');
@@ -85,15 +85,18 @@ $(function(){
     }
   });
 
+    $('#datasend').hide();
+
     $('#join').click(function(e){
       $(this).fadeOut(500,function(){
         $('#datasend').fadeIn();
+        $('input#data').fadeIn();
       })
       e.preventDefault();
       socket.emit('adduser');
     });
 
-    $('#datasend').hide();
+    
 
     $('#data').keypress(function(e) {
         if(e.which == 13) {

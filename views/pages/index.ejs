@@ -60,6 +60,23 @@
 			</nav>
 		</div>
 
+		<% if( !user) { %>
+
+			<div class="connected">
+				<div class="row">
+					<div class="col-xs-12">
+						<form method="post" action="/register">
+								<label for="username">Username: </label>
+								<input type="text" name="username" />
+								<label for="password">Password: </label>
+								<input type="passowrd" name="password" />
+								<input type="submit" name="submit" value="Register" />
+						</form>
+					</div>
+				</div>
+			</div>
+		<% } %>
+
 		<% if( user) { %>
 			<div class="connected">
 				<div class="row">

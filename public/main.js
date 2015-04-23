@@ -1,5 +1,5 @@
 $(function(){
-  var socket = io.connect();
+  var socket = io();
   var me = 'unknown';
   var cachedRooms = [];
 

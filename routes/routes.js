@@ -45,6 +45,27 @@ router.route('/logout')
     res.redirect('/');
 });
 
+router.route('/user')
+  .get(function(req,res){
+    res.render('pages/user', { user : req.user });
+  })
+  .post(function(req,res){
+    if(req.user){
+      User.findOne({username:req.user.username} , function(err,doc){
+         if (err) {
+            return res.status(500).send("There was an error updating the user")
+          }
+          doc.firstname = req.body.firstname;
+          doc.lastname = req.body.lastname;
+          doc.emailaddress = req.body.emailaddress;
+          doc.save();
+          return res.render( 'pages/user', { user : doc});
+      });   
+    } else {
+      res.status(403).send('Request denied');
+    }
+  });
+
 router.route('/new-survey')
   .get(auth,function(request,response){
     response.render('pages/new-survey');

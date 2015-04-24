@@ -4,7 +4,10 @@ var mongoose = require('mongoose'),
 
 var UserSchema = new mongoose.Schema({
  	username: String,
- 	password: String
+ 	password: String,
+ 	firstname: String,
+ 	lastname: String,
+ 	emailaddress: String
 });
 
 UserSchema.plugin(passportLocalMongoose);

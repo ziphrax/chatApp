@@ -69,10 +69,23 @@
         $('.notes').html('');
         if(data){
           $.each(data,function(index,note){
-            $('.notes').append('<li class="list-group-item" data-id="' + note._id +'">' + note.from + ':-> ' + note.content +'</li>');
+            var contentStr= '<li class="list-group-item" data-id="' + note._id +'">' + note.from + ':-> ' + note.content +'<i title="remove" class="glyphicon glyphicon-remove pull-right"></i></li>';
+            $('.notes').append(contentStr).find('i').click(function(){
+              var self = $(this);
+              $.ajax({
+                method: "DELETE",
+                url: "./data/notes/" + note._id                
+              }).done(function(){
+                self.parent().fadeOut(500,function(){
+                  self.remove();
+                })
+              }).fail(function(err){
+                alert(err);
+              });
+            });
           });
         } else {
-          $('.users').append('<li class="list-group-item">There are no notes saved.</li>');
+          $('.notes').append('<li class="list-group-item">There are no notes saved.</li>');
         }
       });
     }

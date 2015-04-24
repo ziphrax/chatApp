@@ -83,12 +83,10 @@ $(function(){
 		}
 	});
 
-    $( '#datasend' ).hide();
 
     $( '#join' ).click(function(e){
         $( this ).fadeOut(500,function(){
-        	$( '#datasend' ).fadeIn();
-        	$( 'input#data' ).fadeIn();
+        	$( '#chatform' ).fadeIn();        	
         })
       	e.preventDefault();
       	socket.emit('adduser');

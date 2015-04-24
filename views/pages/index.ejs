@@ -138,11 +138,11 @@
 				</div>
 				<div class="row">
 					<div class="col-xs-12">
-						<form>
+						<button type="button" id="join" value="send" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i>  Join</button>
+						<form id="chatform" style="display:none;">
 							<div class="input-group">
-							<input id="data" style="display:none;" type="text" class="form-control"/>
-							<span class="input-group-btn">
-								<button type="button" id="join" value="send" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i>  Join</button>
+							<input id="data" type="text" class="form-control"/>
+							<span class="input-group-btn">								
 								<button type="button" id="datasend" value="send" class="btn btn-success"><i class="glyphicon glyphicon-send"></i>  Send</button>
 								<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
 									<i class="glyphicon glyphicon-plus"></i>	Create Room

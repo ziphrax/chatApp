@@ -46,6 +46,20 @@
       </div>
     </div>
 
+    <div class="row">
+        <div class="col-xs-12">
+          <div class="well">
+            <p class="text-justify">
+              <strong>Notes</strong><br />
+              <ol>
+                <li>Notes are saved here based on your saved chat messages.<li>
+                <li>When you no longer want to keep a post click on the cross in the top right corner.</li>
+              </ol>
+            </p>
+          </div>
+        </div>
+    </div>
+
 
   </div> <!-- /container -->
 
@@ -74,7 +88,7 @@
               var self = $(this);
               $.ajax({
                 method: "DELETE",
-                url: "./data/notes/" + note._id                
+                url: "./data/notes/" + note._id
               }).done(function(){
                 self.parent().fadeOut(500,function(){
                   self.remove();

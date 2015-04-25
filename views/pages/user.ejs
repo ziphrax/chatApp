@@ -24,13 +24,13 @@
             <ul class="nav navbar-nav">
               <li ><a href="/">Home</a></li>
               <li class="active"><a href="/notes">Notes</a></li>
-              <li><a href="/news">News</a></li>              
+              <li><a href="/news">News</a></li>
               <li><a href="/terms-of-service">Terms</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
               <li class="text-right">
                 <% if( user) { %>
-                  <p class="navbar-text">Users Online: <span id="usercount">0</span> &nbsp;Logged In as: <a href="./user"><%= user.username %></a> <a href="./logout">Logout</a><p>               
+                  <p class="navbar-text">Users Online: <span id="usercount">0</span> &nbsp;Logged In as: <a href="./user"><%= user.username %></a> <a href="./logout">Logout</a><p>
                 <% } %>
               </li>
             </ul>
@@ -49,31 +49,22 @@
 	<div class="row">
 		<div class="col-xs-12">
 			<form method="post">
-				<div class="col-xs-3">
+				<div class="form-group">
 					<label>First Name</label>
-				</div>
-				<div class="col-xs-3">
 					<input name="firstname" class="form-control" type="text" value="<%= user.firstname%>" />
 				</div>
-				<div class="col-xs-3">
+				<div class="form-group">
 					<label>Last Name</label>
-				</div>
-				<div class="col-xs-3">
 					<input name="lastname" class="form-control" type="text" value="<%= user.lastname %>" />
 				</div>
-				<div class="col-xs-3">
+				<div class="form-group">
 					<label>username</label>
-				</div>
-				<div class="col-xs-3">
 					<input name="username" class="form-control" type="text" value="<%= user.username %>" />
 				</div>
-				<div class="col-xs-3">
+				<div class="form-group">
 					<label>emailaddress</label>
-				</div>
-				<div class="col-xs-3">
 					<input name="emailaddress" class="form-control" type="text" value="<%= user.emailaddress %>" />
 				</div>
-				<div class="col-xs-12">
 				<button type="submit" name="submit" class="btn btn-success" />Update</button>
 			</form>
 		</div>

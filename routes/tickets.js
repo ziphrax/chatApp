@@ -15,26 +15,29 @@ router.route('/')
       }
     });
   }).post(function(req,res){
-    var ticket = new Ticket();
-    ticket.name = req.body.name;
-    ticket.ticketType = req.body.ticketType;
-    ticket.requiresPassword = req.body.ticketType.length > 0;
-    ticket.password = req.body.ticketType;
+    if(req.user){
+      var ticket = new Ticket();
+      ticket.name = req.body.name;
+      ticket.ticketType = req.body.ticketType;
+      ticket.requiresPassword = req.body.ticketType.length > 0;
+      ticket.password = req.body.ticketType;
 
-    ticket.title = req.body.title;
-    ticket.content = req.body.content;
-    ticket.status = 'New';
-    ticket.votes = req.body.votes;
-    ticket.created = new Date();
-    ticket.updated = new Date();
+      ticket.title = req.body.title;
+      ticket.content = req.body.content;
+      ticket.status = 'New';
+      ticket.votes = req.body.votes;
+      ticket.created = new Date();
+      ticket.owner = req.user.username;
+      ticket.updated = new Date();
 
-    ticket.save(function(err){
-      if(err) {
-        res.status(500).send(err);
-      } else {
-        res.json({message: 'Ticket saved successfully',data: ticket});
-      }
-    });
+      ticket.save(function(err){
+        if(err) {
+          res.status(500).send(err);
+        } else {
+          res.json({message: 'Ticket saved successfully',data: ticket});
+        }
+      });
+    }
   });
 
 router.route('/tickets/:id')
@@ -43,8 +46,12 @@ router.route('/tickets/:id')
     if(err){
       return res.status(500).send(err);
     } else {
-       ticket.title = req.body.title;
-      ticket.content = req.body.content;
+
+      if(req.user.username = ticket.owner){
+        ticket.title = req.body.title;
+        ticket.content = req.body.content;
+      }
+
       ticket.status = req.body.status;
       ticket.votes = req.body.votes;      
       ticket.updated = new Date();
@@ -53,7 +60,7 @@ router.route('/tickets/:id')
           if(err){
             return res.send(err);
           } else {
-            res.json({message: 'Ticket saved successfully',data:ticket});
+            res.json({message: 'Ticket updated successfully',data:ticket});
           }
       });
     }
@@ -67,15 +74,7 @@ router.route('/tickets/:id')
    }
  });
 }).delete(function(req,res){
-  Ticket.remove({
-    _id: req.params.id
-  },function(err,ticket){
-    if(err){
-      return res.send(err);
-    } else {
-      res.json({message: 'Successfully deleted'});
-    }
-  });
+    res.json({message: 'You can only close tickets, not delete them.'});
 });
 
 module.exports = router;

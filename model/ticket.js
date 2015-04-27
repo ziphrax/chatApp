@@ -7,7 +7,8 @@ var TicketSchema = new mongoose.Schema({
 	status: String,
 	votes: int,
 	created: Date,
-	updated: Date
+	updated: Date,
+	owner: String
 });
 
 module.exports = mongoose.model('Ticket',TicketSchema);

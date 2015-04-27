@@ -10,7 +10,7 @@ var ticketsRoute = require('../routes/tickets');
 
 router.use('/data',dataRoutes);
 router.use('/surveys',auth,surveysRoute);
-router.use('/tickets',ticketsRoute);
+router.use('/data/tickets',ticketsRoute);
 
 router.route('/')
   .get(function(req,res){
@@ -91,6 +91,11 @@ router.route('/terms-of-service')
 router.route('/users')
   .get(function(request,response){
     response.render('pages/users');
+  });
+
+router.route('/tickets')
+  .get(function(request,resposne){
+    response.render('pages/tickets');
   });
 
 

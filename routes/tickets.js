@@ -77,4 +77,34 @@ router.route('/tickets/:id')
     res.json({message: 'You can only close tickets, not delete them.'});
 });
 
+router.route('/tickets/:id/downvote')
+  .put(function(req,res){
+     Ticket.findOne({ _id: req.params.id}, function(err, ticket) {
+       if (err) {
+         return res.send(err);
+       } else {
+          ticket.votes = ticket.votes - 1;
+          ticket.save();
+          res.json({message:'Downvote Success'});
+       }
+     });
+  });
+
+router.route('/tickets/:id/upvote')
+  .put(function(req,res){
+    if(req.user){
+     Ticket.findOne({ _id: req.params.id}, function(err, ticket) {
+       if (err) {
+         return res.send(err);
+       } else {
+          ticket.votes = ticket.votes + 1;
+          ticket.save();
+          res.json({message:'Downvote Success'});
+       }
+     });
+    } else {
+      res.status(403).send('Request Denied');
+    }
+  });
+
 module.exports = router;

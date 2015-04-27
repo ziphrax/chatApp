@@ -5,7 +5,7 @@ var TicketSchema = new mongoose.Schema({
 	title : String,
 	content: String,
 	status: String,
-	votes: int,
+	votes: Number,
 	created: Date,
 	updated: Date,
 	owner: String

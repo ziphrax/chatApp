@@ -1,61 +1,105 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Ticket System - Under Development</title>
+  <title>www.chatsplosion.com - home page</title>
   <link rel="stylesheet" href="/css/bootstrap.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-	<body>
-		<h1>Ticket System</h1>
-		<h2>Under development</h2>
-		<p class="text-justify">OK, so we put our hands up to this. We should have had this in place right from the begining but with the project getting bigger its not getting more difficult to manage. We want you the users to be able to shape the direction of chatsplosion and so we shall soon be unveiling our new ticketing system.
-		</p>
-		<p>With the new system you will be able to post suggestions or report bugs. Users can then vote on these to raise the priority of that ticket. The development team will then take the highest voted tickets and try to resolve them asap.</p>
-		<p>Kinds Regards,</p>
-		<p>The Development Team</p>
 
-		<div class="row">
-			<div class="col-xs-12">
-				<h1>Tickets</h1>
-				<button type="button" class="btn btn-success navbar-btn" data-toggle="modal" data-target="#ticketModel">
-					<i class="glyphicon glypicon-plus"></i> New Ticket
-				</button>
-			</div>
-		</div>
+  <div class="container-fluid">
 
-		<div class="row">
-			<div class="col-xs-12">
-				<ul class="tickets list-group"></ul>
-			</div>
-		</div>		
+    <div class="row">
+      <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          <div class="navbar-header">
+             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+               <i class="glyphicon glyphicon-menu-hamburger"></i>
+             </button>
+            <a class="navbar-brand" href="/">
+               <i class="glyphicon glyphicon-envelope"></i> Chatsplosion.com
+            </a>
+          </div>
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+              <li><a href="/">Home</a></li>
+              <li><a href="/notes">Notes</a></li>
+              <li><a href="/news">News</a></li>
+              <li><a href="/terms-of-service">Terms</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li class="active"><a href="/tickets">Help/Support</a></li>
+              <li class="text-right">
+                <% if( user) { %>
+                  <p class="navbar-text"><a href="/users" target="_blank">Users Online:</a> <span id="usercount">0</span> &nbsp;Logged In as: <a href="./user"><%= user.username %></a> <a href="./logout" >Logout</a><p>
+                <% } else { %>
+                  <button type="button" class="btn btn-success navbar-btn" data-toggle="modal" data-target="#loginModal">
+                    Login
+                  </button>
+                  <button type="button" class="btn btn-primary navbar-btn" data-toggle="modal" data-target="#registerModal">
+                    Register
+                  </button>
+                  <p class="navbar-text">Users Online: <span id="usercount">0</span></p>
+                <% } %>
 
-		<div class="modal fade" id="ticketModel" tabindex="-1" role="dialog" aria-labelledby="ticketModelLabel" aria-hidden="true">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<form id="newTicket" method="post" action="./data/tickets/">
-						<div class="modal-header">
-							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-							<h4 class="modal-title">New Ticket</h4>
-						</div>
-						<div class="modal-body">
-								<div class="form-group">
-									<label>Title</label>
-									<input type="text" name="title" class="form-control"/>
-								</div>
-								<div class="form-group">
-									<label>Content</label>
-									<input type="text" name="content" class="form-control"/>
-								</div>
-						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-							<button type="submit" name="submit" class="btn btn-primary">Create Ticket</button>
-						</div>
-					</form>
-				</div><!-- /.modal-content -->
-			</div><!-- /.modal-dialog -->
-		</div><!-- /.modal -->
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </div>
+    <div class="container-fluid">
+  		<h1>Ticket System</h1>
+  		<h2>Under development</h2>
+  		<p class="text-justify">OK, so we put our hands up to this. We should have had this in place right from the begining but with the project getting bigger its not getting more difficult to manage. We want you the users to be able to shape the direction of chatsplosion and so we shall soon be unveiling our new ticketing system.
+  		</p>
+  		<p>With the new system you will be able to post suggestions or report bugs. Users can then vote on these to raise the priority of that ticket. The development team will then take the highest voted tickets and try to resolve them asap.</p>
+  		<p>Kinds Regards,</p>
+  		<p>The Development Team</p>
+
+  		<div class="row">
+  			<div class="col-xs-12">
+  				<h1>Tickets</h1>
+  				<button type="button" class="btn btn-success navbar-btn" data-toggle="modal" data-target="#ticketModel">
+  					<i class="glyphicon glypicon-plus"></i> New Ticket
+  				</button>
+  			</div>
+  		</div>
+
+  		<div class="row">
+  			<div class="col-xs-12">
+  				<ul class="tickets list-group"></ul>
+  			</div>
+  		</div>
+
+    </div><!-- End of container-fluid -->
+
+  		<div class="modal fade" id="ticketModel" tabindex="-1" role="dialog" aria-labelledby="ticketModelLabel" aria-hidden="true">
+  			<div class="modal-dialog">
+  				<div class="modal-content">
+  					<form id="newTicket" method="post" action="./data/tickets/">
+  						<div class="modal-header">
+  							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+  							<h4 class="modal-title">New Ticket</h4>
+  						</div>
+  						<div class="modal-body">
+  								<div class="form-group">
+  									<label>Title</label>
+  									<input type="text" name="title" class="form-control"/>
+  								</div>
+  								<div class="form-group">
+  									<label>Content</label>
+  									<input type="text" name="content" class="form-control"/>
+  								</div>
+  						</div>
+  						<div class="modal-footer">
+  							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+  							<button type="submit" name="submit" class="btn btn-primary">Create Ticket</button>
+  						</div>
+  					</form>
+  				</div><!-- /.modal-content -->
+  			</div><!-- /.modal-dialog -->
+  		</div><!-- /.modal -->
 
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
@@ -70,7 +114,7 @@
 		            var contentStr= '<li class="list-group-item" data-id="' + ticket._id +'">' + ticket.title + ' :-> ' + ticket.status + ' ( Votes: ' + ticket.votes +' )<br /><br /> ' + ticket.content +'<i title="downvote" class="glyphicon glyphicon-thumbs-up pull-right"></i>&nbsp<i title="upvote" class="glyphicon glyphicon-thumbs-down pull-right"></i></li>';
 		            $('.tickets').append(contentStr);
 		            $("ul").find("[data-id='" + ticket._id + "']").find('i.glyphicon-thumbs-up').click(function(){
-			              var self = $(this);			              
+			              var self = $(this);
 			              $.ajax({
 			                method: "PUT",
 			                url: "./data/tickets/upvote/" + ticket._id

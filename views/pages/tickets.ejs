@@ -68,32 +68,28 @@
 		        if(data){
 		          $.each(data,function(index,ticket){
 		            var contentStr= '<li class="list-group-item" data-id="' + ticket._id +'">' + ticket.title + '( ' + ticket.votes +' )<br /><br /> ' + ticket.content +'<i title="downvote" class="glyphicon glyphicon-thumbs-up pull-right"></i>&nbsp<i title="upvote" class="glyphicon glyphicon-thumbs-down pull-right"></i></li>';
-		            $('.tickets').append(contentStr).find('i.glyphicon-thumbs-up').click(function(){
-			              var self = $(this);
-			              alert('up');
+		            $('.tickets').append(contentStr);
+		            $("ul").find("[data-id='" + ticket._id + "']").find('i.glyphicon-thumbs-up').click(function(){
+			              var self = $(this);			              
 			              $.ajax({
 			                method: "PUT",
 			                url: "./data/tickets/upvote/" + ticket._id
 			              }).done(function(){
-			                self.parent().fadeOut(500,function(){
-			                  self.remove();
-			                })
+			               location.reload();
 			              }).fail(function(err){
 			                alert(err);
 			              });
-		            }).parent().find('i.glyphicon-thumbs-down').click(function(){
-		              var self = $(this);
-		              alert('down');
-		              $.ajax({
-		                method: "PUT",
-		                url: "./data/tickets/downvote/" + ticket._id
-		              }).done(function(){
-		                self.parent().fadeOut(500,function(){
-		                  self.remove();
-		                })
-		              }).fail(function(err){
-		                alert(err);
-		              });
+		            });
+		            $("ul").find("[data-id='" + ticket._id + "']").find('i.glyphicon-thumbs-down').click(function(){
+		              	var self = $(this);
+			            $.ajax({
+			                method: "PUT",
+			                url: "./data/tickets/downvote/" + ticket._id
+			            }).done(function(){
+			                location.reload();
+			            }).fail(function(err){
+			                alert(err);
+			            });
 		            });
 		          });
 		        } else {

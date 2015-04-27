@@ -36,7 +36,7 @@ router.route('/')
     }
   });
 
-router.route('/tickets/:id')
+router.route('/:id')
 .put(function(req,res){
   Ticket.findOne({_id: req.params.id},function(err,ticket){
     if(err){
@@ -73,7 +73,7 @@ router.route('/tickets/:id')
     res.json({message: 'You can only close tickets, not delete them.'});
 });
 
-router.route('/tickets/downvote/:id')
+router.route('/downvote/:id')
   .put(function(req,res){
     if(req.user){
      Ticket.findOne({ _id: req.params.id}, function(err, ticket) {
@@ -90,7 +90,7 @@ router.route('/tickets/downvote/:id')
     }
   });
 
-router.route('/tickets/upvote/:id')
+router.route('/upvote/:id')
   .put(function(req,res){
     if(req.user){
      Ticket.findOne({ _id: req.params.id}, function(err, ticket) {

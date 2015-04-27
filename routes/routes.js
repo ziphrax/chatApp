@@ -47,7 +47,7 @@ router.route('/logout')
 
 router.route('/user')
   .get(function(req,res){
-    res.render('pages/user', { user : req.user });
+    res.render('pages/user', { user : req.user , message: '' });
   })
   .post(function(req,res){
     if(req.user){
@@ -59,7 +59,7 @@ router.route('/user')
           doc.lastname = req.body.lastname;
           doc.emailaddress = req.body.emailaddress;
           doc.save();
-          return res.render( 'pages/user', { user : doc});
+          return res.render( 'pages/user', { user : doc, message : "Update Successful"});
       });   
     } else {
       res.status(403).send('Request denied');

@@ -94,8 +94,8 @@ router.route('/users')
   });
 
 router.route('/tickets')
-  .get(function(request,resposne){
-    response.render('pages/tickets');
+  .get(function(req,res){
+    res.render('pages/tickets');
   });
 
 

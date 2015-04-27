@@ -17,15 +17,11 @@ router.route('/')
   }).post(function(req,res){
     if(req.user){
       var ticket = new Ticket();
-      ticket.name = req.body.name;
-      ticket.ticketType = req.body.ticketType;
-      ticket.requiresPassword = req.body.ticketType.length > 0;
-      ticket.password = req.body.ticketType;
 
       ticket.title = req.body.title;
       ticket.content = req.body.content;
       ticket.status = 'New';
-      ticket.votes = req.body.votes;
+      ticket.votes = 1;
       ticket.created = new Date();
       ticket.owner = req.user.username;
       ticket.updated = new Date();
@@ -77,8 +73,9 @@ router.route('/tickets/:id')
     res.json({message: 'You can only close tickets, not delete them.'});
 });
 
-router.route('/tickets/:id/downvote')
+router.route('/tickets/downvote/:id')
   .put(function(req,res){
+    if(req.user){
      Ticket.findOne({ _id: req.params.id}, function(err, ticket) {
        if (err) {
          return res.send(err);
@@ -88,9 +85,12 @@ router.route('/tickets/:id/downvote')
           res.json({message:'Downvote Success'});
        }
      });
+    } else {
+      res.status(403).send('Request Denied');
+    }
   });
 
-router.route('/tickets/:id/upvote')
+router.route('/tickets/upvote/:id')
   .put(function(req,res){
     if(req.user){
      Ticket.findOne({ _id: req.params.id}, function(err, ticket) {

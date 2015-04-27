@@ -62,7 +62,7 @@ router.route('/user')
           doc.emailaddress = req.body.emailaddress;
           doc.save();
           return res.render( 'pages/user', { user : doc, message : "Update Successful"});
-      });   
+      });
     } else {
       res.status(403).send('Request denied');
     }
@@ -95,7 +95,7 @@ router.route('/users')
 
 router.route('/tickets')
   .get(function(req,res){
-    res.render('pages/tickets');
+    res.render('pages/tickets', { user: req.user });
   });
 
 

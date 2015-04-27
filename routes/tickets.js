@@ -6,7 +6,9 @@ var router = express.Router();
 
 router.route('/')
   .get(function(req,res){
-    Ticket.find().exec(function(err,docs){
+    var query = Ticket.find({status:{'$ne': 'Closed'}});
+     query.sort([['votes',-1]]);
+     query.exec(function(err, docs) {
       if(err){
         res.status(500).send(err);
       } else {
@@ -93,7 +95,7 @@ router.route('/downvote/:id')
 router.route('/upvote/:id')
   .put(function(req,res){
     if(req.user){
-     Ticket.findOne({ _id: req.params.id}, function(err, ticket) {
+      Ticket.findOne({ _id: req.params.id}, function(err, ticket) {
        if (err) {
          return res.send(err);
        } else {

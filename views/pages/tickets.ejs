@@ -125,7 +125,7 @@
 		            $("ul").find("[data-id='" + ticket._id + "']").find('i.glyphicon-thumbs-up').click(function(){
 			              var self = $(this);
 			              $.ajax({
-			                method: "PUT",
+			                method: "POST",
 			                url: "./data/tickets/upvote/" + ticket._id
 			              }).done(function(){
 			               location.reload();
@@ -136,7 +136,7 @@
 		            $("ul").find("[data-id='" + ticket._id + "']").find('i.glyphicon-thumbs-down').click(function(){
 		              	var self = $(this);
 			            $.ajax({
-			                method: "PUT",
+			                method: "POST",
 			                url: "./data/tickets/downvote/" + ticket._id
 			            }).done(function(){
 			                location.reload();

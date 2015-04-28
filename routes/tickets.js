@@ -39,7 +39,7 @@ router.route('/')
   });
 
 router.route('/:id')
-.put(function(req,res){
+.post(function(req,res){
   Ticket.findOne({_id: req.params.id},function(err,ticket){
     if(err){
       return res.status(500).send(err);
@@ -76,7 +76,7 @@ router.route('/:id')
 });
 
 router.route('/downvote/:id')
-  .put(function(req,res){
+  .post(function(req,res){
     if(req.user){
      Ticket.findOne({ _id: req.params.id}, function(err, ticket) {
        if (err) {
@@ -93,7 +93,7 @@ router.route('/downvote/:id')
   });
 
 router.route('/upvote/:id')
-  .put(function(req,res){
+  .post(function(req,res){
     if(req.user){
       Ticket.findOne({ _id: req.params.id}, function(err, ticket) {
        if (err) {

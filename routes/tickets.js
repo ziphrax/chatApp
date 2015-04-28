@@ -11,7 +11,7 @@ router.route('/')
      query.exec(function(err, docs) {
       if(err){
         res.status(500).send(err);
-      } else {
+      } else {        
         res.json(docs);
         res.end();
       }
@@ -67,12 +67,12 @@ router.route('/:id')
   Ticket.findOne({ _id: req.params.id}, function(err, ticket) {
    if (err) {
      return res.send(err);
-   } else {
-     res.json(ticket);
+   } else {      
+      res.json(ticket);
    }
  });
 }).delete(function(req,res){
-    res.json({message: 'You can only close tickets, not delete them.'});
+    res.status(403).json({message: 'You can only close tickets, not delete them.'});
 });
 
 router.route('/downvote/:id')

@@ -20,6 +20,7 @@ var express = require('express')
     , engine = require('ejs-locals')
 	, passportSocketIo = require("passport.socketio");
 
+
 var usernames = {};
 var rooms = {};
 

@@ -2,6 +2,7 @@ var basicAuth = require('basic-auth-connect');
 var express = require('express');
 var router = express.Router();
 var User = require('../model/user');
+var Ticket = require('../model/ticket');
 var passport = require('passport');
 var auth = basicAuth('Admin42', 'Pro1337p4ss');
 var dataRoutes = require('../routes/data');
@@ -93,10 +94,22 @@ router.route('/users')
     response.render('pages/users');
   });
 
+router.route('/tickets/:id')
+  .get(function(req,res){
+    Ticket.findOne({_id: req.params.id},function(err,ticket){
+      if(err){
+        return res.status(500).send(err);
+      } else {
+        res.render('pages/ticket',{user: req.user, ticket: ticket});
+      }
+    });
+});
+
 router.route('/tickets')
   .get(function(req,res){
     res.render('pages/tickets', { user: req.user });
   });
+
 
 
 

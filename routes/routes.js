@@ -8,6 +8,7 @@ var passport = require('passport');
 var auth = basicAuth('Admin42', 'Pro1337p4ss');
 var dataRoutes = require('../routes/data');
 var surveysRoute = require('../routes/surveys');
+var marked = require('marked');
 
 
 router.use('/data',dataRoutes);
@@ -97,9 +98,10 @@ router.route('/users')
 router.route('/tickets/:id')
   .get(function(req,res){
     Ticket.findOne({_id: req.params.id},function(err,ticket){
-      if(err){
+      if(err){        
         return res.status(500).send(err);
       } else {
+        ticket.content = marked(ticket.content);
         res.render('pages/ticket',{user: req.user, ticket: ticket});
       }
     });
@@ -116,6 +118,7 @@ router.route('/articles/:id')
       if(err){
         return res.status(500).send(err);
       } else {
+        article.content = marked(article.content);
         res.render('pages/article',{user: req.user, article: article});
       }
     });

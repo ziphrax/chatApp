@@ -3,6 +3,7 @@ var Question = require('../model/question');
 var Article = require('../model/article');
 var express = require('express');
 var router = express.Router();
+var marked = require('marked');
 
 router.route('/')
   .get(function(req,res){
@@ -74,6 +75,7 @@ router.route('/:id')
    if (err) {
      return res.send(err);
    } else {      
+      article.content = marked(article.content);
       res.json(article);
    }
  });

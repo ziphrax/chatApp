@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 
-var TicketSchema = new mongoose.Schema({
+var ArticleSchema = new mongoose.Schema({
 	title : String,
 	content: String,
 	status: String,
@@ -10,4 +10,4 @@ var TicketSchema = new mongoose.Schema({
 	owner: String
 });
 
-module.exports = mongoose.model('Ticket',TicketSchema);
+module.exports = mongoose.model('Article',ArticleSchema);

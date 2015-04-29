@@ -1,12 +1,16 @@
 var basicAuth = require('basic-auth-connect');
 var express = require('express');
 var router = express.Router();
-var notes = require('../routes/notes');
+var notesRoute = require('../routes/notes');
+var ticketsRoute = require('../routes/tickets');
+var articlesRoute = require('../routes/articles');
 var auth = basicAuth('Admin42', 'Pro1337p4ss');
 var Log = require('../model/log');
 var ChatLog = require('../model/chatLog');
 
-router.use('/notes',notes);
+router.use('/notes',notesRoute);
+router.use('/tickets',ticketsRoute);
+router.use('/articles',articlesRoute);
 router.route('/logs/dailyhitrate/')
   .get(auth,function(request,response){
       var options = {};

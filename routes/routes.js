@@ -3,6 +3,7 @@ var express = require('express');
 var router = express.Router();
 var User = require('../model/user');
 var Ticket = require('../model/ticket');
+var Article = require('../model/article');
 var passport = require('passport');
 var auth = basicAuth('Admin42', 'Pro1337p4ss');
 var dataRoutes = require('../routes/data');
@@ -109,6 +110,21 @@ router.route('/tickets')
     res.render('pages/tickets', { user: req.user });
   });
 
+router.route('/articles/:id')
+  .get(function(req,res){
+    Article.findOne({_id: req.params.id},function(err,article){
+      if(err){
+        return res.status(500).send(err);
+      } else {
+        res.render('pages/article',{user: req.user, article: article});
+      }
+    });
+});
+
+router.route('/articles')
+  .get(function(req,res){
+    res.render('pages/articles', { user: req.user });
+  });
 
 
 

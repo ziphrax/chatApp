@@ -101,7 +101,9 @@ router.route('/tickets/:id')
       if(err){        
         return res.status(500).send(err);
       } else {
-        ticket.content = marked(ticket.content);
+        if(!req.user || ( req.user && req.user.username == 'admin42')){
+          ticket.content = marked(ticket.content);
+        }
         res.render('pages/ticket',{user: req.user, ticket: ticket});
       }
     });
@@ -118,7 +120,9 @@ router.route('/articles/:id')
       if(err){
         return res.status(500).send(err);
       } else {
-        article.content = marked(article.content);
+        if(!req.user || ( req.user && req.user.username == 'admin42')){
+          article.content = marked(article.content);
+        }
         res.render('pages/article',{user: req.user, article: article});
       }
     });

@@ -29,7 +29,7 @@
               <li><a href="/terms-of-service">Terms</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-              <li class="active"><a href="/articles">Help/Support</a></li>
+              <li class="active"><a href="/tickets">Help/Support</a></li>
               <li class="text-right">
                 <% if( user) { %>
                   <p class="navbar-text"><a href="/users" target="_blank">Users Online:</a> <span id="usercount">0</span> &nbsp;Logged In as: <a href="./user"><%= user.username %></a> <a href="./logout" >Logout</a><p>
@@ -86,7 +86,7 @@
 
             <div class="form-group">
               <label>Title</label>
-              <input type="text" class="form-control" name="title" value="<%= article.title %>" />
+              <input type="text" class="form-control" name="title" value="<%- article.title %>" />
             </div>
               <div class="form-group">
                 <label>Status</label>
@@ -100,7 +100,7 @@
 
               <div class="form-group">
                 <label>Content</label>
-                <textarea name="content" class="form-control" data-provide="markdown" rows="10"><%= article.content %></textarea>
+                <textarea name="content" class="form-control" data-provide="markdown" rows="10"><%- article.content %></textarea>
                 
               </div>
             <button type="submit" name="submit" class="btn btn-success">Update</button>
@@ -114,7 +114,7 @@
                 <div class="form-group">
                   <label>Title</label>
                   <div>
-                    <%= article.title %>
+                    <%- article.title %>
                   </div>
                 </div>
               </div>
@@ -123,7 +123,7 @@
                 <div class="form-group">
                   <label>Content</label>
                   <div>
-                    <%= article.content %>
+                    <%- article.content %>
                   </div>
                 </div>
               </div>

@@ -59,21 +59,19 @@
             <p>We hope that this system works out well and everyone likes a bit of democracy right?</p>
             <p>Kind Regards</p>
             <p>The Sign Painter</p>
-          </div>  			
+          </div>
+  				<button type="button" class="btn btn-primary navbar-btn" data-toggle="modal" data-target="#ticketModel">
+  					<i class="glyphicon glyphicon-plus"></i> New Ticket
+  				</button>
   			</div>
   		</div>
 
   		<div class="row">
   			<div class="col-xs-12">
+          <form method="post" action="../data/tickets/<%= ticket._id %>">
 
-          <% if(user && user.username == "admin42") { %>
-            <button type="button" class="btn btn-primary navbar-btn" data-toggle="modal" data-target="#ticketModel">
-              <i class="glyphicon glyphicon-plus"></i> New Ticket
-            </button>
-            <form method="post" action="../data/tickets/<%= ticket._id %>">
-
-            <input type="hidden" name="owner" value="<%= ticket.owner %>" />
-            <input type="hidden" name="votes" value="<%= ticket.votes %>" />
+          <input type="hidden" name="owner" value="<%= ticket.owner %>" />
+          <input type="hidden" name="votes" value="<%= ticket.votes %>" />
 
             <div class="form-group">
               <label>ID</label>
@@ -83,7 +81,10 @@
             <div class="form-group">
               <label>Title</label>
               <input type="text" class="form-control" name="title" value="<%= ticket.title %>" />
-            </div>            
+            </div>
+
+
+            <% if(user && user.username == "admin42") { %>
 
               <div class="form-group">
                 <label>Status</label>
@@ -97,35 +98,24 @@
 
               <div class="form-group">
                 <label>Content</label>
-                <textarea name="content" class="form-control" data-provide="markdown" rows="10"><%= ticket.content %></textarea>                
+                <textarea name="content" class="form-control" data-provide="markdown" rows="10"><%= ticket.content %></textarea>
+                
               </div>
 
-               <button type="submit" name="submit" class="btn btn-success">Update</button>
+            <% } else { %>
+
+              <div class="form-group">
+                <label>Content</label>
+                <div>
+                  <%= ticket.content %>
+                </div>
+              </div>
+
+            <% } %>
+          
+            <button type="submit" name="submit" class="btn btn-success">Update</button>
 
           </form>
-
-          <% } else { %>
-
-          <div class="row">
-            <div class="col-xs-12">            
-              <label>Title</label>
-              <div>
-                <%= ticket.title %>" 
-              </div>
-            </div>      
-
-            <div class="col-xs-12">
-              <label>Content</label>
-              <div>
-                <%= ticket.content %>
-              </div>
-            </div>
-
-          </div>
-
-          <% } %>
-          
-           
   			</div>
   		</div>
 

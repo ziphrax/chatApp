@@ -1,7 +1,7 @@
 $(function(){
 	var socket = io();
 	var me = 'unknown';
-	var cachedRooms = [];  
+	var cachedRooms = [];
 
 	socket.on('updatechat', function (username, data) {
 	  $('#conversation').append('<li class="list-group-item"><b><span class="username"></i>'+ username + '</span>: ' + formatedTime() +' -> <span class="saveForLater" title="Save as note"><i class="glyphicon glyphicon-star-empty"></i><span></b> ' + data + '</li>');
@@ -62,6 +62,19 @@ $(function(){
 	  });
 	});
 
+	socket.on('update user list',function(userList){
+		$('#userList').empty();
+		var contentStr = '';
+		$.each(userList,function(index,user){
+			contentStr = contentStr + '<li class="list-group-item">' + user + '</li>';
+		});
+
+		$('#userList').html(contentStr);
+		$('#userList li').click(function(){
+			inviteToChat($(this).text());
+		});		
+	});
+
 	socket.on('usercount',function(count){
 		$('#usercount').text(count);
 	});
@@ -86,7 +99,7 @@ $(function(){
 
     $( '#join' ).click(function(e){
         $( this ).fadeOut(500,function(){
-        	$( '#chatform' ).fadeIn();        	
+        	$( '#chatform' ).fadeIn();
         })
       	e.preventDefault();
       	socket.emit('adduser');

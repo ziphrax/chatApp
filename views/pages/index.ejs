@@ -117,15 +117,23 @@
 		<% if( user) { %>
 			<div class="connected">
 				<div class="row">
-					<div class="col-xs-12">
+					<div class="col-xs-10">
 						<ul id="rooms" class="nav nav-tabs">
 							<li role="presentation" class="active"><a href="#" data-room="Lobby">Lobby</a></li>
 						</ul>
 					</div>
+					<div class="col-xs-2">
+						<strong>Room Users</strong>
+					</div>
 				</div>
 				<div class="row">
-					<div class="col-xs-12">
+					<div class="col-xs-10">
 						<ul id="conversation" class="list-group"></ul>
+					</div>
+					<div class="col-xs-2">
+						<ul id="userList" class="list-group">
+							<li class="list-group-item">N/A</li>
+						</ul>
 					</div>
 				</div>
 				<div class="row">

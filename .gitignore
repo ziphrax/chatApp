@@ -3,3 +3,4 @@
 /public/*
 !public/favicon.ico
 !public/BingSiteAuth.xml
+!public/sitemap.xml

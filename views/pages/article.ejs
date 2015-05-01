@@ -91,17 +91,17 @@
               <div class="form-group">
                 <label>Status</label>
                 <select class="form-control" name="status">
-                  <option value="New" <% if(article.status == 'New') { %> selected="selected" <% } %> >New</option>                
+                  <option value="New" <% if(article.status == 'New') { %> selected="selected" <% } %> >New</option>
                   <option value="In Progress" <% if(article.status == 'In Progress') { %> selected="selected" <% } %> >In Progress</option>
                   <option value="Testing" <% if(article.status == 'Testing') { %> selected="selected" <% } %> >Testing</option>
                   <option value="Closed" <% if(article.status == 'Closed') { %> selected="selected" <% } %> >Closed</option>
-                </select>              
+                </select>
               </div>
 
               <div class="form-group">
                 <label>Content</label>
                 <textarea name="content" class="form-control" data-provide="markdown" rows="10"><%- article.content %></textarea>
-                
+
               </div>
             <button type="submit" name="submit" class="btn btn-success">Update</button>
 
@@ -130,7 +130,7 @@
             </div>
 
           <% } %>
-          
+
   			</div>
   		</div>
 
@@ -176,5 +176,15 @@
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-markdown/2.8.0/js/bootstrap-markdown.min.js">
 		</script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-22261401-2', 'auto');
+      ga('send', 'pageview');
+
+    </script>
 	</body>
 </html>

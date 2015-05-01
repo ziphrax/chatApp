@@ -106,23 +106,23 @@ io.on('connection', function( socket ) {
 
 	socket.on( 'adduser' , function(){
       if( socket.request.user.logged_in ){
-					username = socket.request.user.username;
-					socket.username = sanitizer.sanitize( username );
-					socket.room = 'Lobby';
-          socket.lobbied = true;
-					usernames[socket.username] = {
-						username : socket.username,
-						socketId: socket.id
-					};
-					socket.join( 'Lobby' );
-					socket.emit( 'updatechat' , 'SERVER' , 'you have connected to Lobby' );
-					socket.broadcast.to( 'Lobby' ).emit( 'updatechat' , 'SERVER' , socket.username + ' has connected to this room' );
-					socket.emit( 'updaterooms' , makeRoomsSafeToSend( rooms ) , 'Lobby' );
-					socket.broadcast.emit( 'usercount',io.sockets.sockets.length );
+			var username = socket.request.user.username;
+			socket.username = sanitizer.sanitize( username );
+			socket.room = 'Lobby';
+            socket.lobbied = true;
+			usernames[socket.username] = {
+				username : socket.username,
+				socketId: socket.id
+			};
+			socket.join( 'Lobby' );
+			socket.emit( 'updatechat' , 'SERVER' , 'you have connected to Lobby' );
+			socket.broadcast.to( 'Lobby' ).emit( 'updatechat' , 'SERVER' , socket.username + ' has connected to this room' );
+			socket.emit( 'updaterooms' , makeRoomsSafeToSend( rooms ) , 'Lobby' );
+			socket.broadcast.emit( 'usercount',io.sockets.sockets.length );
 
-					var userList = getRoomUsers('Lobby');
-					socket.broadcast.to( 'Lobby' ).emit( 'update user list' , userList );
-					socket.emit( 'update user list' , userList);
+			var userList = getRoomUsers('Lobby');
+			socket.broadcast.to( 'Lobby' ).emit( 'update user list' , userList );
+			socket.emit( 'update user list' , userList);
 
        } else {
           socket.emit( 'updatechat', 'SERVER', 'You are not authorized to join rooms.' );

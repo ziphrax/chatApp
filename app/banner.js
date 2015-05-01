@@ -1,12 +1,9 @@
+/* global process */
 var BannedIP = require('../model/bannedIps');
 var logger = require('../app/logger');
 var sanitizer = require('sanitizer')
 
 module.exports = function banner(request,response,next){
-  var start = +new Date();
-  var stream = process.stdout;
-  var url = request.url;
-  var method = request.method;
   var ip = request.headers['x-real-ip'] || request.connection.remoteAddress;
 
   BannedIP.find({ip: ip},function(err,docs){

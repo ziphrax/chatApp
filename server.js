@@ -24,8 +24,8 @@ var express = require('express')
 var usernames = {};
 var rooms = {};
 
-var port = process.env.PORT || 3000;
-var mongooseURI = process.env.MONGOLAB_URI || 'mongodb://localhost/chatApp';
+var port = 3000;
+var mongooseURI ='mongodb://localhost/chatApp';
 
 var auth = basicAuth('Admin42', 'Pro1337p4ss');
 var Room = require('./model/room');
@@ -48,7 +48,7 @@ require('./config/passport')(passport);
 
 mongoose.connect(mongooseURI, function ( err, res ) {
 	if(err){ logger.log('','','','ERROR connecting to: ' + mongooseURI + '. ' + err,''); }
-	else { logger.log('','','','Succeeded connecting to: ' + mongooseURI,'') }
+	else { logger.log('','','','Succeeded connecting to: ' + mongooseURI,''); }
 });
 
 var sessionStore = new MongoStore({ mongooseConnection: mongoose.connection });
@@ -132,7 +132,7 @@ io.on('connection', function( socket ) {
 
     socket.on('create',function(roomName,password){
         if(socket.request.user.logged_in && socket.lobbied){
-            var newRoom = new Room({
+            new Room({
                 name : sanitizer.sanitize(roomName),
                 createdDate : new Date(),
                 requiresPassword : password.length > 0,
@@ -207,7 +207,7 @@ io.on('connection', function( socket ) {
 
                 socket.join(newroom.name);
 								socket.room = newroom.name;
-								newList = getRoomUsers(newroom.name);
+								var newList = getRoomUsers(newroom.name);
 								socket.broadcast.to( newroom.name ).emit( 'update user list' , newList );
                 socket.broadcast.to(socket.room).emit('updatechat', 'SERVER', socket.username + ' has joined this room');
 								socket.emit( 'update user list' , newList);
@@ -250,7 +250,6 @@ io.on('connection', function( socket ) {
 
 function getRoomUsers(room){
 	var clients = io.sockets.adapter.rooms[room];
-	var numClients = (typeof clients !== 'undefined') ? Object.keys(clients).length : 0;
 	var users = [];
 	for (var clientId in clients ) {
 			var clientSocket = io.sockets.connected[clientId];
@@ -267,7 +266,7 @@ function makeRoomsSafeToSend(rooms){
           safeToSendRooms[item.name] = {name:item.name,requiresPassword:item.requiresPassword};
         }
     });
-    return safeToSendRooms
+    return safeToSendRooms;
 }
 
 function initServer(){
@@ -281,7 +280,7 @@ function initServer(){
                     name : room.name,
                     requiresPassword: room.requiresPassword,
                     password : room.password
-                }
+                };
             });
         }
     });
@@ -333,6 +332,6 @@ function onAuthorizeFail(data, message, error, accept){ accept(null, false); }
 initServer();
 app.start = app.listen = function(){
 	logger.log('','','','SERVER Starting up...','');
-    return server.listen.apply(server, arguments)
-}
-app.start(port)
+    return server.listen.apply(server, arguments);
+};
+app.start(port);

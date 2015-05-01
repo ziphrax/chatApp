@@ -1,5 +1,5 @@
 /node_modules
 /bower_components
 /public
- !/public/favicon.ico
- !/public/BingSiteAuth.xml
+!public/favicon.ico
+!public/BingSiteAuth.xml

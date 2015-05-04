@@ -3,8 +3,18 @@ $(function(){
 	var me = 'unknown';
 	var cachedRooms = [];
 
+	var voicelist = responsiveVoice.getVoices();
+  var vselect = $("#voiceselection");
+
+	$.each(voicelist, function() {
+          vselect.append($("<option />").val(this.name).text(this.name));
+  });
+
 	socket.on('updatechat', function (username, data) {
 	  $('#conversation').append('<li class="list-group-item"><b><span class="username"></i>'+ username + '</span>: ' + formatedTime() +' -> <span class="saveForLater" title="Save as note"><i class="glyphicon glyphicon-star-empty"></i><span></b> ' + data + '</li>');
+
+		speak(data);
+
 	  $('#conversation li:last-child .username').on('click',function(e){
 	    var username = $(this).text();
 	    if(confirm('Would you like to invite ' + username + ' to private chat?')){
@@ -72,7 +82,7 @@ $(function(){
 		$('#userList').html(contentStr);
 		$('#userList li').click(function(){
 			inviteToChat($(this).text());
-		});		
+		});
 	});
 
 	socket.on('usercount',function(count){
@@ -112,6 +122,12 @@ $(function(){
             $( '#datasend' ).focus().click();
         }
     });
+
+		function speak(data){
+			responsiveVoice.speak(
+				data,
+				$('#voiceselection').val());
+		}
 
     function inviteToChat( username ){
       socket.emit( 'invite' , username );

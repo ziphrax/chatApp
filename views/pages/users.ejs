@@ -74,7 +74,7 @@
         $('.users').html('');
         if(data){
           $.each(data,function(index,user){
-            $('.users').append('<div class="col-xs-3"><a href="/user/' + user.username + '">' + user.firstname + ' ' + user.lastname + ' (  '+ user.username + ' )</a></div>');
+            $('.users').append('<div class="col-xs-3"><a href="/user/' + user.username + '">' + (user.firstname?user.firstname:'') + ' ' + (user.lastname?user.lastname:'') + ' (  '+ user.username + ' )</a></div>');
           });
         } else {
           $('.users').append('<li class="list-group-item">There are no users online in the rooms.</li>');

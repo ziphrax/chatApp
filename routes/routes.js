@@ -4,6 +4,7 @@ var router = express.Router();
 var User = require('../model/user');
 var Ticket = require('../model/ticket');
 var Article = require('../model/article');
+var Comment = require('../model/comment');
 var passport = require('passport');
 var auth = basicAuth('Admin42', 'Pro1337p4ss');
 var dataRoutes = require('../routes/data');
@@ -70,6 +71,47 @@ router.route('/user')
     }
   });
 
+router.route('/user/:id')
+  .get(function(req,res){
+    User.findOne({username:req.params.id},function(err,doc){
+      if(err){
+        return res.status(500).send("There was an error getting the user");
+      }
+      doc.salt = '';
+      doc.hash = '';
+      doc.viewedas = req.user.username;
+
+      Comment.find({user:req.params.id},function(err,comments){
+        if(err){
+          return res.status(500).send("There was an error getting the user comments");
+        }
+
+        for(var i=0; i<comments.length; i++){
+          if(comments[i].content){
+            comments[i].content = marked(comments[i].content);
+          }
+        }
+
+        res.render('pages/user', { user: doc , message: '' , comments: comments});
+      });
+    });
+  }).post(function(req,res){
+    if(req.user && req.user.username == req.params.id){
+      User.findOne({username:req.user.username} , function(err,doc){
+         if (err) {
+            return res.status(500).send("There was an error updating the user")
+          }
+          doc.firstname = req.body.firstname;
+          doc.lastname = req.body.lastname;
+          doc.emailaddress = req.body.emailaddress;
+          doc.save();
+          res.redirect('../user/' + req.user.username);
+      });
+    } else {
+      res.status(403).send('Request denied');
+    }
+  });;
+
 router.route('/new-survey')
   .get(auth,function(request,response){
     response.render('pages/new-survey');
@@ -98,7 +140,7 @@ router.route('/users')
 router.route('/tickets/:id')
   .get(function(req,res){
     Ticket.findOne({_id: req.params.id},function(err,ticket){
-      if(err){        
+      if(err){
         return res.status(500).send(err);
       } else {
         if(!req.user || ( req.user && req.user.username != 'admin42')){

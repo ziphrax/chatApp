@@ -5,17 +5,17 @@ var express = require('express');
 var router = express.Router();
 
 router.route('/')
-	.get( function(req, res) {		
+	.get( function(req, res) {
 		return res.render('pages/login/index', { user : req.user });
 	})
 	.post(passport.authenticate('local',{
 		successRedirect: '/login/success/',
 		failureRedirect: '/login/failure/',
-		failureFlash: false 
+		failureFlash: false
 	}));
 
 router.route('/success')
-	.get(function(req,res){		
+	.get(function(req,res){
 		return res.render('pages/login/success',{ user :  req.user.username });
 	});
 

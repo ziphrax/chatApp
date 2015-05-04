@@ -4,13 +4,17 @@ var router = express.Router();
 var notesRoute = require('../routes/notes');
 var ticketsRoute = require('../routes/tickets');
 var articlesRoute = require('../routes/articles');
+var commentsRoute = require('../routes/comments');
 var auth = basicAuth('Admin42', 'Pro1337p4ss');
 var Log = require('../model/log');
+var User = require('../model/user');
 var ChatLog = require('../model/chatLog');
 
 router.use('/notes',notesRoute);
 router.use('/tickets',ticketsRoute);
 router.use('/articles',articlesRoute);
+router.use('/comments',commentsRoute);
+
 router.route('/logs/dailyhitrate/')
   .get(auth,function(request,response){
       var options = {};
@@ -76,5 +80,12 @@ router.route('/chatlogs/:username')
               response.end();
           }
       });
+});
+router.route('/users')
+  .get(function(request,response){
+    User.find().exec(function(err,docs){
+      response.json(docs);
+  		response.end();
+    });
 });
 module.exports = router;

@@ -9,16 +9,16 @@ var express = require('express')
     , passport = require('passport')
     , sanitizer = require('sanitizer')
     , session = require('express-session')
-	, MongoStore = require('connect-mongo')(session)
+		, MongoStore = require('connect-mongo')(session)
     , LocalStrategy = require('passport-local').Strategy
     , server = require('http').createServer(app)
-	, io = require('socket.io').listen(server)
-	, banner = require('./app/banner')
-	, logger = require('./app/logger')
-	, cacher = require('./app/cacher')
+		, io = require('socket.io').listen(server)
+		, banner = require('./app/banner')
+		, logger = require('./app/logger')
+		, cacher = require('./app/cacher')
     , flash   = require('connect-flash')
     , engine = require('ejs-locals')
-	, passportSocketIo = require("passport.socketio");
+		, passportSocketIo = require("passport.socketio");
 
 
 var usernames = {};
@@ -77,11 +77,6 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 app.use('/',routes);
-
-app.get('/data/users',function(request,response){
-		response.json(usernames);
-		response.end();
-});
 
 app.get('/admin/logs',auth,function(request,response){
     response.render('pages/logs');

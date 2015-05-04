@@ -78,6 +78,13 @@
 					<label>emailaddress</label>
 					<input name="emailaddress" class="form-control" type="text" value="<%= user.emailaddress %>" />
 				</div>
+        <div class="form-group">
+					<label>Avatar URL</label>
+					<input name="avatarURL" class="form-control" type="text" value="<%= user.avatarURL %>" />
+          <% if(user.avatarURL) { %>
+            <%- user.avatarIMG %>
+          <% } %>
+				</div>
 				<button type="submit" name="submit" class="btn btn-success" />Update</button>
 			</form>
 		</div>
@@ -98,6 +105,10 @@
         <div class="form-group">
           <label>username</label>
           <%= user.username %>
+        </div>
+        <div class="form-group">
+            <label>Avatar</label>
+            <%- user.avatarIMG %>
         </div>
     </div>
   </div>
@@ -132,17 +143,19 @@
     </div>
   <% } %>
 
-  <div class="row">
-    <div class="col-xs-12">
-      <form method="post" action="/data/comments/<%= user.username %>">
-          <div class="form-group">
-              <label>Comment</label>
-              <textarea name="content" class="form-control" data-provide="markdown" rows="4"></textarea>
-          </div>
-          <button type="submit" name="submit" class="btn btn-primary">Comment</button>
-      </form>
+  <% if(user.viewedas.length) { %>
+    <div class="row">
+      <div class="col-xs-12">
+        <form method="post" action="/data/comments/<%= user.username %>">
+            <div class="form-group">
+                <label>Comment</label>
+                <textarea name="content" class="form-control" data-provide="markdown" rows="4"></textarea>
+            </div>
+            <button type="submit" name="submit" class="btn btn-primary">Comment</button>
+        </form>
+      </div>
     </div>
-  </div>
+  <% } %>
 
 <% } %>
 

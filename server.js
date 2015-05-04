@@ -161,9 +161,7 @@ io.on('connection', function( socket ) {
     });
 
     socket.on('invite',function(to){
-			console.log('here1');
         if(socket.request.user.logged_in  && socket.lobbied){
-					console.log('here2');
           var reqFrom = socket.username;
           var socketId = usernames[to].socketId;
           var newRoomName = reqFrom + '-' + to + +new Date();
@@ -314,7 +312,6 @@ function parseYoutubeMessage(data){
     var youtube_matches = data.match(youtube);
     var msg = '';
     if(youtube_matches && youtube_matches.length == 2){
-        console.log(youtube_matches);
             msg = '<br /><iframe width="560" height="315" src="https://www.youtube.com/embed/' + youtube_matches[1] + '" frameborder="0" allowfullscreen></iframe>';
     } else if( youtube_matches && youtube_matches.length > 0) {
       msg = ' <br /><i> You may only link one video at a time from youtube</i><br />';

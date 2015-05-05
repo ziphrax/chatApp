@@ -7,7 +7,7 @@ var router = express.Router();
 router.route('/')
   .get(function(req,res){
     var query = Article.find({status:{'$ne': 'Closed'}});
-     query.sort([['votes',-1]]);
+     query.sort([['created',-1]]);
      query.exec(function(err, docs) {
       if(err){
         res.status(500).send(err);

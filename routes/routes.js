@@ -162,7 +162,8 @@ router.route('/terms-of-service')
 
 router.route('/users')
   .get(function(request,response){
-    response.render('pages/users');
+  response.status(200).send('Under maintenance');
+    //response.render('pages/users');
   });
 
 router.route('/tickets/:id')

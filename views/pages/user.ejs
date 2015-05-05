@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>App</title>
+  <title>Chatsplosion.com - <%= user.username %></title>
   <link rel="stylesheet" href="/css/bootstrap.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
@@ -25,13 +25,14 @@
               <li><a href="/">Home</a></li>
               <li><a href="/notes">Notes</a></li>
               <li><a href="/articles">News</a></li>
+              <li><a href="/users">Users</a></li>
               <li><a href="/terms-of-service">Terms</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
               <li><a href="/tickets">Help/Support</a></li>
               <li class="text-right">
                 <% if( user) { %>
-                  <p class="navbar-text">Users Online: <span id="usercount">0</span> &nbsp;Logged In as: <a href="./user"><%= user.username %></a> <a href="./logout">Logout</a><p>
+                  <p class="navbar-text">Users Online: <span id="usercount">0</span> &nbsp;Logged In as: <a href="./user/<%= user.viewedas %>"><%= user.viewedas %></a> <a href="../logout">Logout</a><p>
                 <% } %>
               </li>
             </ul>
@@ -56,7 +57,7 @@
           <h1>User</h1>
       </div>
     </div>
-<% if(user) { %>
+<% if(user && user.viewedas == user.username) { %>
 
 	<div class="row">
 		<div class="col-xs-12">
@@ -77,12 +78,85 @@
 					<label>emailaddress</label>
 					<input name="emailaddress" class="form-control" type="text" value="<%= user.emailaddress %>" />
 				</div>
+        <div class="form-group">
+					<label>Avatar URL</label>
+					<input name="avatarURL" class="form-control" type="text" value="<%= user.avatarURL %>" />
+          <% if(user.avatarURL) { %>
+            <%- user.avatarIMG %>
+          <% } %>
+				</div>
 				<button type="submit" name="submit" class="btn btn-success" />Update</button>
 			</form>
 		</div>
 	</div>
+
+<% } else if(user){ %>
+
+  <div class="row">
+    <div class="col-xs-12">
+        <div class="form-group">
+          <label>First Name</label>
+          <%= user.firstname %>
+        </div>
+        <div class="form-group">
+          <label>Last Name</label>
+          <%= user.lastname %>
+        </div>
+        <div class="form-group">
+          <label>username</label>
+          <%= user.username %>
+        </div>
+        <div class="form-group">
+            <label>Avatar</label>
+            <%- user.avatarIMG %>
+        </div>
+    </div>
+  </div>
+
 <% } else { %>
 	User not logged in.
+<% } %>
+
+<% if(user){ %>
+  <% if(comments) { %>
+    <div class="row">
+        <div class="col-xs-12">
+          <strong>Comments</strong>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12">
+          <ul class="list-group">
+            <% for(var i=0; i<comments.length; i++) {%>
+               <li class="list-group-item">
+                 <div class="owner">
+                   <%= comments[i].owner %>
+                 </div>
+                 <div class="content">
+                   <%- comments[i].content %>
+                 </div>
+               </li>
+            <% } %>
+          </ul>
+        </div>
+    </div>
+  <% } %>
+
+  <% if(user.viewedas.length) { %>
+    <div class="row">
+      <div class="col-xs-12">
+        <form method="post" action="/data/comments/<%= user.username %>">
+            <div class="form-group">
+                <label>Comment</label>
+                <textarea name="content" class="form-control" data-provide="markdown" rows="4"></textarea>
+            </div>
+            <button type="submit" name="submit" class="btn btn-primary">Comment</button>
+        </form>
+      </div>
+    </div>
+  <% } %>
+
 <% } %>
 
  </div> <!-- /container -->
@@ -98,5 +172,16 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-markdown/2.8.0/js/bootstrap-markdown.min.js">
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-22261401-2', 'auto');
+  ga('send', 'pageview');
+
+</script>
 </body>
 </html>

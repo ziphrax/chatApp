@@ -9,16 +9,16 @@ var express = require('express')
     , passport = require('passport')
     , sanitizer = require('sanitizer')
     , session = require('express-session')
-	, MongoStore = require('connect-mongo')(session)
+		, MongoStore = require('connect-mongo')(session)
     , LocalStrategy = require('passport-local').Strategy
     , server = require('http').createServer(app)
-	, io = require('socket.io').listen(server)
-	, banner = require('./app/banner')
-	, logger = require('./app/logger')
-	, cacher = require('./app/cacher')
+		, io = require('socket.io').listen(server)
+		, banner = require('./app/banner')
+		, logger = require('./app/logger')
+		, cacher = require('./app/cacher')
     , flash   = require('connect-flash')
     , engine = require('ejs-locals')
-	, passportSocketIo = require("passport.socketio");
+		, passportSocketIo = require("passport.socketio");
 
 
 var usernames = {};
@@ -77,11 +77,6 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 app.use('/',routes);
-
-app.get('/data/users',function(request,response){
-		response.json(usernames);
-		response.end();
-});
 
 app.get('/admin/logs',auth,function(request,response){
     response.render('pages/logs');
@@ -166,9 +161,7 @@ io.on('connection', function( socket ) {
     });
 
     socket.on('invite',function(to){
-			console.log('here1');
         if(socket.request.user.logged_in  && socket.lobbied){
-					console.log('here2');
           var reqFrom = socket.username;
           var socketId = usernames[to].socketId;
           var newRoomName = reqFrom + '-' + to + +new Date();
@@ -318,7 +311,6 @@ function parseYoutubeMessage(data){
     var youtube_matches = data.match(youtube);
     var msg = '';
     if(youtube_matches && youtube_matches.length == 2){
-        console.log(youtube_matches);
             msg = '<br /><iframe width="560" height="315" src="https://www.youtube.com/embed/' + youtube_matches[1] + '" frameborder="0" allowfullscreen></iframe>';
     } else if( youtube_matches && youtube_matches.length > 0) {
       msg = ' <br /><i> You may only link one video at a time from youtube</i><br />';

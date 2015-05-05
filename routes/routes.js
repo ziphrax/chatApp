@@ -4,11 +4,13 @@ var router = express.Router();
 var User = require('../model/user');
 var Ticket = require('../model/ticket');
 var Article = require('../model/article');
+var Comment = require('../model/comment');
 var passport = require('passport');
 var auth = basicAuth('Admin42', 'Pro1337p4ss');
 var dataRoutes = require('../routes/data');
 var surveysRoute = require('../routes/surveys');
 var marked = require('marked');
+var sanitizer = require('sanitizer');
 
 
 router.use('/data',dataRoutes);
@@ -59,16 +61,84 @@ router.route('/user')
          if (err) {
             return res.status(500).send("There was an error updating the user")
           }
+
           doc.firstname = req.body.firstname;
           doc.lastname = req.body.lastname;
           doc.emailaddress = req.body.emailaddress;
-          doc.save();
-          return res.render( 'pages/user', { user : doc, message : "Update Successful"});
+
+          var url = sanitizer.sanitize(req.body.avatarURL);
+          doc.avatarURL = url;
+          doc.avatarIMG = parseImageURLS(url).msg;
+
+          doc.save(function(err){
+            if(err) {
+              res.status(500).send(err);
+            } else {
+              return res.render( 'pages/user', { user : doc, message : "Update Successful"});
+            }
+          });
       });
     } else {
       res.status(403).send('Request denied');
     }
   });
+
+router.route('/user/:id')
+  .get(function(req,res){
+
+    User.findOne({username:req.params.id},function(err,doc){
+      if(err){
+        return res.status(500).send("There was an error getting the user");
+      }
+      doc.salt = '';
+      doc.hash = '';
+      if(req.user){
+        doc.viewedas = req.user.username;
+      } else {
+        doc.viewedas = '';
+      }
+      Comment.find({user:req.params.id},function(err,comments){
+        if(err){
+          return res.status(500).send("There was an error getting the user comments");
+        }
+
+        for(var i=0; i<comments.length; i++){
+          if(comments[i].content){
+            comments[i].content = marked(comments[i].content);
+          }
+        }
+        res.render('pages/user', { user: doc , message: '' , comments: comments});
+      });
+    });
+  }).post(function(req,res){
+    if(req.user && req.user.username == req.params.id){
+
+      User.findOne({username:req.user.username} , function(err,doc){
+
+          if (err) {
+            return res.status(500).send("There was an error updating the user")
+          }
+
+          doc.firstname = req.body.firstname;
+          doc.lastname = req.body.lastname;
+          doc.emailaddress = req.body.emailaddress;
+
+          var url = sanitizer.sanitize(req.body.avatarURL);
+          doc.avatarURL = url;
+          doc.avatarIMG = parseImageURLS(url).msg;
+
+          doc.save(function(err,doc){
+            if(err) {
+              res.status(500).send(err);
+            } else {
+              res.redirect('../user/' + req.user.username);
+            }
+          });
+      });
+    } else {
+      res.status(403).send('Request denied');
+    }
+  });;
 
 router.route('/new-survey')
   .get(auth,function(request,response){
@@ -92,13 +162,14 @@ router.route('/terms-of-service')
 
 router.route('/users')
   .get(function(request,response){
-    response.render('pages/users');
+  response.status(200).send('Under maintenance');
+    //response.render('pages/users');
   });
 
 router.route('/tickets/:id')
   .get(function(req,res){
     Ticket.findOne({_id: req.params.id},function(err,ticket){
-      if(err){        
+      if(err){
         return res.status(500).send(err);
       } else {
         if(!req.user || ( req.user && req.user.username != 'admin42')){
@@ -132,6 +203,20 @@ router.route('/articles')
   .get(function(req,res){
     res.render('pages/articles', { user: req.user });
   });
+
+  function parseImageURLS(data){
+      data = data.replace(re,'');
+      var re = /\bhttps?:[^)''"]+\.(?:jpg|jpeg|gif|png)/ig;
+      var img_matches = data.match(re);
+      var msg = '';
+      if(img_matches && img_matches.length > 0){
+          for(var i = 0; i< img_matches.length;i++){
+              msg += "<br /><img class='img-rounded' src='" + img_matches[i] +"' width='300'/>";
+          }
+      }
+
+      return {msg: msg};
+  }
 
 
 

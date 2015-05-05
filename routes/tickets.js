@@ -11,7 +11,7 @@ router.route('/')
      query.exec(function(err, docs) {
       if(err){
         res.status(500).send(err);
-      } else {        
+      } else {
         res.json(docs);
         res.end();
       }
@@ -51,7 +51,7 @@ router.route('/:id')
       }
 
       ticket.status = req.body.status;
-      ticket.votes = req.body.votes;      
+      ticket.votes = req.body.votes;
       ticket.updated = new Date();
 
       ticket.save(function(err){
@@ -67,7 +67,7 @@ router.route('/:id')
   Ticket.findOne({ _id: req.params.id}, function(err, ticket) {
    if (err) {
      return res.send(err);
-   } else {      
+   } else {
       res.json(ticket);
    }
  });

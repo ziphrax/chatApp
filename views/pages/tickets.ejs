@@ -26,13 +26,14 @@
               <li><a href="/">Home</a></li>
               <li><a href="/notes">Notes</a></li>
               <li><a href="/articles">News</a></li>
+              <li><a href="/users">Users</a></li>
               <li><a href="/terms-of-service">Terms</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
               <li class="active"><a href="/tickets">Help/Support</a></li>
               <li class="text-right">
                 <% if( user) { %>
-                  <p class="navbar-text"><a href="/users" target="_blank">Users Online:</a> <span id="usercount">0</span> &nbsp;Logged In as: <a href="./user"><%= user.username %></a> <a href="./logout" >Logout</a><p>
+                  <p class="navbar-text"><a href="/users" target="_blank">Users Online:</a> <span id="usercount">0</span> &nbsp;Logged In as: <a href="./user/<%= user.username %>"><%= user.username %></a> <a href="./logout" >Logout</a><p>
                 <% } else { %>
                   <button type="button" class="btn btn-success navbar-btn" data-toggle="modal" data-target="#loginModal">
                     Login
@@ -154,5 +155,15 @@
 		    }
 		  });
 		</script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-22261401-2', 'auto');
+      ga('send', 'pageview');
+
+    </script>
 	</body>
 </html>

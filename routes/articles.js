@@ -7,11 +7,11 @@ var router = express.Router();
 router.route('/')
   .get(function(req,res){
     var query = Article.find({status:{'$ne': 'Closed'}});
-     query.sort([['votes',-1]]);
+     query.sort([['created',-1]]);
      query.exec(function(err, docs) {
       if(err){
         res.status(500).send(err);
-      } else {        
+      } else {
         res.json(docs);
         res.end();
       }
@@ -54,7 +54,7 @@ router.route('/:id')
         }
 
         article.status = req.body.status;
-        article.votes = req.body.votes;      
+        article.votes = req.body.votes;
         article.updated = new Date();
 
         article.save(function(err){
@@ -73,7 +73,7 @@ router.route('/:id')
   Article.findOne({ _id: req.params.id}, function(err, article) {
    if (err) {
      return res.send(err);
-   } else {      
+   } else {
       res.json(article);
    }
  });

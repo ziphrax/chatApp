@@ -5,7 +5,7 @@ var express = require('express');
 var router = express.Router();
 
 router.route('/')
-  .get(function(req,res){    
+  .get(function(req,res){
     if(req.user){
       Note.find({owner:req.user.username}).exec(function(err,docs){
         if(err){

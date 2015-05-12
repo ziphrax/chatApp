@@ -12,14 +12,14 @@ function hash(ts)
 	return md5.digest_s(ts + marvelAPI.privateKey + marvelAPI.publicKey);
 }
 
-module.exports.find = function(comic_id,callback){
+module.exports.find = function(comic_id,offset,callback){
 	var ts = +new Date();
 	var url = '';
 	if(comic_id){
-		url = baseURL + namespace + 'comics/' + comic_id + '?ts=' + ts + '&apikey=' + marvelAPI.publicKey + '&hash=' + hash(ts);		
+		url = baseURL + namespace + 'comics/' + comic_id + '?ts=' + ts + '&orderBy=title&apikey=' + marvelAPI.publicKey + '&hash=' + hash(ts);		
 	} else {
-		url = baseURL + namespace + 'comics?ts=' + ts + '&apikey=' + marvelAPI.publicKey + '&hash=' + hash(ts);
-	}	
+		url = baseURL + namespace + 'comics?ts=' + ts + '&offset=' + offset + '&orderBy=title&apikey=' + marvelAPI.publicKey + '&hash=' + hash(ts);
+	}	 
 	request( url ,function(err,res,body){
 		callback(err,res,body); // Show the HTML for the Google homepage. 
 	});	

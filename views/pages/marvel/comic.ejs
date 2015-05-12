@@ -27,9 +27,9 @@
 							<li class="active"><a href="/marvel/comics">Comics</a></li>
 						</ul>
 						<ul class="nav navbar-nav navbar-right">
-							
+
 							<li><a href="/tickets">Help/Support</a></li>
-							
+
 						</ul>
 					</div>
 				</div>
@@ -38,14 +38,19 @@
 			<div class="row">
 				<div class="col-xs-12">
 					<% for(eachComic in comics.data.results) {%>
-						<div class="panel panel-default" data-id="<%= comics.data.results[eachComic].id %>">	
+						<div class="panel panel-default" data-id="<%= comics.data.results[eachComic].id %>">
 							<div class="panel-heading">
 								<div class="panel-title">
 									<%= comics.data.results[eachComic].title %>
 								</div>
 							</div>
 							<div class="panel-body">
-								<%= comics.data.results[eachComic].description %>
+								<div class="col-xs-9">
+									<%- comics.data.results[eachComic].description %>
+								</div>
+								<div class="col-xs-3">
+									<img src="<%- (comics.data.results[eachComic].thumbnail.path + '.' + comics.data.results[eachComic].thumbnail.extension) %>" width="256px"/>
+								</div>
 							</div>
 							<div class="panel-footer">
 								<a href="<%= comics.data.results[eachComic].urls %>" class="btn btn-primary">Buy £ <%= comics.data.results[eachComic].prices[0].price %></a>
@@ -60,7 +65,7 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1">
 	<script type="text/javascript">
 		$(function(){
-			
+
 		});
 	</script>
 </html>

@@ -9,12 +9,14 @@ var passport = require('passport');
 var auth = basicAuth('Admin42', 'Pro1337p4ss');
 var dataRoutes = require('../routes/data');
 var surveysRoute = require('../routes/surveys');
+var marvelRoute = require('../routes/marvel');
 var marked = require('marked');
 var sanitizer = require('sanitizer');
 
 
 router.use('/data',dataRoutes);
 router.use('/surveys',auth,surveysRoute);
+router.use('/marvel',marvelRoute);
 
 router.route('/')
   .get(function(req,res){

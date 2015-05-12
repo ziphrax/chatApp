@@ -9,16 +9,16 @@ var express = require('express')
     , passport = require('passport')
     , sanitizer = require('sanitizer')
     , session = require('express-session')
-		, MongoStore = require('connect-mongo')(session)
+	, MongoStore = require('connect-mongo')(session)
     , LocalStrategy = require('passport-local').Strategy
     , server = require('http').createServer(app)
-		, io = require('socket.io').listen(server)
-		, banner = require('./app/banner')
-		, logger = require('./app/logger')
-		, cacher = require('./app/cacher')
+	, io = require('socket.io').listen(server)
+	, banner = require('./app/banner')
+	, logger = require('./app/logger')
+	, cacher = require('./app/cacher')
     , flash   = require('connect-flash')
     , engine = require('ejs-locals')
-		, passportSocketIo = require("passport.socketio");
+	, passportSocketIo = require("passport.socketio");
 
 
 var usernames = {};
@@ -26,6 +26,11 @@ var rooms = {};
 
 var port = 3000;
 var mongooseURI ='mongodb://localhost/chatApp';
+
+var marvelAPI = {
+    publicKey : 'ed27ed50f19f2ab2c44098a2ec18e8cb',
+    privateKey : '249195ecfb9452872b1dcbce0deaf302b9bbe060'
+}
 
 var auth = basicAuth('Admin42', 'Pro1337p4ss');
 var Room = require('./model/room');

@@ -80,7 +80,7 @@
 										<% for(eachComic in comics.data.results) {%>
 											<tr data-id="<%= comics.data.results[eachComic].id %>">
 												<td class="col-xs-3"><%= comics.data.results[eachComic].title %></td>
-												<td class="col-xs-1"><img src="<%- (comics.data.results[eachComic].thumbnail.path.replace(/^http?\:\/\//i, 'https') + '.' + comics.data.results[eachComic].thumbnail.extension) %>" width="64px"/></td>
+												<td class="col-xs-1"><img src="<%- (comics.data.results[eachComic].thumbnail.path.replace(/^http?\/i, 'https') + '.' + comics.data.results[eachComic].thumbnail.extension) %>" width="64px"/></td>
 												<td class="col-xs-7"><%- comics.data.results[eachComic].description %></td>
 												<td class="col-xs-1">£ <%= comics.data.results[eachComic].prices[0].price %></td>
 											</tr>

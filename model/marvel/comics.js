@@ -14,12 +14,13 @@ function hash(ts)
 
 module.exports.find = function(comic_id,callback){
 	var ts = +new Date();
+	var url = '';
 	if(comic_id){
-		var url = baseURL + namespace + 'comics/' + comic_id + '?ts=' + ts + '&apikey=' + marvelAPI.publicKey + '&hash=' + hash(ts);		
+		url = baseURL + namespace + 'comics/' + comic_id + '?ts=' + ts + '&apikey=' + marvelAPI.publicKey + '&hash=' + hash(ts);		
 	} else {
-		var url = baseURL + namespace + 'comics?ts=' + ts + '&apikey=' + marvelAPI.publicKey + '&hash=' + hash(ts);
+		url = baseURL + namespace + 'comics?ts=' + ts + '&apikey=' + marvelAPI.publicKey + '&hash=' + hash(ts);
 	}	
-	request(  url ,function(err,response,body){
-		callback(err,response,body); // Show the HTML for the Google homepage. 
+	request( url ,function(err,res,body){
+		callback(err,res,body); // Show the HTML for the Google homepage. 
 	});	
 }

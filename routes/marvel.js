@@ -9,7 +9,7 @@ router.route('/comics/')
 			if(err){
 				console.log(err)
 			} else {
-				res.json(body);
+				res.json(JSON.parse(body));
 			}
 		});
 	});
@@ -20,7 +20,7 @@ router.route('/comics/:id')
 			if(err){
 				console.log(err)
 			} else {
-				res.json(body);
+				res.json(JSON.parse(body));
 			}
 		});
 	});

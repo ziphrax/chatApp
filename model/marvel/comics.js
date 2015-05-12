@@ -12,15 +12,17 @@ function hash(ts)
 	return md5.digest_s(ts + marvelAPI.privateKey + marvelAPI.publicKey);
 }
 
-module.exports.find = function(comic_id,offset,callback){
+module.exports.find = function(comic_id,offset,search,callback){
 	var ts = +new Date();
 	var url = '';
+  
 	if(comic_id){
-		url = baseURL + namespace + 'comics/' + comic_id + '?ts=' + ts + '&orderBy=title&apikey=' + marvelAPI.publicKey + '&hash=' + hash(ts);		
+		url = baseURL + namespace + 'comics/' + comic_id + '?ts=' + ts + '&orderBy=title&apikey=' + marvelAPI.publicKey + '&hash=' + hash(ts);
 	} else {
-		url = baseURL + namespace + 'comics?ts=' + ts + '&offset=' + offset + '&orderBy=title&apikey=' + marvelAPI.publicKey + '&hash=' + hash(ts);
-	}	 
+		url = baseURL + namespace + 'comics?ts=' + ts + '&offset=' + offset + '&orderBy=title&apikey=' + marvelAPI.publicKey + '&hash=' + hash(ts) + (search?'&titleStartsWith=' + search:'');
+	}
+
 	request( url ,function(err,res,body){
-		callback(err,res,body); // Show the HTML for the Google homepage. 
-	});	
+		callback(err,res,body,search); // Show the HTML for the Google homepage.
+	});
 }

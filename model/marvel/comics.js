@@ -23,7 +23,7 @@ module.exports.find = function(comic_id,offset,search,callback){
 	}
 
 	request( url ,function(err,res,body){
-    var safeBody = body.replace(/^http?\/i, 'https');
+    var safeBody = body.replace(/^http?/g, 'https');
 		callback(err,res,safeBody,search); // Show the HTML for the Google homepage.
 	});
 }

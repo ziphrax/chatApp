@@ -1,6 +1,6 @@
 <html>
 	<head>
-		<title>Marvel - Comics</title>
+		<title>Marvel - Characters</title>
 		<link rel="stylesheet" href="/css/bootstrap.min.css" />
 	</head>
 	<body>
@@ -24,8 +24,8 @@
 							<li><a href="/articles">News</a></li>
 							<li><a href="/users">Users</a></li>
 							<li><a href="/terms-of-service">Terms</a></li>
-							<li class="active"><a href="/marvel/comics">Comics</a></li>
-							<li><a href="/marvel/characters">Characters</a></li>
+							<li><a href="/marvel/comics">Comics</a></li>
+							<li class="active"><a href="/marvel/characters">Characters</a></li>
 						</ul>
 						<ul class="nav navbar-nav navbar-right">
 
@@ -38,23 +38,20 @@
 		</div>
 			<div class="row">
 				<div class="col-xs-12">
-					<% for(eachComic in comics.data.results) {%>
-						<div class="panel panel-default" data-id="<%= comics.data.results[eachComic].id %>">
+					<% for(eachCharacter in characters.data.results) {%>
+						<div class="panel panel-default" data-id="<%= characters.data.results[eachCharacter].id %>">
 							<div class="panel-heading">
 								<div class="panel-title">
-									<%= comics.data.results[eachComic].title %>
+									panel-title
 								</div>
 							</div>
 							<div class="panel-body">
-								<div class="col-xs-9">
-									<%- comics.data.results[eachComic].description %>
-								</div>
-								<div class="col-xs-3">
-									<img src="<%- (comics.data.results[eachComic].thumbnail.path + '.' + comics.data.results[eachComic].thumbnail.extension) %>" width="256px"/>
+								<div class="col-xs-12">
+									<%- (JSON.stringify(characters.data.results[eachCharacter]))%>
 								</div>
 							</div>
 							<div class="panel-footer">
-								<a href="<%= comics.data.results[eachComic].urls %>" class="btn btn-primary">Buy £ <%= comics.data.results[eachComic].prices[0].price %></a>
+								panel-footer
 							</div>
 						</div>
 					<% } %>

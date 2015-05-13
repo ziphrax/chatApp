@@ -1,6 +1,6 @@
 <html>
 	<head>
-		<title>Marvel - Comics</title>
+		<title>Marvel - Characters</title>
 		<link rel="stylesheet" href="/css/bootstrap.min.css" />
 	</head>
 	<body>
@@ -25,8 +25,8 @@
 							<li><a href="/articles">News</a></li>
 							<li><a href="/users">Users</a></li>
 							<li><a href="/terms-of-service">Terms</a></li>
-							<li class="active"><a href="/marvel/comics">Comics</a></li>
-							<li><a href="/marvel/characters">Characters</a></li>
+							<li><a href="/marvel/comics">Comics</a></li>
+							<li class="active"><a href="/marvel/characters">Characters</a></li>
 						</ul>
 						<ul class="nav navbar-nav navbar-right">
 
@@ -45,12 +45,12 @@
 						<div class="col-xs-6">
 							<div class="input-group">
 								<label class="control-label">
-									<% if(comics.data.offset - 20 >= 0 ) { %>
-									  &nbsp;<a href="/marvel/comics/offset/<%= (comics.data.offset - 20) %>">Previous</a>
+									<% if(characters.data.offset - 20 >= 0 ) { %>
+									  &nbsp;<a href="/marvel/characters/offset/<%= (characters.data.offset - 20) %>">Previous</a>
 									<% } %>
-										Items <strong><%= comics.data.offset %> to <%= comics.data.offset+20 %></strong> of <strong><%= comics.data.total %> </strong>
-									<% if(comics.data.offset + 20 <= comics.data.total ) { %>
-									&nbsp;<a href="/marvel/comics/offset/<%= (comics.data.offset + 20) %>">Next</a>
+										Items <strong><%= characters.data.offset %> to <%= characters.data.offset+20 %></strong> of <strong><%= characters.data.total %> </strong>
+									<% if(characters.data.offset + 20 <= characters.data.total ) { %>
+									&nbsp;<a href="/marvel/characters/offset/<%= (characters.data.offset + 20) %>">Next</a>
 									<% } %>
 								</label>
 							</div>
@@ -68,24 +68,20 @@
 						</div>
 						<div class="col-xs-12">
 							<div class="table-responsive">
-								<table id="comics" class="table table-striped table-hover table-bordered">
+								<table id="characters" class="table table-striped table-hover table-bordered">
 									<thead>
 										<tr>
-											<th class="col-xs-3">Title</th>
-											<th class="col-xs-1">Thumb</th>
+											<th class="col-xs-12">Title</th>
+											<!--th class="col-xs-1">Thumb</th>
 											<th class="col-xs-7">Description</th>
 											<th class="col-xs-1">Price</th>
-											<th class="col-xs-1"></th>
+											<th class="col-xs-1"></th-->
 										</tr>
 									</thead>
 									<tbody>
-										<% for(eachComic in comics.data.results) {%>
-											<tr data-id="<%= comics.data.results[eachComic].id %>">
-												<td class="col-xs-3"><%= comics.data.results[eachComic].title %></td>
-												<td class="col-xs-1"><img src="<%- (comics.data.results[eachComic].thumbnail.path + '.' + comics.data.results[eachComic].thumbnail.extension) %>" width="64px"/></td>
-												<td class="col-xs-6"><%- comics.data.results[eachComic].description %></td>
-												<td class="col-xs-1">£ <%= comics.data.results[eachComic].prices[0].price %></td>
-												<td class="col-xs-1"><a href="<%= comics.data.results[eachComic].urls %>">Store</a></td>
+										<% for(eachCharacter in characters.data.results) {%>
+											<tr data-id="<%= characters.data.results[eachCharacter].id %>">
+												<td class="col-xs-12"><%= (JSON.stringify(characters.data.results[eachCharacter])) %></td>	
 											</tr>
 										<% } %>
 									</tbody>
@@ -102,13 +98,13 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1">
 	<script type="text/javascript">
 		$(function(){
-			$('#comics tr').click(function(){
+			$('#characters tr').click(function(){
 				var id = $(this).data('id');
-				document.location.href="/marvel/comics/"+id;
+				document.location.href="/marvel/characters/"+id;
 			});
 			$('#search_button').click(function(){
 				var search_text = $('#search_title').val();
-				document.location.href='/marvel/comics/offset/<%= comics.data.offset %>/search/' + search_text;
+				document.location.href='/marvel/characters/offset/<%= characters.data.offset %>/search/' + search_text;
 			});
 		});
 	</script>

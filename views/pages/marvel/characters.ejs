@@ -1,0 +1,110 @@
+<html>
+	<head>
+		<title>Marvel - Characters</title>
+		<link rel="stylesheet" href="/css/bootstrap.min.css" />
+	</head>
+	<body>
+		<div class="container">
+
+
+		<div class="row">
+			<nav class="navbar navbar-default">
+				<div class="container-fluid">
+					<div class="navbar-header">
+						 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+						 	<i class="glyphicon glyphicon-menu-hamburger"></i>
+						 </button>
+						<a class="navbar-brand" href="/">
+							 <i class="glyphicon glyphicon-envelope"></i> Chatsplosion.com
+						</a>
+					</div>
+					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+						<ul class="nav navbar-nav">
+							<li><a href="/">Home</a></li>
+							<li><a href="/notes">Notes</a></li>
+							<li><a href="/articles">News</a></li>
+							<li><a href="/users">Users</a></li>
+							<li><a href="/terms-of-service">Terms</a></li>
+							<li class="active"><a href="/marvel/characters">Characters</a></li>
+						</ul>
+						<ul class="nav navbar-nav navbar-right">
+
+							<li><a href="/tickets">Help/Support</a></li>
+
+						</ul>
+					</div>
+				</div>
+			</nav>
+		</div>
+
+			<div class="row">
+				<div class="col-xs-12">
+					<div class="panel panel-default">
+						<div class="panel-body">
+						<div class="col-xs-6">
+							<div class="input-group">
+								<label class="control-label">
+									<% if(characters.data.offset - 20 >= 0 ) { %>
+									  &nbsp;<a href="/marvel/characters/offset/<%= (characters.data.offset - 20) %>">Previous</a>
+									<% } %>
+										Items <strong><%= characters.data.offset %> to <%= characters.data.offset+20 %></strong> of <strong><%= characters.data.total %> </strong>
+									<% if(characters.data.offset + 20 <= characters.data.total ) { %>
+									&nbsp;<a href="/marvel/characters/offset/<%= (characters.data.offset + 20) %>">Next</a>
+									<% } %>
+								</label>
+							</div>
+						</div>
+						<div class="col-xs-6">
+							<div class="input-group">
+								<input type="text" id="search_title" class="form-control" placeholder="Search for..." value="<%= search %>">
+								<span class="input-group-btn">
+									<button class="btn btn-default" id="search_button" type="button"><i class="glyphicon glyphicon-search"></i> Search</button>
+								</span>
+							</div>
+						</div>
+						<div class="col-xs-12">
+							&nbsp;
+						</div>
+						<div class="col-xs-12">
+							<div class="table-responsive">
+								<table id="characters" class="table table-striped table-hover table-bordered">
+									<thead>
+										<tr>
+											<th class="col-xs-12">Title</th>
+											<!--th class="col-xs-1">Thumb</th>
+											<th class="col-xs-7">Description</th>
+											<th class="col-xs-1">Price</th>
+											<th class="col-xs-1"></th-->
+										</tr>
+									</thead>
+									<tbody>
+										<% for(eachCharacter in characters.data.results) {%>
+											<tr data-id="<%= characters.data.results[eachCharacter].id %>">
+												<td class="col-xs-12"><%= (JSON.stringify(characters.data.results[eachCharacter])) %></td>	
+											</tr>
+										<% } %>
+									</tbody>
+								</table>
+							</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1">
+	<script type="text/javascript">
+		$(function(){
+			$('#characters tr').click(function(){
+				var id = $(this).data('id');
+				document.location.href="/marvel/characters/"+id;
+			});
+			$('#search_button').click(function(){
+				var search_text = $('#search_title').val();
+				document.location.href='/marvel/characters/offset/<%= characters.data.offset %>/search/' + search_text;
+			});
+		});
+	</script>
+</html>

@@ -1,5 +1,5 @@
 var request = require('request');
-var md5 = require('MD5');
+var md5 = require('md5');
 var marvelAPI = {
     publicKey : 'ed27ed50f19f2ab2c44098a2ec18e8cb',
     privateKey : '249195ecfb9452872b1dcbce0deaf302b9bbe060'
@@ -15,7 +15,7 @@ function hash(ts)
 module.exports.find = function(comic_id,offset,search,callback){
 	var ts = +new Date();
 	var url = '';
-  
+
 	if(comic_id){
 		url = baseURL + namespace + 'comics/' + comic_id + '?ts=' + ts + '&orderBy=title&apikey=' + marvelAPI.publicKey + '&hash=' + hash(ts);
 	} else {
@@ -23,6 +23,7 @@ module.exports.find = function(comic_id,offset,search,callback){
 	}
 
 	request( url ,function(err,res,body){
-		callback(err,res,body,search); // Show the HTML for the Google homepage.
+    var safeBody = body.replace(/http:/g, 'https:');
+		callback(err,res,safeBody,search); // Show the HTML for the Google homepage.
 	});
 }

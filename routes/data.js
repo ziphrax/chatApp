@@ -47,7 +47,7 @@ router.route('/logs/dailyhitrate/')
 });
 router.route('/logs/')
   .get(auth,function(request,response){
-      Log.find().exec(function(err,docs){
+      Log.find().sort({'time':-1}).limit(100).exec(function(err,docs){
           if(err){
               console.log(err);
               response.status(500).send(err);

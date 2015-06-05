@@ -81,4 +81,17 @@ router.route('/:id')
     res.status(403).json({message: 'You can only close articles, not delete them.'});
 });
 
+router.route('/summary/')
+  .get(function(req,res){
+    Article.find().sort({'updated':-1}).limit(5).exec(function(err,docs){
+          if(err){
+              console.log(err);
+              res.status(500).send(err);
+          } else {
+              res.json(docs);
+              res.end();
+          }
+      });
+  });
+
 module.exports = router;

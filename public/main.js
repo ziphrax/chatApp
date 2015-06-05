@@ -4,11 +4,17 @@ $(function(){
 	var cachedRooms = [];
 
 	var voicelist = responsiveVoice.getVoices();
-  var vselect = $("#voiceselection");
+  	var vselect = $("#voiceselection");
 
 	$.each(voicelist, function() {
           vselect.append($("<option />").val(this.name).text(this.name));
-  });
+  	});
+	newsSummary();
+	function newsSummary(){
+		$.get('/data/articles/summary/').done(function(data){
+			console.log(data);
+		});
+	}
 
 	socket.on('updatechat', function (username, data) {
 	  $('#conversation').append('<li class="list-group-item"><b><span class="username"></i>'+ username + '</span>: ' + formatedTime() +' -> <span class="saveForLater" title="Save as note"><i class="glyphicon glyphicon-star-empty"></i><span></b> ' + data + '</li>');

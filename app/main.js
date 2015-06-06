@@ -9,12 +9,14 @@ $(function(){
 	$.each(voicelist, function() {
           vselect.append($("<option />").val(this.name).text(this.name));
   	});
+
 	newsSummary();
+
 	function newsSummary(){
 		$.get('/data/articles/summary/').done(function(data){
 			console.log(data);
 			$.each(data,function(index,item){
-				$('.news-summary').append('<li class="list-group-item"><a href="/articles/'+item.id+'">'+ item.title +'</a></li>');
+				$('.news-summary').append('<li class="list-group-item"><a href="/articles/'+item._id+'">'+ item.title +'</a></li>');
 			});
 		});
 	}

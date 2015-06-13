@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>www.chatsplosion.com - home page</title>
+  <link rel="stylesheet" href="/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-markdown/2.8.0/css/bootstrap-markdown.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+  <div class="container-fluid">
+    <h1>Weapons</h1>
+    <ul class="list-group">
+      <% for(var i=0; i<weapons.length; i++) {%>
+          <li class="list-group-item">
+            <h2><%= weapons[i].title %> - <%= weapons[i].faction %><h2>
+            <p><%= weapons[i].description %></p>
+            <img src="<%- weapons[i].imageUrl %>" />
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Strength</th>
+                  <th>Armour Penetration</th>
+                  <th>Accuracy</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><%= weapons[i].strength %></td>
+                  <td><%= weapons[i].armourPenetration %></td>
+                  <td><%= weapons[i].accuracy %></td>
+                </tr>
+              </tbody>
+            </table>
+          </li>
+      <% } %>
+
+      <% if (weapons.length == 0) { %>
+        <li class="list-group-item">
+            There are no weapons in the database. Go nag at the developer!!!
+        </li>
+      <% } %>
+
+    </ul>
+  </div>
+</body>
+</html>

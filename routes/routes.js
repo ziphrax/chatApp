@@ -12,11 +12,13 @@ var surveysRoute = require('../routes/surveys');
 var marvelRoute = require('../routes/marvel');
 var marked = require('marked');
 var sanitizer = require('sanitizer');
+var miniGameRoute = require('../routes/miniGame');
 
 
 router.use('/data',dataRoutes);
 router.use('/surveys',auth,surveysRoute);
 router.use('/marvel',marvelRoute);
+router.use('/minigame',miniGameRoute);
 
 router.route('/')
   .get(function(req,res){

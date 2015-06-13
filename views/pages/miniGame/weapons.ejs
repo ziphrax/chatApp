@@ -42,6 +42,69 @@
       <% } %>
 
     </ul>
+
+    <h1>New Weapon</h1>
+    <form action="" method="post" role="form" class="form-horizontal">
+
+      <div class="well">
+
+        <div class="form-group">
+          <div class="col-md-2">
+            <label class="control-label">Title</label>
+          </div>
+          <div class="col-md-4">
+            <input name="title" type="text" class="form-control" />
+          </div>
+          <div class="col-md-2">
+            &nbsp;
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-2">
+            <label class="control-label">Description</label>
+          </div>
+          <div class="col-md-10">
+            <textarea name="description"  class="form-control"></textarea>
+          </div>
+        </div>
+
+        <div class="form-group">
+
+          <div class="col-md-2">
+            <label class="control-label">Strength</label>
+          </div>
+          <div class="col-md-2">
+            <input name="strength" type="number"  class="form-control"/>
+          </div>
+
+          <div class="col-md-2">
+            <label class="control-label">Armour Penetration</label>
+          </div>
+          <div class="col-md-2">
+            <input name="armourPenetration" type="number"  class="form-control"/>
+          </div>
+
+          <div class="col-md-2">
+            <label class="control-label">Accuracy</label>
+          </div>
+          <div class="col-md-2">
+            <input name="accuracy" type="number"  class="form-control"/>
+          </div>
+
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-offset-2 col-md-10">
+            <button type="submit" class="btn btn-primary">
+              <i class="glyphicon glyphicon-add"></i>&nbsp;Add Weapon
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </form>
   </div>
 </body>
 </html>

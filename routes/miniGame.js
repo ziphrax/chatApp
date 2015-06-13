@@ -36,17 +36,54 @@ var request = require('request');
 					res.render('pages/miniGame/weapons',{weapons: docs});
 				}
 			});
-		});
+		}).post(function(req,res){
+	      var weapon = new weapons();
+
+				weapon.title = req.body.title;
+				weapon.description = req.body.description;
+				weapon.strength = req.body.strength;
+				weapon.armourPenetration = req.body.armourPenetration;
+				weapon.accuracy = req.body.accuracy;
+
+				weapon.save(function(err){
+	        if(err) {
+	          res.status(500).send(err);
+	        } else {
+						res.redirect('/minigame/weapons/' + weapon._id);
+	        }
+	      });
+	  });
 	router.route('/weapons/:id')
 		.get(function(req,res){
-      weapons.findOne({_id: req.params.id},function(err,docs){
+      weapons.findOne({_id: req.params.id},function(err,doc){
 				if(err){
 					console.log(err)
 				} else {
-					res.render('pages/miniGame/weapon',{weapons: docs});
+					res.render('pages/miniGame/weapon',{weapon: doc});
 				}
 			});
-		});
+		}).post(function(req,res){
+			weapons.findOne({_id: req.params.id},function(err,doc){
+				if(err){
+					console.log(err)
+				} else {
+					doc.title = req.body.title;
+					doc.description = req.body.description;
+					doc.strength = req.body.strength;
+					doc.armourPenetration = req.body.armourPenetration;
+					doc.accuracy = req.body.accuracy;
+
+					doc.save(function(err){
+		        if(err) {
+		          res.status(500).send(err);
+		        } else {
+							res.redirect('/minigame/weapons/' + doc._id);
+		        }
+		      });
+				}
+			});
+
+	  });
 
 
 //characters

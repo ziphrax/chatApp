@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>www.chatsplosion.com - home page</title>
+  <link rel="stylesheet" href="/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-markdown/2.8.0/css/bootstrap-markdown.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <a href="/minigame/xenos/">Back to List</a>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <h2><%= xeno.title %> - <%= xeno.faction %></h2>
+        <p><%= xeno.description %></p>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Strength</th>
+              <th>Toughness</th>
+              <th>Level</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><%=xeno.strength  %></td>
+              <td><%=xeno.toughness  %></td>
+              <td><%=xeno.level  %></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

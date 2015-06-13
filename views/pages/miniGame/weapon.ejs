@@ -7,23 +7,32 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-  <h2><%= weapon.title %> - <%= weapon.faction %></h2>
-  <p><%= weapon.description %></p>
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Strength</th>
-        <th>Armour Penetration</th>
-        <th>Accuracy</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><%= weapon.strength %></td>
-        <td><%= weapon.armourPenetration %></td>
-        <td><%= weapon.accuracy %></td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="row">
+    <div class="col-md-12">
+      <a href="/minigame/xenos/">Back to List</a>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <h2><%= weapon.title %> - <%= weapon.faction %></h2>
+      <p><%= weapon.description %></p>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Strength</th>
+            <th>Armour Penetration</th>
+            <th>Accuracy</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><%= weapon.strength %></td>
+            <td><%= weapon.armourPenetration %></td>
+            <td><%= weapon.accuracy %></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </body>
 </html>

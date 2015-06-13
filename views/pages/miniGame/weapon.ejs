@@ -7,31 +7,43 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-  <div class="row">
-    <div class="col-md-12">
-      <a href="/minigame/xenos/">Back to List</a>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <h1>Brotherhood of Baal</h1>
+        <h2>The distracting minigame</h2>
+        <ul class="list-group">
+          <li class="list-group-item"><a href="/minigame/xenos/">Xenos Encyclopedia</a></li>
+          <li class="list-group-item"><a href="/minigame/weapons/">Weapons Encyclopedia</a></li>
+        </ul>
+      </div>
     </div>
-  </div>
-  <div class="row">
-    <div class="col-md-12">
-      <h2><%= weapon.title %> - <%= weapon.faction %></h2>
-      <p><%= weapon.description %></p>
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Strength</th>
-            <th>Armour Penetration</th>
-            <th>Accuracy</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><%= weapon.strength %></td>
-            <td><%= weapon.armourPenetration %></td>
-            <td><%= weapon.accuracy %></td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="row">
+      <div class="col-md-12">
+        <a href="/minigame/xenos/">Back to List</a>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <h4><%= weapon.title %> - <%= weapon.faction %></h4>
+        <p><%= weapon.description %></p>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Strength</th>
+              <th>Armour Penetration</th>
+              <th>Accuracy</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><%= weapon.strength %></td>
+              <td><%= weapon.armourPenetration %></td>
+              <td><%= weapon.accuracy %></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </body>

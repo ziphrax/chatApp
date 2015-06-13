@@ -4,7 +4,12 @@ var weapons = require('../model/miniGame/weapons');
 var xenos = require('../model/miniGame/xenos');
 var request = require('request');
 
-//comics
+
+router.route('/')
+	.get(function(req,res){
+			res.render('pages/miniGame/index');					
+	});
+
 	router.route('/data/weapons/')
 		.get(function(req,res){
       weapons.find().exec(function(err,docs){

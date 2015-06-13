@@ -10,7 +10,7 @@
 
 
   <div class="container-fluid">
-    
+
     <div class="row">
       <div class="col-md-12">
         <h1>Brotherhood of Baal</h1>
@@ -35,6 +35,7 @@
                   <th>Strength</th>
                   <th>Armour Penetration</th>
                   <th>Accuracy</th>
+                  <th>Type</th>
                 </tr>
               </thead>
               <tbody>
@@ -42,6 +43,7 @@
                   <td><%= weapons[i].strength %></td>
                   <td><%= weapons[i].armourPenetration %></td>
                   <td><%= weapons[i].accuracy %></td>
+                  <td><%= weapons[i].weaponType %></td>
                 </tr>
               </tbody>
             </table>
@@ -105,6 +107,24 @@
             <input name="accuracy" type="number"  class="form-control"/>
           </div>
 
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-2">
+            <label class="control-label">Weapon Type</label>
+          </div>
+          <div class="col-md-10">
+            <select name="weaponType" class="form-control">              
+                <option value="Pistol">Pistol</option>
+                <option value="Assault">Assault</option>
+                <option value="Rifle">Rifle</option>
+                <option value="Heavy 1">Heavy 1</option>
+                <option value="Heavy 2">Heavy 2</option>
+                <option value="Heavy 3">Heavy 3</option>
+                <option value="Small Blast">Small Blast</option>
+                <option value="Large Blast">Large Blast</option>
+            </select>
+          </div>
         </div>
 
         <div class="form-group">

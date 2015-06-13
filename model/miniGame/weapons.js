@@ -7,7 +7,8 @@ var WeaponSchema = new mongoose.Schema({
 	status: String,
 	strength: Number,
 	armourPenetration: Number,
-  accuracy: Number
+  accuracy: Number,
+	weaponType: String
 });
 
 module.exports = mongoose.model('Weapon',WeaponSchema);

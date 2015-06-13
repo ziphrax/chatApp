@@ -7,7 +7,7 @@ var request = require('request');
 
 router.route('/')
 	.get(function(req,res){
-			res.render('pages/miniGame/index');					
+			res.render('pages/miniGame/index');
 	});
 
 	router.route('/data/weapons/')
@@ -49,6 +49,7 @@ router.route('/')
 				weapon.strength = req.body.strength;
 				weapon.armourPenetration = req.body.armourPenetration;
 				weapon.accuracy = req.body.accuracy;
+				weapon.weaponType = req.body.weaponType;
 
 				weapon.save(function(err){
 	        if(err) {
@@ -77,6 +78,7 @@ router.route('/')
 					doc.strength = req.body.strength;
 					doc.armourPenetration = req.body.armourPenetration;
 					doc.accuracy = req.body.accuracy;
+					doc.weaponType = req.body.weaponType;
 
 					doc.save(function(err){
 		        if(err) {

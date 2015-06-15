@@ -4,7 +4,7 @@ $(function(){
 	var cachedRooms = [];
 
 	var voicelist = responsiveVoice.getVoices();
-  	var vselect = $("#voiceselection");
+  var vselect = $("#voiceselection");
 
 	$.each(voicelist, function() {
           vselect.append($("<option />").val(this.name).text(this.name));

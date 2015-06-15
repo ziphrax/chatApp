@@ -103,6 +103,7 @@ io.on('connection', function( socket ) {
     socket.lobbied = false;
     socket.emit( 'updaterooms' , makeRoomsSafeToSend( rooms ) , 'Lobby' );
     socket.emit( 'usercount' , io.sockets.sockets.length );
+		socket.emit( 'update user list' , userList );
 
 	socket.on( 'adduser' , function(){
       if( socket.request.user.logged_in ){

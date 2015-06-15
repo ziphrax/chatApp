@@ -15,7 +15,8 @@ var gulp = require('gulp'),
 	},
 	source = {
 		js:[
-			 	'app/main.js'
+			 	'app/main.js',
+				'app/minigame.js'
 		],
 		html: ['app/*.html']
 	};

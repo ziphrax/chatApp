@@ -166,8 +166,7 @@ router.route('/terms-of-service')
 
 router.route('/users')
   .get(function(request,response){
-  response.status(200).send('Under maintenance');
-    //response.render('pages/users');
+    response.render('pages/users');
   });
 
 router.route('/tickets/:id')
@@ -215,7 +214,7 @@ router.route('/articles')
       var msg = '';
       if(img_matches && img_matches.length > 0){
           for(var i = 0; i< img_matches.length;i++){
-              msg += "<br /><img class='img-rounded' src='" + img_matches[i] +"' width='300'/>";
+              msg += "<br /><img class='img-rounded' src='" + img_matches[i] +"' width='90'/>";
           }
       }
 

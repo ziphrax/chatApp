@@ -61,53 +61,141 @@
     </div>
 <% if(user && user.viewedas == user.username) { %>
 
-	<div class="row">
-		<div class="col-xs-12">
-			<form method="post">
-				<div class="form-group">
-					<label>First Name</label>
-					<input name="firstname" class="form-control" type="text" value="<%= user.firstname%>" />
-				</div>
-				<div class="form-group">
-					<label>Last Name</label>
-					<input name="lastname" class="form-control" type="text" value="<%= user.lastname %>" />
-				</div>
-				<div class="form-group">
-					<label>username</label>
-					<input name="username" class="form-control" type="text" value="<%= user.username %>" />
-				</div>
-				<div class="form-group">
-					<label>emailaddress</label>
-					<input name="emailaddress" class="form-control" type="text" value="<%= user.emailaddress %>" />
-				</div>
-        <div class="form-group">
-					<label>Avatar URL</label>
-					<input name="avatarURL" class="form-control" type="text" value="<%= user.avatarURL %>" />
-          <% if(user.avatarURL) { %>
-            <%- user.avatarIMG %>
+
+  <div>
+
+    <ul id="myTabs" class="nav nav-pills" role="tablist">
+      <li role="presentation" class="active"><a href="#basic-details" data-toggle="tab">Basic Details</a></li>
+      <li role="presentation"><a href="#interests">Interests</a></li>
+      <li role="presentation"><a href="#comments">Comments</a></li>
+    </ul>
+
+    <div class="tab-content">
+      <div role="tabpanel" class="tab-pane active" id="basic-details">
+        <div class="well">
+          <form method="post">
+            <div class="row">
+              <div class="col-xs-12 col-sm-6">
+                <div class="form-group">
+                  <label>First Name</label>
+                  <input name="firstname" class="form-control" type="text" value="<%= user.firstname%>" />
+                </div>
+              </div>
+
+              <div class="col-xs-12 col-sm-6">
+                <div class="form-group">
+                  <label>Last Name</label>
+                  <input name="lastname" class="form-control" type="text" value="<%= user.lastname %>" />
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-12 col-sm-6">
+                <div class="form-group">
+                  <label>Username</label>
+                  <input name="username" class="form-control" type="text" value="<%= user.username %>" />
+                </div>
+              </div>
+              <div class="col-xs-12 col-sm-6">
+                <div class="form-group">
+                  <label>Email Address</label>
+                  <input name="emailaddress" class="form-control" type="text" value="<%= user.emailaddress %>" />
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-12 col-sm-6">
+                <div class="form-group">
+                  <label>Avatar URL</label>
+                  <input name="avatarURL" class="form-control" type="text" value="<%= user.avatarURL %>" />
+                </div>
+              </div>
+              <div class="col-xs-12 col-sm-6">
+                <% if(user.avatarURL) { %>
+                  <%- user.avatarIMG %>
+                <% } %>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-12">
+                <button type="submit" name="submit" class="btn btn-success" />Update</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div role="tabpanel" class="tab-pane" id="interests">
+        <div class="well">
+          <p>Coming soon....</p>
+        </div>
+      </div>
+
+      <div role="tabpanel" class="tab-pane" id="comments">
+        <div class="well">
+          <% if(user){ %>
+            <% if(comments) { %>
+              <div class="row">
+                <div class="col-xs-12">
+                  <ul class="list-group">
+                    <% for(var i=0; i<comments.length; i++) {%>
+                      <li class="list-group-item">
+                        <div class="owner">
+                          <%= comments[i].owner %>
+                        </div>
+                        <div class="content">
+                         <%- comments[i].content %>
+                        </div>
+                      </li>
+                    <% } %>
+                  </ul>
+                </div>
+              </div>
+            <% } %>
+
+            <% if(user.viewedas.length) { %>
+              <div class="row">
+                <div class="col-xs-12">
+                  <form method="post" action="/data/comments/<%= user.username %>">
+                      <div class="form-group">
+                          <label>Comment</label>
+                          <textarea name="content" class="form-control" data-provide="markdown" rows="4"></textarea>
+                      </div>
+                      <button type="submit" name="submit" class="btn btn-primary">Comment</button>
+                  </form>
+                </div>
+              </div>
+            <% } %>
+
           <% } %>
-				</div>
-				<button type="submit" name="submit" class="btn btn-success" />Update</button>
-			</form>
-		</div>
+        </div>
+      </div>
+    </div>
 	</div>
 
 <% } else if(user){ %>
 
+
   <div class="row">
-    <div class="col-xs-12">
+
+    <div class="col-xs-12 col-sm-6">
         <div class="form-group">
           <label>First Name</label>
           <%= user.firstname %>
         </div>
+    </div>
+    <div class="col-xs-12 col-sm-6">
         <div class="form-group">
           <label>Last Name</label>
           <%= user.lastname %>
         </div>
+      </div>
+        <div class="col-xs-12 col-sm-6">
         <div class="form-group">
           <label>username</label>
           <%= user.username %>
         </div>
+      </div>
         <div class="form-group">
             <label>Avatar</label>
             <%- user.avatarIMG %>
@@ -119,47 +207,7 @@
 	User not logged in.
 <% } %>
 
-<% if(user){ %>
-  <% if(comments) { %>
-    <div class="row">
-        <div class="col-xs-12">
-          <strong>Comments</strong>
-        </div>
-    </div>
 
-    <div class="row">
-        <div class="col-xs-12">
-          <ul class="list-group">
-            <% for(var i=0; i<comments.length; i++) {%>
-               <li class="list-group-item">
-                 <div class="owner">
-                   <%= comments[i].owner %>
-                 </div>
-                 <div class="content">
-                   <%- comments[i].content %>
-                 </div>
-               </li>
-            <% } %>
-          </ul>
-        </div>
-    </div>
-  <% } %>
-
-  <% if(user.viewedas.length) { %>
-    <div class="row">
-      <div class="col-xs-12">
-        <form method="post" action="/data/comments/<%= user.username %>">
-            <div class="form-group">
-                <label>Comment</label>
-                <textarea name="content" class="form-control" data-provide="markdown" rows="4"></textarea>
-            </div>
-            <button type="submit" name="submit" class="btn btn-primary">Comment</button>
-        </form>
-      </div>
-    </div>
-  <% } %>
-
-<% } %>
 
  </div> <!-- /container -->
 
@@ -184,6 +232,13 @@
   ga('create', 'UA-22261401-2', 'auto');
   ga('send', 'pageview');
 
+</script>
+
+<script type="text/javascript">
+$('#myTabs a').click(function (e) {
+  e.preventDefault()
+  $(this).tab('show')
+})
 </script>
 </body>
 </html>

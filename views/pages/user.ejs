@@ -128,7 +128,39 @@
 
       <div role="tabpanel" class="tab-pane" id="interests">
         <div class="well">
-          <p>Coming soon....</p>
+          <form method="post">
+            <div class="row">
+              <div class="col-xs-12 col-sm-6">
+                <div class="form-group">
+                  <label>interests</label>
+                  <% if(user.interests && user.interests.length > 0) { %>
+                  <div class="input-group">
+                    <input name="interests" class="form-control" type="text" value="" />
+                    <span class="input-group-addon" id="btnAddInterest"><i class="glyphicon glyphicon-plus"></i>Add Interest</span>
+                  </div>
+                  <ul class="list-group">
+                    <% for(var i = 0; i<= user.interests.length; i++) { %>
+                      <li class="list-group-item"><%= user.interests[i] %><span class="pull-right">
+                        <button class="btn btn-xs btn-danger" data-toggle="tooltip" data-placement="right" title="Remove Interest">
+                          <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                        </span>
+                      </li>
+                    <% } %>
+                  </ul>
+
+                  <% } else { %>
+                    No Interests yet.
+                  <% } %>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-12">
+                <button type="submit" name="submit" class="btn btn-success" />Update</button>
+              </div>
+            </div>
+          </form>
         </div>
       </div>
 

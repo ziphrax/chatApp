@@ -126,6 +126,9 @@ router.route('/user/:id')
           doc.firstname = req.body.firstname;
           doc.lastname = req.body.lastname;
           doc.emailaddress = req.body.emailaddress;
+          doc.interests = req.body.interests;
+
+          console.log(req.body.interests);
 
           var url = sanitizer.sanitize(req.body.avatarURL);
           doc.avatarURL = url;

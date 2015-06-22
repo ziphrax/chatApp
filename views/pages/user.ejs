@@ -65,9 +65,10 @@
   <div>
 
     <ul id="myTabs" class="nav nav-pills" role="tablist">
-      <li role="presentation" class="active"><a href="#basic-details" data-toggle="tab">Basic Details</a></li>
-      <li role="presentation"><a href="#interests">Interests</a></li>
-      <li role="presentation"><a href="#comments">Comments</a></li>
+      <li role="presentation" class="active"><a href="#basic-details" data-toggle="tab"><i class="glyphicon glyphicon-user"></i>&nbsp;Basic Details</a></li>
+      <li role="presentation"><a href="#interests"><i class="glyphicon glyphicon-knight"></i>&nbsp;Interests</a></li>
+      <li role="presentation"><a href="#comments"><i class="glyphicon glyphicon-envelope"></i>&nbsp;Comments</a></li>
+      <li role="presentation"><a href="#settings"><i class="glyphicon glyphicon-cog"></i>&nbsp;Settings</a></li>
     </ul>
 
     <div class="tab-content">
@@ -107,7 +108,7 @@
               <div class="col-xs-12 col-sm-6">
                 <div class="form-group">
                   <label>Avatar URL</label>
-                  <input name="avatarURL" class="form-control" type="text" value="<%= user.avatarURL %>" />
+                  <input name="avatarURL" class="form-control" type="text" value="<%= user.avatarURL %>" data-toggle="tooltip" data-placement="right" title="Can only link to external urls." />
                 </div>
               </div>
               <div class="col-xs-12 col-sm-6">
@@ -170,38 +171,81 @@
           <% } %>
         </div>
       </div>
+
+      <div role="tabpanel" class="tab-pane" id="settings">
+        <div class="well">
+          <p>Comming soon....</p>
+        </div>
+      </div>
     </div>
 	</div>
 
 <% } else if(user){ %>
 
 
-  <div class="row">
 
-    <div class="col-xs-12 col-sm-6">
-        <div class="form-group">
-          <label>First Name</label>
-          <%= user.firstname %>
+
+    <div>
+
+      <ul id="myTabs" class="nav nav-pills" role="tablist">
+        <li role="presentation" class="active"><a href="#basic-details" data-toggle="tab"><i class="glyphicon glyphicon-user"></i>&nbsp;Basic Details</a></li>
+        <li role="presentation"><a href="#interests"><i class="glyphicon glyphicon-knight"></i>&nbsp;Interests</a></li>
+        <li role="presentation"><a href="#comments"><i class="glyphicon glyphicon-envelope"></i>&nbsp;Comments</a></li>
+      </ul>
+
+      <div class="tab-content">
+
+        <div role="tabpanel" class="tab-pane active" id="basic-details">
+          <div class="well">
+            <div class="row">
+
+              <div class="col-xs-12 col-sm-6">
+                  <div class="form-group">
+                    <label>First Name</label>
+                    <%= user.firstname %>
+                  </div>
+              </div>
+
+              <div class="col-xs-12 col-sm-6">
+                <div class="form-group">
+                  <label>Last Name</label>
+                  <%= user.lastname %>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+
+              <div class="col-xs-12 col-sm-6">
+                <div class="form-group">
+                  <label>username</label>
+                  <%= user.username %>
+                </div>
+              </div>
+
+              <div class="col-xs-12 col-sm-6">
+                <div class="form-group">
+                  <label>Avatar</label>
+                  <%- user.avatarIMG %>
+                </div>
+              </div>
+
+            </div>
+          </div>
         </div>
-    </div>
-    <div class="col-xs-12 col-sm-6">
-        <div class="form-group">
-          <label>Last Name</label>
-          <%= user.lastname %>
+
+        <div role="tabpanel" class="tab-pane" id="interests">
+          <div class="well">Coming soon...</div>
         </div>
+
+        <div role="tabpanel" class="tab-pane" id="comments">
+          <div class="well">Coming soon...</div>
+        </div>
+
       </div>
-        <div class="col-xs-12 col-sm-6">
-        <div class="form-group">
-          <label>username</label>
-          <%= user.username %>
-        </div>
-      </div>
-        <div class="form-group">
-            <label>Avatar</label>
-            <%- user.avatarIMG %>
-        </div>
+
     </div>
-  </div>
+
 
 <% } else { %>
 	User not logged in.
@@ -235,10 +279,13 @@
 </script>
 
 <script type="text/javascript">
-$('#myTabs a').click(function (e) {
-  e.preventDefault()
-  $(this).tab('show')
-})
+$(function(){
+  $('#myTabs a').click(function (e) {
+    e.preventDefault()
+    $(this).tab('show')
+  })
+  $('[data-toggle="tooltip"]').tooltip();
+});
 </script>
 </body>
 </html>

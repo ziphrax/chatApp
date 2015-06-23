@@ -14,7 +14,6 @@ var marked = require('marked');
 var sanitizer = require('sanitizer');
 var miniGameRoute = require('../routes/miniGame');
 
-
 router.use('/data',dataRoutes);
 router.use('/surveys',auth,surveysRoute);
 router.use('/marvel',marvelRoute);
@@ -127,6 +126,7 @@ router.route('/user/:id')
           doc.lastname = req.body.lastname;
           doc.emailaddress = req.body.emailaddress;
           doc.interests = req.body.interests;
+          doc.preferedVoice = req.body.preferedVoice;
 
           console.log(req.body.interests);
 

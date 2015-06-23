@@ -12,7 +12,8 @@ var UserSchema = new mongoose.Schema({
 	pref_voice: String,
 	avatarURL: String,
 	avatarIMG: String,
-	interests: [String]
+	interests: [String],
+	preferedVoice: String
 });
 
 UserSchema.plugin(passportLocalMongoose);

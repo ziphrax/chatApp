@@ -5,10 +5,10 @@ $(function(){
 
 	var voicelist = responsiveVoice.getVoices();
   var vselect = $("#voiceselection");
-
+  vselect.append($("<option />").val('').text('Off'));
 	$.each(voicelist, function() {
-          vselect.append($("<option />").val(this.name).text(this.name));
-  	});
+  	vselect.append($("<option />").val(this.name).text(this.name));
+	});
 
 	newsSummary();
 

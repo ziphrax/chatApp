@@ -1,7 +1,4 @@
 $(function(){
-
-	jQuery.fn.reverse = [].reverse;
-	
 	var socket = io();
 	var me = 'unknown';
 	var cachedRooms = [];
@@ -93,7 +90,7 @@ $(function(){
 	});
 
 	socket.on('chat log',function(logs){
-		$.each(logs,function(index,val){
+		$.each($(logs).reverse(),function(index,val){
 			updateChat(val.username,val.message,false);
 		});		
 	});
@@ -101,7 +98,7 @@ $(function(){
 	socket.on('update user list',function(userList){
 		$('#userList').empty();
 		var contentStr = '';
-		$.each($(userList).reverse(),function(index,user){
+		$.each(userList,function(index,user){
 			contentStr = contentStr + '<li class="list-group-item">' + user + '</li>';
 		});
 

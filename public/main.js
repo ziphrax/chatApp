@@ -1,4 +1,7 @@
 $(function(){
+
+	jQuery.fn.reverse = [].reverse;
+
 	var socket = io();
 	var me = 'unknown';
 	var cachedRooms = [];

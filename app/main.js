@@ -45,6 +45,7 @@ $(function(){
 	    e.preventDefault();
 	    var room = $(this).data('room');
 	    socket.emit('switchRoom',{name: room, password: ''});
+	    $('#conversation').empty();
 	  });
 
 	  $('#conversation li:last-child a.decline').on('click',function(e){

@@ -128,7 +128,7 @@ io.on('connection', function( socket ) {
 			socket.emit( 'update user list' , userList);
 
 			var query = ChatLog.find({room:'Lobby'});
-			query.sort([['time',-1]]).limit(50);
+			query.sort([['time',1]]).limit(50);
 			query.exec(function(err, docs) {
 				if(err){
 					socket.emit('updatechat','SERVER','Error retrieving chat log :-(');
@@ -226,7 +226,7 @@ io.on('connection', function( socket ) {
 				socket.emit( 'update user list' , newList);
 
 				var query = ChatLog.find({room:newroom.name});
-				query.sort([['time',-1]]).limit(50);
+				query.sort([['time',1]]).limit(50);
 				query.exec(function(err, docs) {
 					if(err){
 						socket.emit('updatechat','SERVER','Error retrieving chat log :-(');

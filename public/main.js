@@ -45,7 +45,7 @@ $(function(){
 	    e.preventDefault();
 	    var room = $(this).data('room');
 	    socket.emit('switchRoom',{name: room, password: ''});
-	    $('#conversation').empty();
+	    $('#conversation').html('');
 	  });
 
 	  $('#conversation li:last-child a.decline').on('click',function(e){
@@ -89,6 +89,7 @@ $(function(){
 	          password = prompt('Please enter password');
 	        }
 	          socket.emit('switchRoom',{name: room, password: password});
+	          $('#conversation').html('');
 	      });
 	  });
 	});

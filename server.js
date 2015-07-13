@@ -18,6 +18,7 @@ var express = require('express')
 	, cacher = require('./app/cacher')
     , flash   = require('connect-flash')
     , engine = require('ejs-locals')
+    , ChatLog = require('./model/chatLog')
 	, passportSocketIo = require("passport.socketio");
 
 
@@ -126,6 +127,16 @@ io.on('connection', function( socket ) {
 			socket.broadcast.to( 'Lobby' ).emit( 'update user list' , userList );
 			socket.emit( 'update user list' , userList);
 
+			var query = ChatLog.find({room:'Lobby'});
+			query.sort([['time',-1]]).limit(50);
+			query.exec(function(err, docs) {
+				if(err){
+					socket.emit('updatechat','SERVER','Error retrieving chat log :-(');
+				} else {
+					socket.emit('chat log', docs);						
+				}
+			});
+
        } else {
           socket.emit( 'updatechat', 'SERVER', 'You are not authorized to join rooms.' );
           socket.leave( socket.room );
@@ -201,17 +212,30 @@ io.on('connection', function( socket ) {
                 oldroom = socket.room;
                 socket.leave(oldroom);
 
-								var oldList = getRoomUsers(oldroom);
-								socket.broadcast.to( oldroom ).emit( 'update user list' , oldList );
-								socket.broadcast.to( oldroom ).emit( 'updatechat' , 'SERVER', socket.username + ' has left this room');
+				var oldList = getRoomUsers(oldroom);
+				socket.broadcast.to( oldroom ).emit( 'update user list' , oldList );
+				socket.broadcast.to( oldroom ).emit( 'updatechat' , 'SERVER', socket.username + ' has left this room');
 
                 socket.join(newroom.name);
-								socket.room = newroom.name;
-								var newList = getRoomUsers(newroom.name);
-								socket.broadcast.to( newroom.name ).emit( 'update user list' , newList );
+				socket.room = newroom.name;
+
+				var newList = getRoomUsers(newroom.name);
+
+				socket.broadcast.to( newroom.name ).emit( 'update user list' , newList );
                 socket.broadcast.to(socket.room).emit('updatechat', 'SERVER', socket.username + ' has joined this room');
-								socket.emit( 'update user list' , newList);
-								socket.emit('updaterooms', makeRoomsSafeToSend(rooms), newroom.name);
+				socket.emit( 'update user list' , newList);
+
+				var query = ChatLog.find({room:newroom.name});
+				query.sort([['time',-1]]).limit(50);
+				query.exec(function(err, docs) {
+					if(err){
+						socket.emit('updatechat','SERVER','Error retrieving chat log :-(');
+					} else {
+						socket.emit('chat log', docs);						
+					}
+				});
+
+				socket.emit('updaterooms', makeRoomsSafeToSend(rooms), newroom.name);
 
                 if(!rooms[newroom.name].private){
                   socket.emit('updatechat', 'SERVER', 'you have connected to ' + newroom.name);

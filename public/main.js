@@ -4,11 +4,11 @@ $(function(){
 	var cachedRooms = [];
 
 	var voicelist = responsiveVoice.getVoices();
-  var vselect = $("#voiceselection");
-
+  	var vselect = $("#voiceselection");
+  	//vselect.append($("<option />").val('').text('Off'));
 	$.each(voicelist, function() {
-          vselect.append($("<option />").val(this.name).text(this.name));
-  	});
+  	vselect.append($("<option />").val(this.name).text(this.name));
+	});
 
 	newsSummary();
 
@@ -21,10 +21,15 @@ $(function(){
 		});
 	}
 
-	socket.on('updatechat', function (username, data) {
-	  $('#conversation').append('<li class="list-group-item"><b><span class="username"></i>'+ username + '</span>: ' + formatedTime() +' -> <span class="saveForLater" title="Save as note"><i class="glyphicon glyphicon-star-empty"></i><span></b> ' + data + '</li>');
+	socket.on('updatechat', updateChat);
 
-		speak(data);
+	function updateChat(username,data,sayIt){
+		$('#conversation').append('<li class="list-group-item"><b><span class="username"></i>'+ username + '</span>: ' + formatedTime() +' -> <span class="saveForLater" title="Save as note"><i class="glyphicon glyphicon-star-empty"></i><span></b> ' + data + '</li>');
+
+		if(sayIt){
+			speak(data);			
+		}
+
 
 	  $('#conversation li:last-child .username').on('click',function(e){
 	    var username = $(this).text();
@@ -32,6 +37,7 @@ $(function(){
 	      inviteToChat(username);
 	    };
 	  });
+
 	  $('#conversation li:last-child a.join').on('click',function(e){
 	    e.preventDefault();
 	    var room = $(this).data('room');
@@ -53,7 +59,7 @@ $(function(){
 	  });
 
 	  scrollConversation();
-	});
+	}
 
 	socket.on('updaterooms', function (rooms, current_room) {
 	  $('#rooms').empty();
@@ -81,6 +87,12 @@ $(function(){
 	          socket.emit('switchRoom',{name: room, password: password});
 	      });
 	  });
+	});
+
+	socket.on('chat log',function(logs){
+		$.each(logs,function(index,val){
+			updateChat(val.username,val.message,false);
+		});		
 	});
 
 	socket.on('update user list',function(userList){

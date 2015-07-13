@@ -1,4 +1,7 @@
 $(function(){
+
+	jQuery.fn.reverse = [].reverse;
+	
 	var socket = io();
 	var me = 'unknown';
 	var cachedRooms = [];
@@ -98,7 +101,7 @@ $(function(){
 	socket.on('update user list',function(userList){
 		$('#userList').empty();
 		var contentStr = '';
-		$.each(userList,function(index,user){
+		$.each($(userList).reverse(),function(index,user){
 			contentStr = contentStr + '<li class="list-group-item">' + user + '</li>';
 		});
 

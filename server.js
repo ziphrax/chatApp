@@ -83,7 +83,7 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.use(new GoogleStrategy({
    clientID: '90748331248-luqlbqbksj0lblhttu8qk54s20anfr1d.apps.googleusercontent.com',
    clientSecret: '1xJpsEcRmj5qWAryomvQ-rxv',
-   callbackURL: 'https://www.chatropolis.com/oauth2callback'
+   callbackURL: 'https://www.chatropolis.com/auth/google/callback'
   },
   function(token, tokenSecret, profile, done) {
     User.findOrCreate({ googleId: profile.id }, function (err, user) {

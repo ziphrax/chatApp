@@ -11,6 +11,7 @@ var express = require('express')
     , session = require('express-session')
 	, MongoStore = require('connect-mongo')(session)
     , LocalStrategy = require('passport-local').Strategy
+    , GoogleStrategy = require('passport-google-oauth').OAuth2Strategy
     , server = require('http').createServer(app)
 	, io = require('socket.io').listen(server)
 	, banner = require('./app/banner')
@@ -79,10 +80,29 @@ app.use(function(req, res, next) {
 });
 
 passport.use(new LocalStrategy(User.authenticate()));
+passport.use(new GoogleStrategy({
+   clientID: '90748331248-luqlbqbksj0lblhttu8qk54s20anfr1d.apps.googleusercontent.com',
+   clientSecret: '1xJpsEcRmj5qWAryomvQ-rxv',
+   callbackURL: 'https://www.chatropolis.com/oauth2callback'
+  },
+  function(token, tokenSecret, profile, done) {
+    User.findOrCreate({ googleId: profile.id }, function (err, user) {
+      return done(err, user);
+    });
+  }
+));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 app.use('/',routes);
+
+app.get('/auth/google',passport.authenticate('google', { scope: 'https://www.google.com/m8/feeds' }));
+app.get('/auth/google/callback', 
+  passport.authenticate('google', { failureRedirect: '/login' }),
+  function(req, res) {
+    // Successful authentication, redirect home.
+    res.redirect('/');
+  });
 
 app.get('/admin/logs',auth,function(request,response){
     response.render('pages/logs');

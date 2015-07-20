@@ -1,5 +1,5 @@
 var request = require('request');
-var md5 = require('MD5');
+var md5 = require('md5');
 var marvelAPI = {
     publicKey : 'ed27ed50f19f2ab2c44098a2ec18e8cb',
     privateKey : '249195ecfb9452872b1dcbce0deaf302b9bbe060'

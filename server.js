@@ -133,7 +133,12 @@ io.on('connection', function( socket ) {
 				if(err){
 					socket.emit('updatechat','SERVER','Error retrieving chat log :-(');
 				} else {
-					socket.emit('chat log', docs);						
+					socket.emit('chat log', docs.map(
+						function(doc){
+							doc.message =  parseMessage(doc.message);
+							return doc;
+						})
+					);
 				}
 			});
 
@@ -231,7 +236,12 @@ io.on('connection', function( socket ) {
 					if(err){
 						socket.emit('updatechat','SERVER','Error retrieving chat log :-(');
 					} else {
-						socket.emit('chat log', docs);						
+						socket.emit('chat log', docs.map(
+							function(doc){
+								doc.message =  parseMessage(doc.message);
+								return doc;
+							})
+						);
 					}
 				});
 

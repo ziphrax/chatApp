@@ -80,7 +80,7 @@
 										<% for(eachCharacter in characters.data.results) {%>
 											<tr data-id="<%= characters.data.results[eachCharacter].id %>">
 												<td class="col-xs-2"><%=characters.data.results[eachCharacter].name  %></td>	
-												<td class="col-xs-1"><img src="<%- (characters.data.results[eachCharacter]..thumbnail.path + '.' + characters.data.results[eachCharacter]..thumbnail.extension) %>" width="64px"/></td>
+												<td class="col-xs-1"><img src="<%- (characters.data.results[eachCharacter].thumbnail.path + '.' + characters.data.results[eachCharacter].thumbnail.extension) %>" width="64px"/></td>
 												<td class="col-xs-7"><%=characters.data.results[eachCharacter].description  %></td>	
 											</tr>
 										<% } %>

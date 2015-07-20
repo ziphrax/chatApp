@@ -71,17 +71,17 @@
 								<table id="characters" class="table table-striped table-hover table-bordered">
 									<thead>
 										<tr>
-											<th class="col-xs-12">Title</th>
-											<!--th class="col-xs-1">Thumb</th>
+											<th class="col-xs-2">Title</th>
+											<th class="col-xs-1">Thumb</th>
 											<th class="col-xs-7">Description</th>
-											<th class="col-xs-1">Price</th>
-											<th class="col-xs-1"></th-->
 										</tr>
 									</thead>
 									<tbody>
 										<% for(eachCharacter in characters.data.results) {%>
 											<tr data-id="<%= characters.data.results[eachCharacter].id %>">
-												<td class="col-xs-12"><%= (JSON.stringify(characters.data.results[eachCharacter])) %></td>	
+												<td class="col-xs-2"><%=characters.data.results[eachCharacter].name  %></td>	
+												<td class="col-xs-1"><img src="<%- (characters.data.results[eachCharacter]..thumbnail.path + '.' + characters.data.results[eachCharacter]..thumbnail.extension) %>" width="64px"/></td>
+												<td class="col-xs-7"><%=characters.data.results[eachCharacter].description  %></td>	
 											</tr>
 										<% } %>
 									</tbody>

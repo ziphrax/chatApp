@@ -42,16 +42,15 @@
 						<div class="panel panel-default" data-id="<%= characters.data.results[eachCharacter].id %>">
 							<div class="panel-heading">
 								<div class="panel-title">
-									panel-title
+									<%= characters.data.results[eachCharacter].name %>
 								</div>
 							</div>
 							<div class="panel-body">
 								<div class="col-xs-12">
-									<%- (JSON.stringify(characters.data.results[eachCharacter]))%>
+									<%= characters.data.results[eachCharacter].description %>
 								</div>
 							</div>
-							<div class="panel-footer">
-								panel-footer
+							<div class="panel-footer">								
 							</div>
 						</div>
 					<% } %>

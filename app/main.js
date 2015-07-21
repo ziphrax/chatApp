@@ -19,7 +19,12 @@ $(function(){
 		$.get('/data/articles/summary/').done(function(data){
 			console.log(data);
 			$.each(data,function(index,item){
-				$('.news-summary').append('<li class="list-group-item"><a href="/articles/'+item._id+'">'+ item.title +'</a></li>');
+				if(index == 0){
+					$('.news-summary').append('<li class="list-group-item"><h2><a href="/articles/'+item._id+'">'+ item.title +'</a></h2>' 
+						+ '<div class="content">' + marked(item.content) + '</div></li>');
+				} else {					
+					$('.news-summary').append('<li class="list-group-item"><a href="/articles/'+item._id+'">'+ item.title +'</a></li>');
+				}
 			});
 		});
 	}

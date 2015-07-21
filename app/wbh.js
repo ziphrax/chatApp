@@ -5,6 +5,8 @@ var timer = '';
 var lastTime = '';
 var rate = 10;
 var time = new Date();
+var lastTime = new Date();
+var deltaTime = 0;
 
 var battleGroupClass = function(data){
   var self = this;
@@ -239,7 +241,7 @@ function init(){
 
   timer = setInterval(function(){
     tick(1);
-  },1000 / rate);
+  }, (1000 / rate) - deltaTime);
 
 }
 
@@ -259,6 +261,8 @@ $('.btn-stop').click(function(){
 
 function tick(deltaTime){
   time= +new Date();
+  deltaTime = time - lastTime - (1000 / rate);
+  lastTime = time;
   $('.timer').html(time);
   $('.fps').html(rate);
   drawPlayerUI(universe);

@@ -24,6 +24,11 @@ router.route('/')
     res.render('pages/index', { user : req.user});
   });
 
+router.route('/wbh')
+  .get(function(req,res){
+      res.render('pages/wbh', { });
+  });
+
 router.route('/register')
   .get(function(req, res) {
     res.render('pages/login/register', { });

@@ -6,13 +6,6 @@ $(function(){
 	var me = 'unknown';
 	var cachedRooms = [];
 
-	var voicelist = responsiveVoice.getVoices();
-  	var vselect = $("#voiceselection");
-  	//vselect.append($("<option />").val('').text('Off'));
-	$.each(voicelist, function() {
-  	vselect.append($("<option />").val(this.name).text(this.name));
-	});
-
 	newsSummary();
 
 	function newsSummary(){
@@ -26,7 +19,7 @@ $(function(){
 					$('.news-summary').append('<li class="list-group-item"><a href="/articles/'+item._id+'">'+ item.title +'</a></li>');
 				}
 			});
-			$('.news-summary').append('<li class="list-group-item text-center"><a href="/articles/">More News</a></li>');
+			$('.news-summary').append('<li class="list-group-item text-center"><a href="/articles">More News</a></li>');
 		});
 	}
 
@@ -36,7 +29,7 @@ $(function(){
 		$('#conversation').append('<li class="list-group-item"><b><span class="username"></i>'+ username + '</span>: ' + formatedTime() +' -> <span class="saveForLater" title="Save as note"><i class="glyphicon glyphicon-star-empty"></i><span></b> ' + data + '</li>');
 
 		if(sayIt){
-			speak(data);			
+			speak(data);
 		}
 
 
@@ -103,7 +96,7 @@ $(function(){
 	socket.on('chat log',function(logs){
 		$.each($(logs).reverse(),function(index,val){
 			updateChat(val.username,val.message,false);
-		});		
+		});
 	});
 
 	socket.on('update user list',function(userList){

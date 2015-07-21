@@ -26,6 +26,7 @@ $(function(){
 					$('.news-summary').append('<li class="list-group-item"><a href="/articles/'+item._id+'">'+ item.title +'</a></li>');
 				}
 			});
+			$('.news-summary').append('<li class="list-group-item text-center"><a href="/articles/">More News</a></li>');
 		});
 	}
 

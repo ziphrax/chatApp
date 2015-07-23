@@ -44,95 +44,109 @@
 							</div>
 						</div>
 						<div class="panel-body">
-							<div class="col-xs-6 col-md-3">
-								Height:
-							</div>				
-							<div class="col-xs-6 col-md-3">
-								<%= people.height %> cm
-							</div>
-							<div class="col-xs-6 col-md-3">
-								Mass:
-							</div>				
-							<div class="col-xs-6 col-md-3">
-								<%= people.mass %> kg
-							</div>
-							<div class="col-xs-6 col-md-3">
-								Hair Color:
-							</div>				
-							<div class="col-xs-6 col-md-3">
-								<%= people.hair_color %>
-							</div>
-							<div class="col-xs-6 col-md-3">
-								Eye Color:
-							</div>				
-							<div class="col-xs-6 col-md-3">
-								<%= people.eye_color %>
-							</div>
-							<div class="col-xs-6 col-md-3">
-								Birth Year:
-							</div>				
-							<div class="col-xs-6 col-md-3">
-								<%= people.birth_year %>
-							</div>
-							<div class="col-xs-6 col-md-3">
-								Gender:
-							</div>				
-							<div class="col-xs-6 col-md-3">
-								<%= people.gender %>
-							</div>
-							<div class="col-xs-6 col-md-3">
-								Homeworld:
-							</div>				
-							<div class="col-xs-6 col-md-3">
-								<a href="<%= people.homeworld %>">Click Here to View</a>
-							</div>
-							<div class="col-xs-6 col-md-3">
-								Species:
-							</div>				
-							<div class="col-xs-6 col-md-3">
-								<a href="<%= people.species %>">Click Here to View</a>
-							</div>
-							<div class="col-xs-6 col-md-3">
-								Films:
-							</div>
-							<div class="col-xs-6 col-md-3">
-								<ul class="list-group">
-									<% for(eachFilm in people.films) { %>
-										<li class="list-group-item"><a href="<%= people.films[eachFilm] %>"><%= people.films[eachFilm] %></a></li>
-									<% } %>
-								</ul>
-							</div>
-							<div class="col-xs-6 col-md-3">
-								Vehicles:
-							</div>
-							<div class="col-xs-6 col-md-3">
-								<ul class="list-group">
-									<% for(eachVehicle in people.vehicles) { %>
-										<li class="list-group-item"><a href="<%= people.vehicles[eachVehicle] %>"><%= people.vehicles[eachVehicle] %></a></li>
-									<% } %>
-								</ul>
-							</div>
-							<div class="col-xs-6 col-md-3">
-								Starships:
-							</div>
-							<div class="col-xs-6 col-md-3">
-								<ul class="list-group">
-									<% for(eachStartship in people.starships) { %>
-										<li class="list-group-item"><a href="<%= people.starships[eachStartship] %>"><%= people.starships[eachStartship] %></a></li>
-									<% } %>
-								</ul>
-							</div>
-							<div class="col-xs-6 col-md-3">
-								Created:
-							</div>				
-							<div class="col-xs-6 col-md-3">
-								<%= people.created %>
-							</div>
+							<div class="row">
 								<div class="col-xs-6 col-md-3">
-								Edited:
-							</div>				
-							<div class="col-xs-6 col-md-3">
-								<%= people.edited %>
+									Height:
+								</div>				
+								<div class="col-xs-6 col-md-3">
+									<%= people.height %> cm
+								</div>
+								<div class="col-xs-6 col-md-3">
+									Mass:
+								</div>				
+								<div class="col-xs-6 col-md-3">
+									<%= people.mass %> kg
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-6 col-md-3">
+									Hair Color:
+								</div>				
+								<div class="col-xs-6 col-md-3">
+									<%= people.hair_color %>
+								</div>
+								<div class="col-xs-6 col-md-3">
+									Eye Color:
+								</div>				
+								<div class="col-xs-6 col-md-3">
+									<%= people.eye_color %>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-6 col-md-3">
+									Birth Year:
+								</div>				
+								<div class="col-xs-6 col-md-3">
+									<%= people.birth_year %>
+								</div>
+								<div class="col-xs-6 col-md-3">
+									Gender:
+								</div>				
+								<div class="col-xs-6 col-md-3">
+									<%= people.gender %>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-6 col-md-3">
+									Homeworld:
+								</div>				
+								<div class="col-xs-6 col-md-3">
+									<a href="<%= people.homeworld %>">Click Here to View</a>
+								</div>
+								<div class="col-xs-6 col-md-3">
+									Species:
+								</div>				
+								<div class="col-xs-6 col-md-3">
+									<a href="<%= people.species %>">Click Here to View</a>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-6 col-md-3">
+									Films:
+								</div>
+								<div class="col-xs-6 col-md-3">
+									<ul class="list-group">
+										<% for(eachFilm in people.films) { %>
+											<li class="list-group-item"><a href="<%= people.films[eachFilm] %>"><%= people.films[eachFilm] %></a></li>
+										<% } %>
+									</ul>
+								</div>
+								<div class="col-xs-6 col-md-3">
+									Vehicles:
+								</div>
+								<div class="col-xs-6 col-md-3">
+									<ul class="list-group">
+										<% for(eachVehicle in people.vehicles) { %>
+											<li class="list-group-item"><a href="<%= people.vehicles[eachVehicle] %>"><%= people.vehicles[eachVehicle] %></a></li>
+										<% } %>
+									</ul>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-6 col-md-3">
+									Starships:
+								</div>
+								<div class="col-xs-6 col-md-3">
+									<ul class="list-group">
+										<% for(eachStartship in people.starships) { %>
+											<li class="list-group-item"><a href="<%= people.starships[eachStartship] %>"><%= people.starships[eachStartship] %></a></li>
+										<% } %>
+									</ul>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-6 col-md-3">
+									Created:
+								</div>				
+								<div class="col-xs-6 col-md-3">
+									<%= people.created %>
+								</div>
+									<div class="col-xs-6 col-md-3">
+									Edited:
+								</div>				
+								<div class="col-xs-6 col-md-3">
+									<%= people.edited %>
+								</div>
 							</div>
 						</div>
 						<div class="panel-footer">				

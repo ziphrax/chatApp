@@ -10,6 +10,7 @@ var auth = basicAuth('Admin42', 'Pro1337p4ss');
 var dataRoutes = require('../routes/data');
 var surveysRoute = require('../routes/surveys');
 var marvelRoute = require('../routes/marvel');
+var swapiRoute = require('../routes/swapi');
 var marked = require('marked');
 var sanitizer = require('sanitizer');
 var miniGameRoute = require('../routes/miniGame');
@@ -17,6 +18,7 @@ var miniGameRoute = require('../routes/miniGame');
 router.use('/data',dataRoutes);
 router.use('/surveys',auth,surveysRoute);
 router.use('/marvel',marvelRoute);
+router.use('/swapi',swapiRoute);
 router.use('/minigame',miniGameRoute);
 
 router.route('/')

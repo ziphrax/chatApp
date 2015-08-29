@@ -27,6 +27,7 @@ function getOSDetails(){
     "platform":os.platform(),
     "release":os.release(),
     "uptime": ( os.uptime() / 60 ).toFixed(0),
+    "uptimesecs": (os.uptime() % 60).toFixed(0),
     "loadavg1":os.loadavg()[0],
     "loadavg5":os.loadavg()[1],
     "loadavg15":os.loadavg()[2],

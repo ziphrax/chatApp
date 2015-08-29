@@ -22,6 +22,7 @@ var     score = 0
 ingame.prototype = {
     create: function() {
         game.physics.startSystem(Phaser.Physics.ARCADE);
+        score = 0;
 
         main_theme.stop();
 
@@ -226,7 +227,7 @@ function collectStar (player, star) {
     score += 10;
     scoreText.text = 'Score: ' + score;
 
-    if(score == 120){
+    if(score > 110){
       scoreText.text = 'Level Complete!';
       console.log('level exit opened');
       createExit();

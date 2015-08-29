@@ -1,0 +1,106 @@
+<html>
+  <head>
+    <title>Chatropolis.com - Monitoring</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-xs-12">
+          <h1>Monitoring</h1>
+        </div>
+      </div>
+
+      <div id="os-details"></div>
+    </div>
+
+    <script id="os-details-template" type="text/x-handlebars-template">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">OS Details</h3>
+        </div>
+        <div class="panel-body">
+
+          <div class="col-xs-6">
+            hostname
+          </div>
+          <div class="col-xs-6">
+            {{ os.hostname }}
+          </div>
+
+          <div class="col-xs-6">
+            Type
+          </div>
+          <div class="col-xs-6">
+            {{ os.type }} : {{ os.platform }} - {{ os.release }}
+          </div>
+
+          <div class="col-xs-6">
+            Uptime
+          </div>
+          <div class="col-xs-6">
+            {{ os.uptime }} minutes
+          </div>
+
+          <div class="col-xs-6">
+            Load Avg
+          </div>
+          <div class="col-xs-6">
+            1 min ( {{ os.loadavg1 }} ), 5 min ( {{ os.loadavg5 }} ), 15 min ( {{ os.loadavg15 }} )
+          </div>
+
+          <div class="col-xs-6">
+            Memory
+          </div>
+          <div class="col-xs-6">
+            {{  os.freemem  }} GB / {{  os.totalmem  }} GB
+          </div>
+
+          <div class="col-xs-6">
+            CPUs
+          </div>
+          <div class="col-xs-6">
+            {{ os.cpusmodel }} * {{ os.cpuslength }}
+          </div>
+
+
+        </div>
+        <div class="panel-footer">
+          <em>Updates every 15 secs</em>
+        </div>
+      </div>
+    </script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.3/handlebars.min.js"></script>
+    <script>
+      $(function(){
+        update();
+        function update(){
+          $.get('/monitoring/data').success(function(data){
+            var source   = $("#os-details-template").html();
+            var template = Handlebars.compile(source);
+            var context = {os: data};
+            var html    = template(context);
+            $('#os-details').html(html);
+            setTimeout(update,15000);
+          }).fail(function(err){
+            console.log(err);
+          });
+        }
+      });
+    </script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-22261401-2', 'auto');
+      ga('send', 'pageview');
+
+    </script>
+  </body>
+</html>

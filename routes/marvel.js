@@ -1,4 +1,4 @@
-var express = require('express');
+/*var express = require('express');
 var router = express.Router();
 var comics = require('../model/');
 var characters = require('../model/marvel/characters');
@@ -132,4 +132,4 @@ var request = require('request');
 				}
 			});
 		});
-module.exports = router
+module.exports = router*/

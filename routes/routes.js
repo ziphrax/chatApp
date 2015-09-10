@@ -18,7 +18,7 @@ var monitorRoute = require('../routes/monitor');
 
 router.use('/data',dataRoutes);
 router.use('/surveys',auth,surveysRoute);
-router.use('/marvel',marvelRoute);
+//router.use('/marvel',marvelRoute);
 router.use('/swapi',swapiRoute);
 router.use('/minigame',miniGameRoute);
 router.use('/monitoring',monitorRoute);

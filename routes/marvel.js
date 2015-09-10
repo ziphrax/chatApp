@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var comics = require('../model/marvel/comics');
+var comics = require('../model/');
 var characters = require('../model/marvel/characters');
 var request = require('request');
 
@@ -33,7 +33,7 @@ var request = require('request');
 				if(err){
 					console.log(err)
 				} else {
-					res.render('pages/marvel/comics',{comics: JSON.parse(body),search: ''});
+					res.render('pages/',{comics: JSON.parse(body),search: ''});
 				}
 			});
 		});
@@ -43,7 +43,7 @@ var request = require('request');
 				if(err){
 					console.log(err)
 				} else {
-					res.render('pages/marvel/comics',{comics: JSON.parse(body),search: ''});
+					res.render('pages/',{comics: JSON.parse(body),search: ''});
 				}
 			});
 		});
@@ -53,7 +53,7 @@ var request = require('request');
 					if(err){
 						console.log(err)
 					} else {
-						res.render('pages/marvel/comics',{comics: JSON.parse(body),search:search?search:''});
+						res.render('pages/',{comics: JSON.parse(body),search:search?search:''});
 					}
 				});
 			});

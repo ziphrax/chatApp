@@ -25,7 +25,7 @@
 							<li><a href="/articles">News</a></li>
 							<li><a href="/users">Users</a></li>
 							<li><a href="/terms-of-service">Terms</a></li>
-							<li class="active"><a href="/marvel/comics">Comics</a></li>
+							<li class="active"><a href="/">Comics</a></li>
 							<li><a href="/marvel/characters">Characters</a></li>
 						</ul>
 						<ul class="nav navbar-nav navbar-right">
@@ -46,11 +46,11 @@
 							<div class="input-group">
 								<label class="control-label">
 									<% if(comics.data.offset - 20 >= 0 ) { %>
-									  &nbsp;<a href="/marvel/comics/offset/<%= (comics.data.offset - 20) %>">Previous</a>
+									  &nbsp;<a href="//offset/<%= (comics.data.offset - 20) %>">Previous</a>
 									<% } %>
 										Items <strong><%= comics.data.offset %> to <%= comics.data.offset+20 %></strong> of <strong><%= comics.data.total %> </strong>
 									<% if(comics.data.offset + 20 <= comics.data.total ) { %>
-									&nbsp;<a href="/marvel/comics/offset/<%= (comics.data.offset + 20) %>">Next</a>
+									&nbsp;<a href="//offset/<%= (comics.data.offset + 20) %>">Next</a>
 									<% } %>
 								</label>
 							</div>
@@ -104,11 +104,11 @@
 		$(function(){
 			$('#comics tr').click(function(){
 				var id = $(this).data('id');
-				document.location.href="/marvel/comics/"+id;
+				document.location.href="//"+id;
 			});
 			$('#search_button').click(function(){
 				var search_text = $('#search_title').val();
-				document.location.href='/marvel/comics/offset/<%= comics.data.offset %>/search/' + search_text;
+				document.location.href='//offset/<%= comics.data.offset %>/search/' + search_text;
 			});
 		});
 	</script>

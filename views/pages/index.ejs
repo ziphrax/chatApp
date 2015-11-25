@@ -23,13 +23,14 @@
 					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 						<ul class="nav navbar-nav">
 							<li class="active"><a href="/">Home</a></li>
-							<li><a href="/notes">Notes</a></li>
+							<% if( user) { %>
+								<li><a href="/notes">Notes</a></li>
+								<li><a href="/users">Users</a></li>
+							<% } %>
+							<li class="active"><a href="/">Home</a></li>
 							<li><a href="/articles">News</a></li>
-							<li><a href="/users">Users</a></li>
 							<li><a href="/terms-of-service">Terms</a></li>
 							<li><a href="/phaser">Game</a></li>
-
-
 						</ul>
 						<ul class="nav navbar-nav navbar-right">
 							<li><a href="/tickets">Help/Support</a></li>

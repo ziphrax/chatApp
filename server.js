@@ -113,46 +113,47 @@
     		var userList = getRoomUsers('Lobby');
     		socket.emit( 'update user list' , userList );
 
-    	socket.on( 'adduser' , function(){
-          if( socket.request.user.logged_in ){
-    			var username = socket.request.user.username;
-    			socket.username = sanitizer.sanitize( username );
-    			socket.room = 'Lobby';
-                socket.lobbied = true;
-    			usernames[socket.username] = {
-    				username : socket.username,
-    				socketId: socket.id
-    			};
-    			socket.join( 'Lobby' );
-    			socket.emit( 'updatechat' , 'SERVER' , 'you have connected to Lobby' );
-    			socket.broadcast.to( 'Lobby' ).emit( 'updatechat' , 'SERVER' , socket.username + ' has connected to this room' );
-    			socket.emit( 'updaterooms' , makeRoomsSafeToSend( rooms ) , 'Lobby' );
-    			socket.broadcast.emit( 'usercount',io.sockets.sockets.length );
+    	socket.on( 'adduser' , function(username){
 
-    			var userList = getRoomUsers('Lobby');
-    			socket.broadcast.to( 'Lobby' ).emit( 'update user list' , userList );
-    			socket.emit( 'update user list' , userList);
+            if( socket.request.user.logged_in ){
+              var username = socket.request.user.username;
+            } else {
+              var username = username;
+            }
 
-    			var query = ChatLog.find({room:'Lobby'});
-    			query.sort([['time',-1]]).limit(50);
-    			query.exec(function(err, docs) {
-    				if(err){
-    					socket.emit('updatechat','SERVER','Error retrieving chat log :-(');
-    				} else {
-    					socket.emit('chat log', docs.map(
-    						function(doc){
-    							doc.message =  parseMessage(doc.message);
-    							return doc;
-    						})
-    					);
-    				}
-    			});
+      			socket.username = sanitizer.sanitize( username );
+      			socket.room = 'Lobby';
+            socket.lobbied = true;
+      			usernames[socket.username] = {
+      				username : socket.username,
+      				socketId: socket.id
+      			};
+      			socket.join( 'Lobby' );
+      			socket.emit( 'updatechat' , 'SERVER' , 'you have connected to Lobby' );
+      			socket.broadcast.to( 'Lobby' ).emit( 'updatechat' , 'SERVER' , socket.username + ' has connected to this room' );
+      			socket.emit( 'updaterooms' , makeRoomsSafeToSend( rooms ) , 'Lobby' );
+      			socket.broadcast.emit( 'usercount',io.sockets.sockets.length );
 
-           } else {
-              socket.emit( 'updatechat', 'SERVER', 'You are not authorized to join rooms.' );
-              socket.leave( socket.room );
-          }
-    	});
+      			var userList = getRoomUsers('Lobby');
+      			socket.broadcast.to( 'Lobby' ).emit( 'update user list' , userList );
+      			socket.emit( 'update user list' , userList);
+
+      			var query = ChatLog.find({room:'Lobby'});
+      			query.sort([['time',-1]]).limit(50);
+      			query.exec(function(err, docs) {
+      				if(err){
+      					socket.emit('updatechat','SERVER','Error retrieving chat log :-(');
+      				} else {
+      					socket.emit('chat log', docs.map(
+      						function(doc){
+      							doc.message =  parseMessage(doc.message);
+      							return doc;
+      						})
+      					);
+      				}
+      			});
+
+      	});
 
         socket.on('create',function(roomName,password){
             if(socket.request.user.logged_in && socket.lobbied){
@@ -179,10 +180,10 @@
         });
 
         socket.on('sendchat', function(data) {
-            if(socket.request.user.logged_in  && socket.lobbied){
+            if(socket.lobbied){
                 var msg = parseMessage(data);
                 io.sockets["in"](socket.room).emit('updatechat', socket.username, msg);
-        		logger.chatLog(socket.username,	sanitizer.sanitize(data),socket.room,'sockets');
+        		    logger.chatLog(socket.username,	sanitizer.sanitize(data),socket.room,'sockets');
             } else {
                 socket.emit('updatechat', 'SERVER', 'You are not authorized to send chat.');
                 socket.leave(socket.room);
@@ -190,7 +191,7 @@
         });
 
         socket.on('invite',function(to){
-            if(socket.request.user.logged_in  && socket.lobbied){
+            if(socket.lobbied){
               var reqFrom = socket.username;
               var socketId = usernames[to].socketId;
               var newRoomName = reqFrom + '-' + to + +new Date();
@@ -216,29 +217,29 @@
         });
 
         socket.on('switchRoom', function(newroom) {
-            if(socket.request.user.logged_in  && socket.lobbied){
+            if(socket.lobbied){
                 if(rooms[newroom.name].password == newroom.password){
 
-                    var oldroom;
-                    oldroom = socket.room;
-                    socket.leave(oldroom);
+                  var oldroom;
+                  oldroom = socket.room;
+                  socket.leave(oldroom);
 
-    				var oldList = getRoomUsers(oldroom);
-    				socket.broadcast.to( oldroom ).emit( 'update user list' , oldList );
-    				socket.broadcast.to( oldroom ).emit( 'updatechat' , 'SERVER', socket.username + ' has left this room');
+          				var oldList = getRoomUsers(oldroom);
+          				socket.broadcast.to( oldroom ).emit( 'update user list' , oldList );
+          				socket.broadcast.to( oldroom ).emit( 'updatechat' , 'SERVER', socket.username + ' has left this room');
 
-                    socket.join(newroom.name);
-    				socket.room = newroom.name;
+                  socket.join(newroom.name);
+          				socket.room = newroom.name;
 
-    				var newList = getRoomUsers(newroom.name);
+          				var newList = getRoomUsers(newroom.name);
 
-    				socket.broadcast.to( newroom.name ).emit( 'update user list' , newList );
-                    socket.broadcast.to(socket.room).emit('updatechat', 'SERVER', socket.username + ' has joined this room');
-    				socket.emit( 'update user list' , newList);
+          				socket.broadcast.to( newroom.name ).emit( 'update user list' , newList );
+                  socket.broadcast.to(socket.room).emit('updatechat', 'SERVER', socket.username + ' has joined this room');
+          				socket.emit( 'update user list' , newList);
 
-    				var query = ChatLog.find({room:newroom.name});
-    				query.sort([['time',-1]]).limit(50);
-    				query.exec(function(err, docs) {
+          				var query = ChatLog.find({room:newroom.name});
+          				query.sort([['time',-1]]).limit(50);
+          				query.exec(function(err, docs) {
     					if(err){
     						socket.emit('updatechat','SERVER','Error retrieving chat log :-(');
     					} else {

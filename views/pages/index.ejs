@@ -29,7 +29,7 @@
 							<li><a href="/terms-of-service">Terms</a></li>
 							<li><a href="/phaser">Game</a></li>
 
-							 
+
 						</ul>
 						<ul class="nav navbar-nav navbar-right">
 							<li><a href="/tickets">Help/Support</a></li>
@@ -118,7 +118,26 @@
 			</div>
 		<% } %>
 
-		<% if( user) { %>
+		<div class="row welcome">
+			<div class="col-xs-12">
+				<p class="alert alert-info text-justify">
+					<a class="pull-right remove"><i class="glyphicon glyphicon-remove"></i> Close</a>
+					<strong>Welcome,</strong><br /><br />
+					 Registration enables you to reserve your favourite username and also lets you be able to save data such as notes. While chatting you will see a small star next in each post. Clicking on this lets you save that post for later. Very handy to save information like event dates, meeting locations or even just youtube videos to watch later. Later on if you decide you are happy to share more information with us; such as your real name and email address. Just visit your user page by clicking on your username in the top right hand corner and submit anything you wish to add. We do plan on adding profile pages later on.<br /><br />
+					<strong>From<br /><br /> The Sign Painter</strong>
+				</p>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-xs-12">
+				<h2>Latest News</h2>
+				<ul class="news-summary list-group">
+				</ul>
+			</div>
+		</div>
+
+
 			<div class="connected">
 				<div class="row">
 					<div class="col-xs-10">
@@ -142,7 +161,11 @@
 				</div>
 				<div class="row">
 					<div class="col-xs-12">
-						<button type="button" id="join" value="send" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i>  Join</button>
+						<% if( user) { %>
+							<button type="button" id="joinAuthed" value="send" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i>  Join</button>
+						<% } else { %>
+							<button type="button" id="join" value="send" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i>  Join</button>
+						<% } %>
 						<form id="chatform" style="display:none;">
 							<div class="input-group">
 							<input id="data" type="text" class="form-control"/>
@@ -180,27 +203,9 @@
 						</div>
 				</div>
 
-			<% } else { %>
 
-				<div class="row">
-					<div class="col-xs-12">
-						<p class="alert alert-info text-justify">
-							<strong>Welcome,</strong><br /><br />
-							To chat on our website just register a username and password. It doesn't even have to be an email address, just has to be 4 characters long and different to anyone else already registered. Registration enables you to reserve your favourite username and also lets you be able to save data such as notes. While chatting you will see a small star next in each post. Clicking on this lets you save that post for later. Very handy to save information like event dates, meeting locations or even just youtube videos to watch later. Later on if you decide you are happy to share more information with us; such as your real name and email address. Just visit your user page by clicking on your username in the top right hand corner and submit anything you wish to add. We do plan on adding profile pages later on.<br /><br />
-							<strong>From<br /><br /> The Sign Painter</strong>
-						</p>
-					</div>
-				</div>
 
-				<div class="row">
-					<div class="col-xs-12">
-						<h2>Latest News</h2>
-						<ul class="news-summary list-group">
-						</ul>
-					</div>
-				</div>
 
-			<% } %>
 
 		<!-- Modal -->
 		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

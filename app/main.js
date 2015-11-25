@@ -13,9 +13,9 @@ $(function(){
 			console.log(data);
 			$.each(data,function(index,item){
 				if(index == 0){
-					$('.news-summary').append('<li class="list-group-item"><h2><a href="/articles/'+item._id+'">'+ item.title +'</a></h2>' 
+					$('.news-summary').append('<li class="list-group-item"><h2><a href="/articles/'+item._id+'">'+ item.title +'</a></h2>'
 						+ '<div class="content">' + marked(item.content) + '</div></li>');
-				} else {					
+				} else {
 					$('.news-summary').append('<li class="list-group-item"><a href="/articles/'+item._id+'">'+ item.title +'</a></li>');
 				}
 			});
@@ -135,12 +135,24 @@ $(function(){
 
 
     $( '#join' ).click(function(e){
-        $( this ).fadeOut(500,function(){
+			var username = window.prompt("Please enter a username","");
+
+			if(username != null){
+				$( this ).fadeOut(500,function(){
         	$( '#chatform' ).fadeIn();
         })
       	e.preventDefault();
-      	socket.emit('adduser');
+      	socket.emit('adduser',username);
+			}
     });
+
+		$( '#joinAuthed' ).click(function(e){
+				$( this ).fadeOut(500,function(){
+					$( '#chatform' ).fadeIn();
+				})
+				e.preventDefault();
+				socket.emit('adduser');			
+		});
 
     $( '#data' ).keypress( function(e) {
         if(e.which == 13) {
@@ -171,6 +183,10 @@ $(function(){
       d.getMinutes() + ':' +
       d.getSeconds();
     }
+
+		$('div.welcome .remove').click(function(e){
+			$('div.welcome').remove();
+		});
 
     $( '#datasend' ).click( function(e) {
         e.preventDefault();

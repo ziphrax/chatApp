@@ -23,18 +23,16 @@
           <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
               <li><a href="/">Home</a></li>
-              <li><a href="/notes">Notes</a></li>
               <li><a href="/articles">News</a></li>
-              <li><a href="/users">Users</a></li>
               <li><a href="/terms-of-service">Terms</a></li>
               <li><a href="/phaser">Game</a></li>
-               
-               
             </ul>
             <ul class="nav navbar-nav navbar-right">
               <li><a href="/tickets">Help/Support</a></li>
               <li class="text-right">
                 <% if( user) { %>
+                  <li><a href="/users">Users</a></li>
+                  <li><a href="/notes">Notes</a></li>
                   <p class="navbar-text">Users Online: <span id="usercount">0</span> &nbsp;Logged In as: <a href="./user/<%= user.viewedas %>"><%= user.viewedas %></a> <a href="../logout">Logout</a><p>
                 <% } %>
               </li>
@@ -205,28 +203,6 @@
         </div>
       </div>
 
-      <div role="tabpanel" class="tab-pane" id="settings">
-        <div class="well">
-            <form method="post">
-              <div class="row">
-                  <div class="col-xs-12">
-                    <label>Prefered Voice</label>
-                    <select name="preferedVoice" class="form-control">
-                      <option value="">Off</option>
-                      <option value="UK English Female">UK English Female</option>
-                      <option value="UK English Male">UK English Male</option>
-                    </select>
-                  </div>
-              </div>
-              <div class="row">&nbsp;</div>
-              <div class="row">
-                <div class="col-xs-12">
-                  <button type="submit" name="submit" class="btn btn-success" />Update</button>
-                </div>
-              </div>
-            </form>
-        </div>
-      </div>
     </div>
 	</div>
 

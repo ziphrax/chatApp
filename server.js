@@ -73,6 +73,7 @@
     app.use(passport.session());
     app.use(express.static('public',{ maxAge: 120000 }));
     app.use('/phaser_assets',express.static('phaser_game',{ maxAge: 120000 }));
+    app.use('/ellen',express.static('valentines',{ maxAge: 120000 }))
     app.use(flash());
 
     app.use(function(req, res, next) {

@@ -21,22 +21,24 @@ var gulp = require('gulp'),
 		html: ['app/*.html']
 	};
 
-gulp.task('default',['move-dependencies','js-source'],function(){});
-
-gulp.task('move-dependencies',function(){
-	gulp.src(dependencies.js)
-		.pipe(gulp.dest('./public/'));
-	gulp.src(dependencies.fonts)
-		.pipe(gulp.dest('./public/fonts/'));
-	gulp.src(dependencies.css)
-		.pipe(gulp.dest('./public/css/'));
+gulp.task('move-dependencies', function(){
+	return gulp.src(dependencies.js)
+		.pipe(gulp.dest('./public/'))
+		.on('end', function() {
+			gulp.src(dependencies.fonts)
+				.pipe(gulp.dest('./public/fonts/'));
+			gulp.src(dependencies.css)
+				.pipe(gulp.dest('./public/css/'));
+		});
 });
 
-gulp.task('js-source',function(){
-	gulp.src(source.js)
+gulp.task('js-source', function(){
+	return gulp.src(source.js)
 		.pipe(gulp.dest('./public/'));
 });
 
-gulp.task('watch',['js-source'],function(){
-	gulp.watch(source.js,['js-source']);
+gulp.task('default', gulp.series('move-dependencies', 'js-source'));
+
+gulp.task('watch', function(){
+	gulp.watch(source.js, gulp.series('js-source'));
 });

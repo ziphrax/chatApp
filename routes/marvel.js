@@ -2,7 +2,7 @@
 var router = express.Router();
 var comics = require('../model/');
 var characters = require('../model/marvel/characters');
-var request = require('request');
+var request = require('axios');
 
 //comics
 	router.route('/data/comics/')

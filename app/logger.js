@@ -16,10 +16,9 @@ module.exports = function logger(request,response,next){
 			method: method,
 			ip:ip,
 			duration: duration
-		}).save(function(err){
-			if(err){
-				console.err(err);
-			}
+		});
+		log.save().catch(function(err){
+			console.error(err);
 		});
 		stream.write(ip + ': '+ method + ' ' + url + ' ' + duration + ' ms' + ' \n');
 	});
@@ -43,10 +42,9 @@ module.exports.log = function log(url,method,ip,message,duration){
 		ip:ip,
 		message: message,
 		duration: duration
-	}).save(function(err){
-		if(err){
-			console.err(err);
-		}
+	});
+	log.save().catch(function(err){
+		console.error(err);
 	});
 	stream.write(ip + ': '+ method + ' ' + url + ' ' + message + ' '+ duration + '\n');
 }
@@ -65,9 +63,8 @@ module.exports.chatLog = function chatLog(username,message,room,ip){
 		message: message,
 		room: room,
 		ip: ip
-	}).save(function(err){
-		if(err){
-			console.err(err);
-		}
+	});
+	log.save().catch(function(err){
+		console.error(err);
 	});
 }

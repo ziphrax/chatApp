@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var people = require('../model/swapi/people');
-var request = require('request');
+var request = require('axios');
 
 //people
 	router.route('/data/people/')

@@ -1,4 +1,4 @@
-var request = require('request');
+var request = require('axios');
 var baseURL = 'http://swapi.co/';
 var namespace = 'api/';
 

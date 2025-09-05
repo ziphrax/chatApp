@@ -1,4 +1,4 @@
-var request = require('request');
+var request = require('axios');
 var md5 = require('md5');
 var marvelAPI = {
     publicKey : 'ed27ed50f19f2ab2c44098a2ec18e8cb',

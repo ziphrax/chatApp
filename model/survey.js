@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var QuestionSchema = require('../model/question');
+var Question = require('../model/question');
 
 var SurveySchema = new mongoose.Schema({
   name : String,
@@ -7,7 +7,7 @@ var SurveySchema = new mongoose.Schema({
   requiresPassword : Boolean,
   password : String,  
   surveyType: String,
-  questions: [QuestionSchema]
+  questions: [Question.schema]
 });
 
 module.exports = mongoose.model('Survey',SurveySchema);

@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  # MongoDB service
+  mongodb:
+    image: mongo:6.0
+    container_name: chatapp-mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    environment:
+      # No authentication for development
+      - MONGO_INITDB_DATABASE=chatApp
+    networks:
+      - chatapp-network
+
+  # Node.js Chat Application
+  chatapp:
+    build: .
+    container_name: chatapp-node
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongodb
+    environment:
+      - NODE_ENV=development
+      - MONGODB_URI=mongodb://mongodb:27017/chatApp
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    networks:
+      - chatapp-network
+
+volumes:
+  mongodb_data:
+
+networks:
+  chatapp-network:
+    driver: bridge

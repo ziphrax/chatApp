@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var weapons = require('../model/miniGame/weapons');
 var xenos = require('../model/miniGame/xenos');
-var request = require('request');
+var request = require('axios');
 
 
 router.route('/')

@@ -6,23 +6,21 @@ var sanitizer = require('sanitizer')
 module.exports = function banner(request,response,next){
   var ip = request.headers['x-real-ip'] || request.connection.remoteAddress;
 
-  BannedIP.find({ip: ip},function(err,docs){
-    if(err){
-      console.log(err);
-      response.status(500).send('Internal Error');
+  BannedIP.find({ip: ip}).then(function(docs){
+    if(docs && docs.length > 0){
+      logger.log('','DeniedIP',ip,'IPBanned' ,'');
+      response.status(401).send('Request Denied');
     } else {
-      if(docs && docs.length > 0){
-        logger.log('','DeniedIP',ip,'IPBanned' ,'');
-        response.status(401).send('Request Denied');
-      } else {
-        var passesRequestCheck = checkRequest(ip,request.url);
-        if(passesRequestCheck){
-          next();
+      var passesRequestCheck = checkRequest(ip,request.url);
+      if(passesRequestCheck){
+        next();
         } else {
           response.status(401).send('Request Denied');
         }
       }
-    }
+  }).catch(function(err){
+    console.log(err);
+    response.status(500).send('Internal Error');
   });
 }
 
@@ -31,10 +29,9 @@ function banIP(IPAddress,Reason){
     time: new Date(),
     reason: Reason,
     ip: IPAddress
-  }).save(function(err){
-		if(err){
-			console.err(err);
-		}
+  });
+  ip.save().catch(function(err){
+		console.error(err);
 	});
   //url,method,ip,message,duration
   logger.log('','IPBanned',IPAddress,Reason ,'');

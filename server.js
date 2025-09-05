@@ -10,24 +10,22 @@
         , passport = require('passport')
         , sanitizer = require('sanitizer')
         , session = require('express-session')
-    	, MongoStore = require('connect-mongo')(session)
+    	, MongoStore = require('connect-mongo')
         , LocalStrategy = require('passport-local').Strategy
         , server = require('http').createServer(app)
-    	, io = require('socket.io').listen(server)
+    	, io = require('socket.io')(server)
     	, banner = require('./app/banner')
     	, logger = require('./app/logger')
     	, cacher = require('./app/cacher')
         , flash   = require('connect-flash')
-        , engine = require('ejs-locals')
-        , ChatLog = require('./model/chatLog')
-    	, passportSocketIo = require("passport.socketio");
+        , ChatLog = require('./model/chatLog');
 
 
     var usernames = {};
     var rooms = {};
 
-    var port = 3000;
-    var mongooseURI ='mongodb://localhost/chatApp';
+    var port = process.env.PORT || 3000;
+    var mongooseURI = process.env.MONGODB_URI || 'mongodb://localhost/chatApp';
 
     var marvelAPI = {
         publicKey : 'ed27ed50f19f2ab2c44098a2ec18e8cb',
@@ -38,8 +36,6 @@
     var Room = require('./model/room');
     var User = require('./model/user');
     var routes = require('./routes/routes');
-
-    app.engine('ejs', engine);
 
     app.set('view engine','ejs');
     app.disable('x-powered-by');
@@ -53,12 +49,18 @@
 
     require('./config/passport')(passport);
 
-    mongoose.connect(mongooseURI, function ( err, res ) {
-    	if(err){ logger.log('','','','ERROR connecting to: ' + mongooseURI + '. ' + err,''); }
-    	else { logger.log('','','','Succeeded connecting to: ' + mongooseURI,''); }
-    });
+    mongoose.connect(mongooseURI)
+        .then(() => {
+            logger.log('','','','Succeeded connecting to: ' + mongooseURI,'');
+        })
+        .catch((err) => {
+            logger.log('','','','ERROR connecting to: ' + mongooseURI + '. ' + err,'');
+        });
 
-    var sessionStore = new MongoStore({ mongooseConnection: mongoose.connection });
+    var sessionStore = new MongoStore({ 
+        mongoUrl: mongooseURI,
+        touchAfter: 24 * 3600 // lazy session update
+    });
 
     app.use(
         session({
@@ -96,21 +98,45 @@
     });
 
 
-    io.use(
-        passportSocketIo.authorize({
-        	cookieParser: cookieParser,
-        	key:          'connect.sid',
-        	secret:       'keyboard cat',
-        	store:        sessionStore,
-        	success:      onAuthorizeSuccess,
-        	fail:         onAuthorizeFail,
-        })
-    );
+    // Custom Socket.io authentication middleware
+    io.use(async (socket, next) => {
+        const sessionParser = session({
+            secret: 'keyboard cat',
+            resave: false,
+            saveUninitialized: false,
+            store: sessionStore
+        });
+        
+        sessionParser(socket.request, {}, async () => {
+            if (socket.request.session && socket.request.session.passport && socket.request.session.passport.user) {
+                // User is authenticated
+                try {
+                    const user = await User.findById(socket.request.session.passport.user).exec();
+                    if (!user) return next(new Error('User not found'));
+                    
+                    socket.request.user = {
+                        logged_in: true,
+                        username: user.username,
+                        _id: user._id
+                    };
+                    onAuthorizeSuccess(socket.request, next);
+                } catch (err) {
+                    return next(new Error('Authentication error'));
+                }
+            } else {
+                // User is not authenticated
+                socket.request.user = {
+                    logged_in: false
+                };
+                onAuthorizeFail(socket.request, next);
+            }
+        });
+    });
 
     io.on('connection', function( socket ) {
         socket.lobbied = false;
         socket.emit( 'updaterooms' , makeRoomsSafeToSend( rooms ) , 'Lobby' );
-        socket.emit( 'usercount' , io.sockets.sockets.length );
+        socket.emit( 'usercount' , io.sockets.sockets.size );
     		var userList = getRoomUsers('Lobby');
     		socket.emit( 'update user list' , userList );
 
@@ -133,7 +159,7 @@
       			socket.emit( 'updatechat' , 'SERVER' , 'you have connected to Lobby' );
       			socket.broadcast.to( 'Lobby' ).emit( 'updatechat' , 'SERVER' , socket.username + ' has connected to this room' );
       			socket.emit( 'updaterooms' , makeRoomsSafeToSend( rooms ) , 'Lobby' );
-      			socket.broadcast.emit( 'usercount',io.sockets.sockets.length );
+      			socket.broadcast.emit( 'usercount',io.sockets.sockets.size );
 
       			var userList = getRoomUsers('Lobby');
       			socket.broadcast.to( 'Lobby' ).emit( 'update user list' , userList );
@@ -158,13 +184,14 @@
 
         socket.on('create',function(roomName,password){
             if(socket.request.user.logged_in && socket.lobbied){
-                new Room({
+                var newRoom = new Room({
                     name : sanitizer.sanitize(roomName),
                     createdDate : new Date(),
                     requiresPassword : password.length > 0,
                     password : password,
                     displayOrder: Object.keys(rooms).length + 1
-                }).save(function(err){
+                });
+                newRoom.save().catch(function(err){
                     console.error(err);
                 });
                 rooms[sanitizer.sanitize(roomName)] = {
@@ -183,7 +210,7 @@
         socket.on('sendchat', function(data) {
             if(socket.lobbied){
                 var msg = parseMessage(data);
-                io.sockets["in"](socket.room).emit('updatechat', socket.username, msg);
+                io.sockets.to(socket.room).emit('updatechat', socket.username, msg);
         		    logger.chatLog(socket.username,	sanitizer.sanitize(data),socket.room,'sockets');
             } else {
                 socket.emit('updatechat', 'SERVER', 'You are not authorized to send chat.');
@@ -261,7 +288,7 @@
                       socket.emit('updatechat', 'SERVER', 'you have connected to private chat.');
                     }
 
-                    socket.broadcast.emit('usercount',io.sockets.sockets.length);
+                    socket.broadcast.emit('usercount',io.sockets.sockets.size);
 
 
                 } else {
@@ -285,17 +312,21 @@
             if(socket.username){
                 socket.broadcast.emit('updatechat', 'SERVER', socket.username + ' has disconnected');
             }
-            socket.broadcast.emit('usercount',io.sockets.sockets.length);
+            socket.broadcast.emit('usercount',io.sockets.sockets.size);
             socket.leave(socket.room);
         });
      });
 
     function getRoomUsers(room){
-    	var clients = io.sockets.adapter.rooms[room];
+    	var roomData = io.sockets.adapter.rooms.get(room);
     	var users = [];
-    	for (var clientId in clients ) {
-    			var clientSocket = io.sockets.connected[clientId];
-    			users.push(clientSocket.username);
+    	if (roomData) {
+    		for (let clientId of roomData) {
+    			var clientSocket = io.sockets.sockets.get(clientId);
+    			if (clientSocket && clientSocket.username) {
+    				users.push(clientSocket.username);
+    			}
+    		}
     	}
     	return users;
     }
@@ -311,21 +342,19 @@
         return safeToSendRooms;
     }
 
-    function initServer(){
-        var roomQuery = Room.find({}).sort([['requiresPassword','ascending'],['displayOrder','ascending']]);
-        roomQuery.exec(function(err,docs){
-            if(err){
-                console.log('Error.initServer: ' + err);
-            } else {
-                docs.forEach(function(room){
-                    rooms[room.name] = {
-                        name : room.name,
-                        requiresPassword: room.requiresPassword,
-                        password : room.password
-                    };
-                });
-            }
-        });
+    async function initServer(){
+        try {
+            const docs = await Room.find({}).sort([['requiresPassword','ascending'],['displayOrder','ascending']]).exec();
+            docs.forEach(function(room){
+                rooms[room.name] = {
+                    name : room.name,
+                    requiresPassword: room.requiresPassword,
+                    password : room.password
+                };
+            });
+        } catch (err) {
+            console.log('Error.initServer: ' + err);
+        }
     }
 
     function parseMessage(data){
@@ -370,9 +399,12 @@
     function onAuthorizeSuccess(data, accept){ accept(); }
     function onAuthorizeFail(data, message, error, accept){ accept(null, false); }
 
-    initServer();
-    app.start = app.listen = function(){
-    	logger.log('','','','SERVER Starting up...','');
-        return server.listen.apply(server, arguments);
-    };
-    app.start(port);
+    initServer().then(() => {
+        app.start = app.listen = function(){
+        	logger.log('','','','SERVER Starting up...','');
+            return server.listen.apply(server, arguments);
+        };
+        app.start(port);
+    }).catch(err => {
+        console.error('Failed to initialize server:', err);
+    });

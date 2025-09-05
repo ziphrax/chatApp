@@ -10,7 +10,7 @@ router.route('/').get(function(req,res){
 });
 
 router.route('/:id')
-.post(function(req,res){
+.post(async function(req,res){
   if(req.user){
     var comment = new Comment();
 
@@ -21,37 +21,38 @@ router.route('/:id')
     comment.user = req.params.id;
     comment.updated = new Date();
 
-    comment.save(function(err){
-      if(err) {
-        res.status(500).send(err);
-      } else {
-        res.json({message: 'Comment saved successfully',data: comment});
-      }
-    });
+    try {
+      await comment.save();
+      res.json({message: 'Comment saved successfully',data: comment});
+    } catch(err) {
+      res.status(500).send(err);
+    }
   } else {
     res.status(403).send("Request denied");
   }
-}).get(function(req,res){
-  Comment.find({ owner: req.params.id}, function(err, comments) {
-   if (err) {
-     return res.send(err);
-   } else {
-      res.json(comments);
-   }
- });
-}).delete(function(req,res){
-  Comment.findOne({ owner: req.params.id}, function(err, comment) {
+}).get(async function(req,res){
+  try {
+    const comments = await Comment.find({ owner: req.params.id});
+    res.json(comments);
+  } catch(err) {
+    return res.status(500).send(err);
+  }
+}).delete(async function(req,res){
+  try {
+    const comment = await Comment.findOne({ owner: req.params.id});
+    if(!comment) {
+      return res.status(404).send('Comment not found');
+    }
     if(req.user && req.user.username == comment.owner){
       comment.status = 'closed';
-      comment.save(function(err){
-        if(err) {
-          res.status(500).send(err);
-        } else {
-          res.json({message: 'Comment deleted successfully',data: comment});
-        }
-      });
+      await comment.save();
+      res.json({message: 'Comment deleted successfully',data: comment});
+    } else {
+      res.status(403).send("Request denied");
     }
-  });    
+  } catch(err) {
+    res.status(500).send(err);
+  }
 });
 
 module.exports = router;

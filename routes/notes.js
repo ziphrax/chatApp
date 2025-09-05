@@ -5,20 +5,19 @@ var express = require('express');
 var router = express.Router();
 
 router.route('/')
-  .get(function(req,res){
+  .get(async function(req,res){
     if(req.user){
-      Note.find({owner:req.user.username}).exec(function(err,docs){
-        if(err){
-          res.status(500).send(err);
-        } else {
-          res.json(docs);
-          res.end();
-        }
-      });
+      try {
+        const docs = await Note.find({owner:req.user.username}).exec();
+        res.json(docs);
+        res.end();
+      } catch(err) {
+        res.status(500).send(err);
+      }
     } else {
       res.status(403).send('Request denied');
     }
-  }).post(function(req,res){
+  }).post(async function(req,res){
     if(req.user){
       var note = new Note();
       note.content = req.body.content;
@@ -27,51 +26,51 @@ router.route('/')
       note.time = new Date();
       note.tags = req.body.tags;
 
-      note.save(function(err){
-        if(err) {
-          res.status(500).send(err);
-        } else {
-          res.json({message: 'Note saved successfully',data: note});
-        }
-      });
+      try {
+        await note.save();
+        res.json({message: 'Note saved successfully',data: note});
+      } catch(err) {
+        res.status(500).send(err);
+      }
     } else {
       res.status(403).send("Request denied");
     }
   });
 
-router.route('/:id').put(function(req,res){
+router.route('/:id').put(async function(req,res){
   if(req.user){
-    Note.findOne({_id: req.params.id,owner: req.user.username},function(err,note){
-      if(err){
-        return res.status(500).send(err);
-      } else {
-        for(pro in req.body){
-          note[prop] = req.body[prop];
-        }
-        note.save(function(err){
-            if(err){
-              return res.send(err);
-            } else {
-              res.json({message: 'Note saved successfully',data:note});
-            }
-        });
+    try {
+      const note = await Note.findOne({_id: req.params.id,owner: req.user.username});
+      if(!note) {
+        return res.status(404).send('Note not found');
       }
-    });
+      
+      for(prop in req.body){
+        note[prop] = req.body[prop];
+      }
+      
+      await note.save();
+      res.json({message: 'Note saved successfully',data:note});
+    } catch(err) {
+      return res.status(500).send(err);
+    }
   }else {
     res.status(403).send("Request denied");
   }
-}).get(function(req,res){
+}).get(async function(req,res){
   if(req.user){
-    Note.findOne({
+    try {
+      const note = await Note.findOne({
         _id: req.params.id,
         owner: req.user.username
-      }, function(err, note) {
-     if (err) {
-       return res.send(err);
-     } else {
-       res.json(note);
-     }
-   });
+      });
+      if(!note) {
+        return res.status(404).send('Note not found');
+      }
+      res.json(note);
+    } catch(err) {
+      return res.status(500).send(err);
+    }
   } else {
     res.status(403).send("Request denied");
   }

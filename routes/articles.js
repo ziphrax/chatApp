@@ -16,7 +16,7 @@ router.route('/')
         res.end();
       }
     });
-  }).post(function(req,res){
+  }).post(async function(req,res){
     if(req.user && req.user.username == 'admin42' ){
       var article = new Article();
 
@@ -28,69 +28,66 @@ router.route('/')
       article.owner = req.user.username;
       article.updated = new Date();
 
-      article.save(function(err){
-        if(err) {
-          res.status(500).send(err);
-        } else {
-          res.json({message: 'Article saved successfully',data: article});
-        }
-      });
+      try {
+        await article.save();
+        res.json({message: 'Article saved successfully',data: article});
+      } catch(err) {
+        res.status(500).send(err);
+      }
     } else {
       res.status(403).send("Request denied");
     }
   });
 
 router.route('/summary/')
-    .get(function(req,res){
-      Article.find().sort({'updated':-1}).limit(5).exec(function(err,docs){
-            if(err){
-                console.log(err);
-                res.status(500).send(err);
-            } else {
-                res.json(docs);
-                res.end();
-            }
-        });
+    .get(async function(req,res){
+      try {
+        const docs = await Article.find().sort({'updated':-1}).limit(5).exec();
+        res.json(docs);
+        res.end();
+      } catch(err) {
+        console.log(err);
+        res.status(500).send(err);
+      }
     });
 
 
 router.route('/:id')
-.post(function(req,res){
+.post(async function(req,res){
   if(req.user && req.user.username == 'admin42' ){
-    Article.findOne({_id: req.params.id},function(err,article){
-      if(err){
-        return res.status(500).send(err);
-      } else {
-
-        if(req.user.username = article.owner){
-          article.title = req.body.title;
-          article.content = req.body.content;
-        }
-
-        article.status = req.body.status;
-        article.votes = req.body.votes;
-        article.updated = new Date();
-
-        article.save(function(err){
-            if(err){
-              return res.send(err);
-            } else {
-              res.json({message: 'Article updated successfully',data:article});
-            }
-        });
+    try {
+      const article = await Article.findOne({_id: req.params.id});
+      if(!article) {
+        return res.status(404).send('Article not found');
       }
-    });
+
+      if(req.user.username = article.owner){
+        article.title = req.body.title;
+        article.content = req.body.content;
+      }
+
+      article.status = req.body.status;
+      article.votes = req.body.votes;
+      article.updated = new Date();
+
+      await article.save();
+      res.json({message: 'Article updated successfully',data:article});
+    } catch(err) {
+      return res.status(500).send(err);
+    }
   } else {
     res.status(403).send("Request denied");
   }
-}).get(function(req,res){
-  Article.findOne({ _id: req.params.id}, function(err, article) {
-   if (err) {
-     return res.send(err);
-   } else {
-      res.json(article);
-   }
- });
+}).get(async function(req,res){
+  try {
+    const article = await Article.findOne({ _id: req.params.id});
+    if(!article) {
+      return res.status(404).send('Article not found');
+    }
+    res.json(article);
+  } catch(err) {
+    return res.status(500).send(err);
+  }
 }).delete(function(req,res){
     res.status(403).json({message: 'You can only close articles, not delete them.'});
 });

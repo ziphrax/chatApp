@@ -74,8 +74,6 @@
     app.use(passport.initialize());
     app.use(passport.session());
     app.use(express.static('public',{ maxAge: 120000 }));
-    app.use('/phaser_assets',express.static('phaser_game',{ maxAge: 120000 }));
-    app.use('/ellen',express.static('valentines',{ maxAge: 120000 }))
     app.use(flash());
 
     app.use(function(req, res, next) {
@@ -89,9 +87,6 @@
 
     app.use('/',routes);
 
-    app.get('/phaser',function(request,response){
-        response.render('games/phaser');
-    });
 
     app.get('/admin/logs',auth,function(request,response){
         response.render('pages/logs');
@@ -119,7 +114,7 @@
                         username: user.username,
                         _id: user._id
                     };
-                    onAuthorizeSuccess(socket.request, next);
+                    next();
                 } catch (err) {
                     return next(new Error('Authentication error'));
                 }
@@ -128,7 +123,7 @@
                 socket.request.user = {
                     logged_in: false
                 };
-                onAuthorizeFail(socket.request, next);
+                next();
             }
         });
     });
@@ -395,9 +390,6 @@
         }
         return {data: data, msg: msg};
     }
-
-    function onAuthorizeSuccess(data, accept){ accept(); }
-    function onAuthorizeFail(data, message, error, accept){ accept(null, false); }
 
     initServer().then(() => {
         app.start = app.listen = function(){

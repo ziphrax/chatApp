@@ -1,58 +1,9 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>www.chatsplosion.com - home page</title>
-	<link rel="stylesheet" href="/css/bootstrap.min.css" />
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-</head>
-<body>
+<%- include('../partials/header', { title: 'www.chatsplosion.com - home page' }) %>
 
 	<div class="container-fluid">
 
 		<div class="row">
-			<nav class="navbar navbar-default">
-				<div class="container-fluid">
-					<div class="navbar-header">
-						 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-						 	<i class="glyphicon glyphicon-menu-hamburger"></i>
-						 </button>
-						<a class="navbar-brand" href="/">
-							 <i class="glyphicon glyphicon-envelope"></i> Chatsplosion.com
-						</a>
-					</div>
-					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-						<ul class="nav navbar-nav">
-							<li class="active"><a href="/">Home</a></li>
-							<% if( user) { %>
-								<li><a href="/notes">Notes</a></li>
-								<li><a href="/users">Users</a></li>
-							<% } %>
-							<li><a href="/articles">News</a></li>
-							<li><a href="/terms-of-service">Terms</a></li>
-							<li><a href="/phaser">Game</a></li>
-						</ul>
-						<ul class="nav navbar-nav navbar-right">
-							<li><a href="/tickets">Help/Support</a></li>
-							<li class="text-right">
-								<% if( user) { %>
-									<p class="navbar-text"><a href="/users" target="_blank">Users Online:</a> <span id="usercount">0</span> &nbsp;Logged In as: <a href="./user/<%= user.username %>"><%= user.username %></a> <a href="./logout" >Logout</a><p>
-								<% } else { %>
-									<div class="btn-group">
-										<button type="button" class="btn btn-success navbar-btn" data-toggle="modal" data-target="#loginModal">
-										  Login
-										</button>
-										<button type="button" class="btn btn-primary navbar-btn" data-toggle="modal" data-target="#registerModal">
-										  Register
-										</button>
-									</div>
-									<p class="navbar-text">Users Online: <span id="usercount">0</span></p>
-								<% } %>
-
-							</li>
-						</ul>
-					</div>
-				</div>
-			</nav>
+			<%- include('../partials/navbar', { currentPage: 'home', user: user }) %>
 		</div>
 
 		<% if( !user) { %>
@@ -267,22 +218,7 @@
 		</div>
 	</div>
 
-
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-<script src="/socket.io/socket.io.js"></script>
-<script src="responsivevoice.js"></script>
-<script src="marked.js"></script>
-<script src="main.js"></script>
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-  ga('create', 'UA-22261401-2', 'auto');
-  ga('send', 'pageview');
-
-</script>
-</body>
-</html>
+<%- include('../partials/footer-home') %>

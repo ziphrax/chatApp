@@ -1,43 +1,9 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Chatsplosion.com - Users</title>
-  <link rel="stylesheet" href="/css/bootstrap.min.css" />
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-</head>
-<body>
+<%- include('../partials/header', { title: 'Chatsplosion.com - Users' }) %>
 
   <div class="container-fluid">
 
     <div class="row">
-      <nav class="navbar navbar-default">
-        <div class="container-fluid">
-          <div class="navbar-header">
-              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-              <i class="glyphicon glyphicon-menu-hamburger"></i>
-             </button>
-            <a class="navbar-brand" href="/">
-               <i class="glyphicon glyphicon-envelope"></i> Chatsplosion.com
-            </a>
-          </div>
-          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav">
-              <li ><a href="/">Home</a></li>
-              <li><a href="/notes">Notes</a></li>
-              <li><a href="/articles">News</a></li>
-              <li  class="active"><a href="/users">Users</a></li>
-              <li><a href="/terms-of-service">Terms</a></li>
-              <li><a href="/phaser">Game</a></li>
-               
-               
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-              <li><a href="/tickets">Help/Support</a></li>
-              <li class="text-right"><a href="/users"><b>Users</b></a><li>
-            </ul>
-          </div>
-        </div>
-      </nav>
+      <%- include('../partials/navbar', { currentPage: 'users' }) %>
     </div>
 
     <div class="row">
@@ -63,9 +29,6 @@
     </div>
   </div>
 
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 <script>
   $(function(){
 
@@ -96,7 +59,6 @@
 
   ga('create', 'UA-22261401-2', 'auto');
   ga('send', 'pageview');
-
 </script>
-</body>
-</html>
+
+<%- include('../partials/footer') %>

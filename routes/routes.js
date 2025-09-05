@@ -54,11 +54,13 @@ router.post('/login', passport.authenticate('local'), function(req, res) {
 
 router.route('/logout')
   .get(function(req, res) {
-    req.logout();
-    res.redirect('/');
-});
-
-router.route('/user')
+    req.logout(function(err) {
+      if (err) {
+        console.error('Logout error:', err);
+      }
+      res.redirect('/');
+    });
+  });router.route('/user')
   .get(function(req,res){
     res.render('pages/user', { user : req.user , message: '' });
   })

@@ -40,7 +40,7 @@ router.route('/logs/dailyhitrate/')
               console.log(err);
               response.status(500).send(err);
           } else {
-              console.log("hitrate map reduce took %d ms", stats.processtime);
+              console.log("hitrate map reduce took %d ms", stats ? stats.processtime : 'unknown');
               response.json(results);
           }
       });

@@ -151,7 +151,7 @@ router.route('/new-survey')
     response.render('pages/new-survey');
   });
 
-router.route('/news')
+router.route('/archived-news')
   .get(function(request,response){
     response.render('pages/news');
   });
